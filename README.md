@@ -24,12 +24,18 @@
     │   │           └── contexts
     │   │               └── payment
     │   │                   └── walletinteractionservice
+    │   │                       └── shared
+    │   │                           └── adapters
     │   └── resources
     └── test
-        └── kotlin
-            └── org
-                └── egualpam
-                    └── contexts
-                        └── payment
-                            └── walletinteractionservice
+        ├── kotlin
+        │   └── org
+        │       └── egualpam
+        │           └── contexts
+        │               └── payment
+        │                   └── walletinteractionservice
+        │                       ├── health
+        │                       └── shared
+        │                           └── adapters
+        └── resources
 ```

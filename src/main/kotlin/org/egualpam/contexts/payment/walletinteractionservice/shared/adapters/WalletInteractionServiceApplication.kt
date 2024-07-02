@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice
+package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
