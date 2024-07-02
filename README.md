@@ -5,6 +5,8 @@
 [![](https://img.shields.io/badge/Java%20Version-21-blue)](/pom.xml)
 [![](https://img.shields.io/badge/Kotlin%20Version-2.0.0-blue)](/pom.xml)
 
+![wallet-interaction-service](etc/wallet-interaction-service.png)
+
 🧪 Run tests
 <br>
 
