@@ -10,9 +10,9 @@ import org.springframework.test.web.servlet.MockMvc
 @ActiveProfiles("integration-test")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = [WalletInteractionServiceApplication::class]
+    classes = [WalletInteractionServiceApplication::class],
 )
 abstract class AbstractIntegrationTest {
-    @Autowired
-    protected lateinit var mockMvc: MockMvc
+  @Autowired
+  protected lateinit var mockMvc: MockMvc
 }

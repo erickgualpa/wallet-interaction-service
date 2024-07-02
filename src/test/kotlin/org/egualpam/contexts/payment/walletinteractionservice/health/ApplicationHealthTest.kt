@@ -8,18 +8,18 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 class ApplicationHealthTest : AbstractIntegrationTest() {
 
-    @Test
-    fun `application status should be UP`() {
-        mockMvc.perform(get("/actuator/health"))
-            .andExpect(status().isOk)
-            .andExpect(
-                content().json(
-                    """
+  @Test
+  fun `application status should be UP`() {
+    mockMvc.perform(get("/actuator/health"))
+        .andExpect(status().isOk)
+        .andExpect(
+            content().json(
+                """
                     {
                       "status": "UP"
                     }
-                    """
-                )
-            )
-    }
+                    """,
+            ),
+        )
+  }
 }
