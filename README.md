@@ -20,6 +20,7 @@
 
 ```
 .
+├── etc
 └── src
     ├── main
     │   ├── kotlin
@@ -28,8 +29,12 @@
     │   │           └── contexts
     │   │               └── payment
     │   │                   └── walletinteractionservice
-    │   │                       └── shared
+    │   │                       ├── shared
+    │   │                       │   └── adapters
+    │   │                       └── wallet
     │   │                           └── adapters
+    │   │                               └── in
+    │   │                                   └── controllers
     │   └── resources
     └── test
         ├── kotlin
@@ -38,6 +43,7 @@
         │           └── contexts
         │               └── payment
         │                   └── walletinteractionservice
+        │                       ├── e2e
         │                       ├── health
         │                       └── shared
         │                           └── adapters
