@@ -98,6 +98,13 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <configuration>
+                    <!--
+                    The -Xjsr305=strict argument configures the Kotlin compiler to handle Java's JSR-305 nullability
+                    annotations strictly. This means that the Kotlin compiler will enforce nullability checks based on
+                    these annotations, which can help catch potential null pointer exceptions at compile time rather
+                    than at runtime.
+                    https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/boot-features-kotlin.html#boot-features-kotlin-null-safety
+                    -->
                     <args>
                         <arg>-Xjsr305=strict</arg>
                     </args>
