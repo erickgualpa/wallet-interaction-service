@@ -30,11 +30,16 @@
     │   │               └── payment
     │   │                   └── walletinteractionservice
     │   │                       ├── shared
-    │   │                       │   └── adapters
+    │   │                       │   ├── adapters
+    │   │                       │   └── application
+    │   │                       │       └── domain
     │   │                       └── wallet
-    │   │                           └── adapters
-    │   │                               └── in
-    │   │                                   └── controllers
+    │   │                           ├── adapters
+    │   │                           │   ├── configuration
+    │   │                           │   └── in
+    │   │                           │       └── controllers
+    │   │                           └── application
+    │   │                               └── domain
     │   └── resources
     └── test
         ├── kotlin

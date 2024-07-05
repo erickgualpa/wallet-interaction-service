@@ -5,6 +5,7 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication(
     scanBasePackages = [
+      "org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration",
       "org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.in.controllers",
     ],
 )
