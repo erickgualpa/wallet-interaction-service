@@ -36,10 +36,14 @@
     │   │                       └── wallet
     │   │                           ├── adapters
     │   │                           │   ├── configuration
-    │   │                           │   └── in
-    │   │                           │       └── controllers
+    │   │                           │   ├── in
+    │   │                           │   │   └── controllers
+    │   │                           │   └── out
     │   │                           └── application
-    │   │                               └── domain
+    │   │                               ├── domain
+    │   │                               │   └── exceptions
+    │   │                               └── ports
+    │   │                                   └── out
     │   └── resources
     └── test
         ├── kotlin
@@ -53,4 +57,5 @@
         │                       └── shared
         │                           └── adapters
         └── resources
+
 ```
