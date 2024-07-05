@@ -14,7 +14,7 @@
 ./mvnw clean verify
 ```
 
-📣 This project has been structured following a Hexagonal Architecture
+📣 This project has been structured following Hexagonal Architecture principles: https://alistair.cockburn.us/hexagonal-architecture
 
 [//]: # (Directory tree below was generated using 'tree -d -I target' command)
 
