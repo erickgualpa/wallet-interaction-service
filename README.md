@@ -41,8 +41,9 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │   └── out
     │   │                           │       └── findwallet
     │   │                           ├── application
-    │   │                           │   └── ports
-    │   │                           │       └── out
+    │   │                           │   ├── ports
+    │   │                           │   │   └── out
+    │   │                           │   └── query
     │   │                           └── domain
     │   │                               └── exceptions
     │   └── resources
@@ -58,7 +59,10 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                       ├── architecture
         │                       ├── e2e
         │                       ├── health
-        │                       └── shared
-        │                           └── adapters
+        │                       ├── shared
+        │                       │   └── adapters
+        │                       └── wallet
+        │                           └── application
+        │                               └── query
         └── resources
 ```

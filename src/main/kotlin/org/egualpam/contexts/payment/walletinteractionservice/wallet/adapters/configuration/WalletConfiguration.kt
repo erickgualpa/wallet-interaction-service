@@ -2,8 +2,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletFakeAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletMySQLAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.RetrieveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWallet
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary

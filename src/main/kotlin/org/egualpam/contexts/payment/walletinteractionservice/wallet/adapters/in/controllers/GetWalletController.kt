@@ -1,7 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`in`.controllers
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.RetrieveWallet
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.RetrieveWalletQuery
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWalletQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
