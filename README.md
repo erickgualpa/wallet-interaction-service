@@ -14,7 +14,8 @@
 ./mvnw clean verify
 ```
 
-📣 This project has been structured following Hexagonal Architecture principles: https://alistair.cockburn.us/hexagonal-architecture
+📣 This project has been structured following Hexagonal Architecture principles:
+https://alistair.cockburn.us/hexagonal-architecture
 
 [//]: # (Directory tree below was generated using 'tree -d -I target' command)
 
@@ -31,19 +32,18 @@
     │   │                   └── walletinteractionservice
     │   │                       ├── shared
     │   │                       │   ├── adapters
-    │   │                       │   └── application
-    │   │                       │       └── domain
+    │   │                       │   └── domain
     │   │                       └── wallet
     │   │                           ├── adapters
     │   │                           │   ├── configuration
     │   │                           │   ├── in
     │   │                           │   │   └── controllers
     │   │                           │   └── out
-    │   │                           └── application
-    │   │                               ├── domain
-    │   │                               │   └── exceptions
-    │   │                               └── ports
-    │   │                                   └── out
+    │   │                           ├── application
+    │   │                           │   └── ports
+    │   │                           │       └── out
+    │   │                           └── domain
+    │   │                               └── exceptions
     │   └── resources
     └── test
         ├── kotlin
@@ -52,10 +52,10 @@
         │           └── contexts
         │               └── payment
         │                   └── walletinteractionservice
+        │                       ├── architecture
         │                       ├── e2e
         │                       ├── health
         │                       └── shared
         │                           └── adapters
         └── resources
-
 ```
