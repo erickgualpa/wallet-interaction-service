@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Account

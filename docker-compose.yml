@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: "mysql:latest"
+    environment:
+      - MYSQL_DATABASE=wis
+      - MYSQL_USER=wis-db-user
+      - MYSQL_PASSWORD=wis-db-pw
+      - MYSQL_ROOT_PASSWORD=wis-db-pw
+    ports:
+      - '3306'

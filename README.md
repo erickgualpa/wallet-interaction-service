@@ -39,12 +39,15 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │   ├── in
     │   │                           │   │   └── controllers
     │   │                           │   └── out
+    │   │                           │       └── findwallet
     │   │                           ├── application
     │   │                           │   └── ports
     │   │                           │       └── out
     │   │                           └── domain
     │   │                               └── exceptions
     │   └── resources
+    │       └── db
+    │           └── changelog
     └── test
         ├── kotlin
         │   └── org

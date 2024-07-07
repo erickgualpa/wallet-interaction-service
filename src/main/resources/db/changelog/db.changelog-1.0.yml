@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: erickgualpam
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE wallet (
+                id CHAR(36) PRIMARY KEY NOT NULL,
+                owner_id CHAR(36) NOT NULL,
+                account_id CHAR(36) NOT NULL,
+                created_at TIMESTAMP NOT NULL
+              );

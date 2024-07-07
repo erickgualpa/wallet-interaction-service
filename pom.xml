@@ -13,10 +13,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>wallet-interaction.service</name>
     <url/>
+
     <properties>
         <java.version>21</java.version>
         <kotlin.version>2.0.0</kotlin.version>
     </properties>
+
     <dependencies>
         <!-- Begin of Spring Boot dependencies -->
         <dependency>
@@ -24,17 +26,30 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!--TODO: Uncomment once datasource is configured-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- End of Spring Boot dependencies -->
+
+        <!-- Begin of Database dependencies -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.28.0</version>
+        </dependency>
+        <!-- End of Database dependencies -->
 
         <!-- Begin of Kotlin dependencies -->
         <dependency>
@@ -70,6 +85,12 @@
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5</artifactId>
             <version>1.3.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
         <!--  End of Testing dependencies  -->

@@ -1,3 +1,10 @@
 spring:
   application:
-    name: walletinteractionservice
+    name: wallet-interaction-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/wis
+    username: wis-db-user
+    password: wis-db-pw
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
