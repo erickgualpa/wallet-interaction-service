@@ -40,6 +40,7 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │   │   └── controllers
     │   │                           │   └── out
     │   │                           │       └── findwallet
+    │   │                           │           └── springdatajdbc
     │   │                           ├── application
     │   │                           │   ├── ports
     │   │                           │   │   └── out
@@ -62,6 +63,10 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                       ├── shared
         │                       │   └── adapters
         │                       └── wallet
+        │                           ├── adapters
+        │                           │   └── out
+        │                           │       └── findwallet
+        │                           │           └── springdatajdbc
         │                           └── application
         │                               └── query
         └── resources
