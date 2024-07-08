@@ -13,7 +13,7 @@ class FindWalletSpringDataJdbcAdapterIT : AbstractIntegrationTest() {
   private lateinit var walletRepository: WalletRepository
 
   @Test
-  fun `return null when wallet matching it not exists`() {
+  fun `return null when wallet matching id not exists`() {
     val walletId = WalletId(randomUUID().toString())
     val testSubject = FindWalletSpringDataJdbcAdapter(walletRepository)
     val result = testSubject.find(walletId)
