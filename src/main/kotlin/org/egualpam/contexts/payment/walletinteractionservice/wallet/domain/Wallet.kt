@@ -9,10 +9,22 @@ class Wallet(
 ) : AggregateRoot {
 
   companion object {
-    fun create(id: String, ownerId: String, accountId: String): Wallet {
+    fun create(
+      id: String,
+      ownerId: String,
+      ownerUsername: String,
+      accountId: String,
+      accountCurrency: String
+    ): Wallet {
       val walletId = WalletId(id)
-      val owner = Owner(OwnerId(ownerId))
-      val account = Account(AccountId(accountId))
+      val owner = Owner(
+          OwnerId(ownerId),
+          OwnerUsername(ownerUsername),
+      )
+      val account = Account(
+          AccountId(accountId),
+          AccountCurrency(accountCurrency),
+      )
       return Wallet(walletId, owner, account)
     }
   }

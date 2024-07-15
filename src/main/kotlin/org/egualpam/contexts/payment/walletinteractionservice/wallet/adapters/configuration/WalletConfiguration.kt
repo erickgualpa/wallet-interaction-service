@@ -3,8 +3,11 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletFakeAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.springdatajdbc.FindWalletSpringDataJdbcAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.springdatajdbc.WalletRepository
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.SaveWalletSpringDataJdbcAdapter
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletRepository
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.command.CreateWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWallet
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -28,5 +31,13 @@ class WalletConfiguration {
   ): FindWalletPort = FindWalletSpringDataJdbcAdapter(walletRepository)
 
   @Bean
+  fun saveWalletSpringDataJdbcAdapter(
+    walletRepository: WalletRepository
+  ): SaveWalletPort = SaveWalletSpringDataJdbcAdapter(walletRepository)
+
+  @Bean
   fun retrieveWallet(findWalletPort: FindWalletPort) = RetrieveWallet(findWalletPort)
+
+  @Bean
+  fun createWallet(saveWalletPort: SaveWalletPort) = CreateWallet(saveWalletPort)
 }

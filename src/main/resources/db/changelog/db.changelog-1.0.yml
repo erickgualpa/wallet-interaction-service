@@ -6,8 +6,10 @@ databaseChangeLog:
         - sql:
             sql: |
               CREATE TABLE wallet (
-                id CHAR(36) PRIMARY KEY NOT NULL,
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                entity_id CHAR(36) NOT NULL,
                 owner_id CHAR(36) NOT NULL,
                 account_id CHAR(36) NOT NULL,
-                created_at TIMESTAMP NOT NULL
+                created_at TIMESTAMP NOT NULL,
+                UNIQUE KEY uk_wallet_entity_id(entity_id)
               );
