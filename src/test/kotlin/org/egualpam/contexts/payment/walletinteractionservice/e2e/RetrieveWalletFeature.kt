@@ -48,7 +48,7 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
 
   private fun createWallet(walletId: String, ownerId: String, accountId: String) {
     val sql = """
-        INSERT INTO wallet(id, owner_id, account_id, created_at)
+        INSERT INTO wallet(entity_id, owner_id, account_id, created_at)
         VALUES(:walletId, :ownerId, :accountId, :createdAt)
       """
 

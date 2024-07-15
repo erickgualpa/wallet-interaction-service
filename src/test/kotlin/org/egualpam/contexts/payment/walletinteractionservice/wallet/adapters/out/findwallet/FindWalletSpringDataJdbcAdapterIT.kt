@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID.randomUUID
 import kotlin.test.assertNull
 
-class SaveWalletSpringDataJdbcAdapterIT : AbstractIntegrationTest() {
+class FindWalletSpringDataJdbcAdapterIT : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var walletRepository: WalletRepository
