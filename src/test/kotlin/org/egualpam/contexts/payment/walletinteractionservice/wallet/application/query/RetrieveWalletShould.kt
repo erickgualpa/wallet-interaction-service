@@ -2,11 +2,6 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Account
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.AccountId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Owner
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.OwnerId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.exceptions.WalletNotExists
 import org.junit.jupiter.api.Test
@@ -25,10 +20,10 @@ class RetrieveWalletShould {
     val findWalletPort = mock<FindWalletPort> {
       on {
         find(WalletId(walletId))
-      } doReturn Wallet(
-          WalletId(walletId),
-          Owner(OwnerId(ownerId)),
-          Account(AccountId(accountId)),
+      } doReturn WalletDto(
+          walletId,
+          WalletDto.OwnerDto(ownerId),
+          WalletDto.AccountDto(accountId),
       )
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)

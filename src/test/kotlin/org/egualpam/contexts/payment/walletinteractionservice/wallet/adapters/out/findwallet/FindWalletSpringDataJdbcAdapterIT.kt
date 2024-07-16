@@ -1,6 +1,7 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.springdatajdbc
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.WalletId
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

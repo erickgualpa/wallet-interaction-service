@@ -5,7 +5,7 @@ import org.springframework.boot.runApplication
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
 
 @EnableJdbcRepositories(
-    "org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.springdatajdbc",
+    "org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc",
 )
 @SpringBootApplication(
     scanBasePackages = [
