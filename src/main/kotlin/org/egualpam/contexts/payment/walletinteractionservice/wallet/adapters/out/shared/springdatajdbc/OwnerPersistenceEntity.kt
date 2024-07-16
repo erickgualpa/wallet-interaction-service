@@ -6,25 +6,21 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
-@Table("wallet")
-class WalletPersistenceEntity(
+@Table("owner")
+class OwnerPersistenceEntity(
   @Id val id: String?,
   @Column("entity_id") val entityId: String,
-  @Column("account_id") val accountId: String,
+  @Column("wallet_entity_id") val walletEntityId: String,
+  @Column("username") val username: String,
   @Column("created_at") val createdAt: Instant,
-  private val ownerPersistenceEntity: OwnerPersistenceEntity
 ) {
   companion object {
-    fun from(wallet: Wallet) = WalletPersistenceEntity(
+    fun from(wallet: Wallet) = OwnerPersistenceEntity(
         null,
+        wallet.getOwnerId().value,
         wallet.getId().value,
-        wallet.getAccountId().value,
+        wallet.getOwnerUsername().value,
         Instant.now(),
-        OwnerPersistenceEntity.from(wallet),
     )
-  }
-
-  fun ownerId(): String {
-    return this.ownerPersistenceEntity.entityId
   }
 }

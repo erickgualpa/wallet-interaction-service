@@ -33,6 +33,8 @@ class Wallet(
 
   fun getOwnerId() = owner.getId()
 
+  fun getOwnerUsername() = owner.getUsername()
+
   override fun getId() = id
 
   override fun equals(other: Any?): Boolean {

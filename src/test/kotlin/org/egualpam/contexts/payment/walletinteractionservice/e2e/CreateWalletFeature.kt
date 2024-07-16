@@ -52,6 +52,7 @@ class CreateWalletFeature : AbstractIntegrationTest() {
         .andExpect(header().string("Location", "/v1/wallet/$walletId"))
 
     assertTrue(walletExists(walletId))
+    assertTrue(ownerExists(ownerId))
   }
 
   private fun walletExists(walletId: String): Boolean {
@@ -63,6 +64,21 @@ class CreateWalletFeature : AbstractIntegrationTest() {
 
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("walletId", walletId)
+
+    val count = jdbcTemplate.queryForObject(sql, sqlParameters, Int::class.java)
+
+    return count == 1
+  }
+
+  private fun ownerExists(ownerId: String): Boolean {
+    val sql = """
+        SELECT COUNT(*)
+        FROM owner
+        WHERE entity_id=:walletId
+      """
+
+    val sqlParameters = MapSqlParameterSource()
+    sqlParameters.addValue("walletId", ownerId)
 
     val count = jdbcTemplate.queryForObject(sql, sqlParameters, Int::class.java)
 

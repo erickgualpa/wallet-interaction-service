@@ -7,4 +7,6 @@ class Owner(
   private val username: OwnerUsername
 ) : DomainEntity {
   override fun getId() = id
+
+  fun getUsername() = this.username
 }
