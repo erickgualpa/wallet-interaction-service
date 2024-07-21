@@ -7,4 +7,4 @@ services:
       - MYSQL_PASSWORD=wis-db-pw
       - MYSQL_ROOT_PASSWORD=wis-db-pw
     ports:
-      - '3306'
+      - '3306:3306'
