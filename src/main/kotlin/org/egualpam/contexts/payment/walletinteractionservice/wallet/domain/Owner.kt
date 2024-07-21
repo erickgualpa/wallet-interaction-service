@@ -5,7 +5,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.domain.Doma
 class Owner(
   private val id: OwnerId,
   private val username: OwnerUsername
-) : DomainEntity {
+) : DomainEntity() {
   override fun getId() = id
 
   fun getUsername() = this.username

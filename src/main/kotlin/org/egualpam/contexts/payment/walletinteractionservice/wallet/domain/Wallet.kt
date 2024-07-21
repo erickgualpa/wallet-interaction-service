@@ -6,7 +6,7 @@ class Wallet(
   private val id: WalletId,
   private val owner: Owner,
   private val account: Account
-) : AggregateRoot {
+) : AggregateRoot() {
 
   companion object {
     fun create(
@@ -36,17 +36,4 @@ class Wallet(
   fun getOwnerUsername() = owner.getUsername()
 
   override fun getId() = id
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as Wallet
-
-    return id == other.id
-  }
-
-  override fun hashCode(): Int {
-    return id.hashCode()
-  }
 }

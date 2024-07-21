@@ -17,7 +17,7 @@ class WalletArchitectureTest {
         .and()
         .haveNameMatching(".*Wallet")
         .should()
-        .implement(AggregateRoot::class.java)
+        .beAssignableTo(AggregateRoot::class.java)
         .check(importedClasses)
   }
 }
