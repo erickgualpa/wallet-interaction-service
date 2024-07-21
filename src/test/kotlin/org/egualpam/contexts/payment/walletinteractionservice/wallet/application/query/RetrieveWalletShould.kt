@@ -1,6 +1,8 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query
 
+import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.assertj.core.api.Assertions.assertThat
+import org.egualpam.contexts.payment.walletinteractionservice.shared.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.exceptions.WalletNotExists
@@ -27,6 +29,7 @@ class RetrieveWalletShould {
       )
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
+
     val result = RetrieveWallet(findWalletPort).execute(retrieveWalletQuery)
 
     assertThat(result).usingRecursiveComparison().isEqualTo(
@@ -36,6 +39,19 @@ class RetrieveWalletShould {
             WalletDto.AccountDto(accountId),
         ),
     )
+  }
+
+  @Test
+  fun `throw domain exception when wallet id is not valid`() {
+    val invalidWalletId = randomAlphabetic(10)
+
+    val findWalletPort = mock<FindWalletPort>()
+    val retrieveWalletQuery = RetrieveWalletQuery(invalidWalletId)
+    val testSubject = RetrieveWallet(findWalletPort)
+
+    val exception = assertThrows<InvalidDomainEntityId> { testSubject.execute(retrieveWalletQuery) }
+
+    assertThat(exception).hasMessage("The provided id [$invalidWalletId] is invalid")
   }
 
   @Test
@@ -49,6 +65,7 @@ class RetrieveWalletShould {
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
     val testSubject = RetrieveWallet(findWalletPort)
+
     val exception = assertThrows<WalletNotExists> { testSubject.execute(retrieveWalletQuery) }
 
     assertThat(exception).hasMessage("Wallet with id [$walletId] not exists")
