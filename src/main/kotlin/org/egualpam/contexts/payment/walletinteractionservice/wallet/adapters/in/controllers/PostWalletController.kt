@@ -1,7 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`in`.controllers
 
+import org.egualpam.contexts.payment.walletinteractionservice.shared.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.command.CreateWallet
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.command.CreateWalletCommand
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -17,15 +17,11 @@ class PostWalletController(
 
   @PostMapping
   fun postWallet(@RequestBody postWalletRequest: PostWalletRequest): ResponseEntity<Void> {
-    val walletId = postWalletRequest.wallet.id
-    val createWalletCommand = CreateWalletCommand(
-        walletId,
-        postWalletRequest.wallet.owner.id,
-        postWalletRequest.wallet.owner.username,
-        postWalletRequest.wallet.account.id,
-        postWalletRequest.wallet.account.currency,
-    )
-    createWallet.execute(createWalletCommand)
-    return ResponseEntity.created(URI("/v1/wallet/$walletId")).build()
+    return try {
+      createWallet.execute(postWalletRequest.toCommand())
+      ResponseEntity.created(URI("/v1/wallet/${postWalletRequest.wallet.id}")).build()
+    } catch (e: InvalidDomainEntityId) {
+      ResponseEntity.badRequest().build()
+    }
   }
 }

@@ -55,6 +55,39 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     assertTrue(ownerExists(ownerId))
   }
 
+  @Test
+  fun `get 400 BAD REQUEST when domain entity id is invalid`() {
+    val invalidWalletId = randomAlphabetic(10)
+    val ownerId = randomUUID().toString()
+    val accountId = randomUUID().toString()
+
+    val username = randomAlphabetic(10)
+    val currency = "EUR"
+
+    val request = """
+      {
+        "wallet": {
+          "id": "$invalidWalletId",
+          "owner": {
+            "id": "$ownerId",
+            "username": "$username"
+          },
+          "account": {
+            "id": "$accountId",
+            "currency": "$currency"
+          }
+        }
+      }
+    """
+
+    mockMvc.perform(
+        post("/v1/wallets")
+            .contentType("application/json")
+            .content(request),
+    )
+        .andExpect(status().isBadRequest)
+  }
+
   private fun walletExists(walletId: String): Boolean {
     val sql = """
         SELECT COUNT(*)
