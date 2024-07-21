@@ -53,6 +53,14 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
         )
   }
 
+  @Test
+  fun `get 404 NOT FOUND when wallet matching wallet id not exists`() {
+    val walletId = randomUUID().toString()
+
+    mockMvc.perform(get("/v1/wallets/{wallet-id}", walletId))
+        .andExpect(status().isNotFound)
+  }
+
   private fun createWallet(persistenceId: Int, entityId: String, accountId: String) {
     val sql = """
         INSERT INTO wallet(id, entity_id, account_id, created_at)

@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWalletQuery
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.exceptions.WalletNotExists
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,7 +17,11 @@ class GetWalletController(
 
   @GetMapping("/{wallet-id}")
   fun getWallet(@PathVariable("wallet-id") walletId: String): ResponseEntity<GetWalletResponse> {
-    val walletDto = retrieveWallet.execute(RetrieveWalletQuery(walletId))
-    return ResponseEntity.ok(GetWalletResponse.from(walletDto))
+    return try {
+      val walletDto = retrieveWallet.execute(RetrieveWalletQuery(walletId))
+      ResponseEntity.ok(GetWalletResponse.from(walletDto))
+    } catch (e: WalletNotExists) {
+      ResponseEntity.notFound().build()
+    }
   }
 }
