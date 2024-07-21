@@ -32,7 +32,9 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                   └── walletinteractionservice
     │   │                       ├── shared
     │   │                       │   ├── adapters
+    │   │                       │   │   └── configuration
     │   │                       │   └── domain
+    │   │                       │       └── exceptions
     │   │                       └── wallet
     │   │                           ├── adapters
     │   │                           │   ├── configuration
@@ -67,9 +69,12 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                       │   └── adapters
         │                       └── wallet
         │                           ├── adapters
+        │                           │   ├── in
+        │                           │   │   └── controllers
         │                           │   └── out
         │                           │       └── findwallet
         │                           └── application
+        │                               ├── command
         │                               └── query
         └── resources
 ```
