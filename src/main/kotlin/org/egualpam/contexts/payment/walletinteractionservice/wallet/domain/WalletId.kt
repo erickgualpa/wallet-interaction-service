@@ -9,7 +9,7 @@ data class WalletId(val value: String) : AggregateId {
     try {
       UUID.fromString(value)
     } catch (e: IllegalArgumentException) {
-      throw InvalidDomainEntityId()
+      throw InvalidDomainEntityId(value)
     }
   }
 }

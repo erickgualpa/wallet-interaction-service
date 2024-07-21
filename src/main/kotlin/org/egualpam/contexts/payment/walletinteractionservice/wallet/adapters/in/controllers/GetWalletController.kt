@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`in`.controllers
 
+import org.egualpam.contexts.payment.walletinteractionservice.shared.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWalletQuery
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.exceptions.WalletNotExists
@@ -20,6 +21,8 @@ class GetWalletController(
     return try {
       val walletDto = retrieveWallet.execute(RetrieveWalletQuery(walletId))
       ResponseEntity.ok(GetWalletResponse.from(walletDto))
+    } catch (e: InvalidDomainEntityId) {
+      ResponseEntity.notFound().build()
     } catch (e: WalletNotExists) {
       ResponseEntity.notFound().build()
     }

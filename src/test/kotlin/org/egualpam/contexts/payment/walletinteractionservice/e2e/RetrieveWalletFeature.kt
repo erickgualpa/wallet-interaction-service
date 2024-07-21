@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
+import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -51,6 +52,14 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
                 """,
             ),
         )
+  }
+
+  @Test
+  fun `get 404 NOT FOUND when wallet id is not valid`() {
+    val invalidWalletId = randomAlphanumeric(10)
+
+    mockMvc.perform(get("/v1/wallets/{wallet-id}", invalidWalletId))
+        .andExpect(status().isNotFound)
   }
 
   @Test

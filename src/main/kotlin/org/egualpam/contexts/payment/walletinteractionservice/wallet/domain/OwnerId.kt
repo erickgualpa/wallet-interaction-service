@@ -9,7 +9,7 @@ data class OwnerId(val value: String) : DomainEntityId {
     try {
       UUID.fromString(value)
     } catch (e: IllegalArgumentException) {
-      throw InvalidDomainEntityId()
+      throw InvalidDomainEntityId(value)
     }
   }
 }

@@ -64,9 +64,11 @@ class CreateWalletShould {
         accountCurrency,
     )
 
-    assertThrows<InvalidDomainEntityId> {
+    val exception = assertThrows<InvalidDomainEntityId> {
       CreateWallet(saveWalletPort).execute(createWalletCommand)
     }
+
+    assertThat(exception).hasMessage("The provided id [$invalidWalletId] is invalid")
   }
 
   @Test
@@ -86,9 +88,11 @@ class CreateWalletShould {
         accountCurrency,
     )
 
-    assertThrows<InvalidDomainEntityId> {
+    val exception = assertThrows<InvalidDomainEntityId> {
       CreateWallet(saveWalletPort).execute(createWalletCommand)
     }
+
+    assertThat(exception).hasMessage("The provided id [$invalidOwnerId] is invalid")
   }
 
   @Test
@@ -108,8 +112,10 @@ class CreateWalletShould {
         accountCurrency,
     )
 
-    assertThrows<InvalidDomainEntityId> {
+    val exception = assertThrows<InvalidDomainEntityId> {
       CreateWallet(saveWalletPort).execute(createWalletCommand)
     }
+
+    assertThat(exception).hasMessage("The provided id [$invalidAccountId] is invalid")
   }
 }
