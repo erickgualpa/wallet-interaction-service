@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.UUID.randomUUID
 import kotlin.test.assertTrue
@@ -43,13 +42,11 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     """
 
     mockMvc.perform(
-        post("/v1/wallets")
+        put("/v1/wallets")
             .contentType("application/json")
             .content(request),
     )
-        .andExpect(status().isCreated)
-        .andExpect(header().exists("Location"))
-        .andExpect(header().string("Location", "/v1/wallet/$walletId"))
+        .andExpect(status().isNoContent)
 
     assertTrue(walletExists(walletId))
     assertTrue(ownerExists(ownerId))
@@ -81,7 +78,7 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     """
 
     mockMvc.perform(
-        post("/v1/wallets")
+        put("/v1/wallets")
             .contentType("application/json")
             .content(request),
     )
