@@ -16,7 +16,6 @@ import java.time.temporal.ChronoUnit.SECONDS
 import java.util.UUID.randomUUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class CreateWalletFeature : AbstractIntegrationTest() {
 
@@ -54,7 +53,17 @@ class CreateWalletFeature : AbstractIntegrationTest() {
             .content(request),
     ).andExpect(status().isNoContent)
 
-    assertTrue(walletExists(walletId))
+    val walletResult = findWallet(walletId)
+    assertNotNull(walletResult)
+    assertThat(walletResult).satisfies(
+        {
+          assertEquals(walletId, it.id)
+          assertThat(it.createdAt).isCloseTo(
+              Instant.now(),
+              TemporalUnitWithinOffset(1, SECONDS),
+          )
+        },
+    )
 
     val ownerResult = findOwner(ownerId)
     assertNotNull(ownerResult)
@@ -102,9 +111,9 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     ).andExpect(status().isBadRequest)
   }
 
-  private fun walletExists(walletId: String): Boolean {
+  private fun findWallet(walletId: String): WalletResult? {
     val sql = """
-        SELECT COUNT(*)
+        SELECT entity_id, created_at
         FROM wallet
         WHERE entity_id=:walletId
       """
@@ -112,9 +121,14 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("walletId", walletId)
 
-    val count = jdbcTemplate.queryForObject(sql, sqlParameters, Int::class.java)
+    val walletResultRowMapper = RowMapper { rs, _ ->
+      WalletResult(
+          rs.getString("entity_id"),
+          rs.getTimestamp("created_at").toInstant(),
+      )
+    }
 
-    return count == 1
+    return jdbcTemplate.queryForObject(sql, sqlParameters, walletResultRowMapper)
   }
 
   private fun findOwner(ownerId: String): OwnerResult? {
@@ -127,18 +141,18 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("walletId", ownerId)
 
-    return jdbcTemplate.queryForObject(sql, sqlParameters, mapIntoOwnerResult())
-  }
-
-  private fun mapIntoOwnerResult(): RowMapper<OwnerResult> {
-    return RowMapper { rs, _ ->
+    val ownerResultRowMapper = RowMapper { rs, _ ->
       OwnerResult(
           rs.getString("entity_id"),
           rs.getString("username"),
           rs.getTimestamp("created_at").toInstant(),
       )
     }
+
+    return jdbcTemplate.queryForObject(sql, sqlParameters, ownerResultRowMapper)
   }
 }
+
+data class WalletResult(val id: String, val createdAt: Instant)
 
 data class OwnerResult(val id: String, val username: String, val createdAt: Instant)
