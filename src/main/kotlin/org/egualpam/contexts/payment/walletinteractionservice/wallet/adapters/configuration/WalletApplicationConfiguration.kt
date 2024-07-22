@@ -1,9 +1,9 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.command.CreateWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.RetrieveWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWallet
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

@@ -1,6 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`in`.controllers
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query.WalletDto
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.WalletDto
 
 data class GetWalletResponse(val wallet: Wallet) {
   data class Wallet(val id: String, val owner: Owner, val account: Account)

@@ -1,6 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`in`.controllers
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.command.CreateWalletCommand
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWalletCommand
 
 data class PostWalletRequest(val wallet: Wallet) {
   data class Wallet(val id: String, val owner: Owner, val account: Account)

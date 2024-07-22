@@ -1,8 +1,8 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.query
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query
 
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.WalletId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.exceptions.WalletNotExists
 
 class RetrieveWallet(private var findWalletPort: FindWalletPort) {
   fun execute(retrieveWalletQuery: RetrieveWalletQuery): WalletDto {

@@ -1,6 +1,6 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.domain
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain
 
-import org.egualpam.contexts.payment.walletinteractionservice.shared.domain.AggregateRoot
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
 
 class Wallet(
   private val id: WalletId,

@@ -1,11 +1,11 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.command
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.assertj.core.api.Assertions.assertThat
-import org.egualpam.contexts.payment.walletinteractionservice.shared.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Wallet
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.argumentCaptor

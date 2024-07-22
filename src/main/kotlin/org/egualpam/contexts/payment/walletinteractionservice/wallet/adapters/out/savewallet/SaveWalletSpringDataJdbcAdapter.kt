@@ -2,8 +2,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.o
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletPersistenceEntity
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletRepository
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Wallet
 import org.springframework.transaction.annotation.Transactional
 
 open class SaveWalletSpringDataJdbcAdapter(

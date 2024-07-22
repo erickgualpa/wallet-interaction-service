@@ -2,7 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.architecture
 
 import com.tngtech.archunit.core.importer.ClassFileImporter
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes
-import org.egualpam.contexts.payment.walletinteractionservice.shared.domain.AggregateRoot
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
 import org.junit.jupiter.api.Test
 
 class WalletArchitectureTest {

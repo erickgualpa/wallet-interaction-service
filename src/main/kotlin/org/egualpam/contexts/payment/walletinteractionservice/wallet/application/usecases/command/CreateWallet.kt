@@ -1,7 +1,7 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.command
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command
 
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Wallet
 
 class CreateWallet(
   private val saveWalletPort: SaveWalletPort

@@ -33,8 +33,9 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                       ├── shared
     │   │                       │   ├── adapters
     │   │                       │   │   └── configuration
-    │   │                       │   └── domain
-    │   │                       │       └── exceptions
+    │   │                       │   └── application
+    │   │                       │       └── domain
+    │   │                       │           └── exceptions
     │   │                       └── wallet
     │   │                           ├── adapters
     │   │                           │   ├── configuration
@@ -45,13 +46,14 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │       ├── savewallet
     │   │                           │       └── shared
     │   │                           │           └── springdatajdbc
-    │   │                           ├── application
-    │   │                           │   ├── command
-    │   │                           │   ├── ports
-    │   │                           │   │   └── out
-    │   │                           │   └── query
-    │   │                           └── domain
-    │   │                               └── exceptions
+    │   │                           └── application
+    │   │                               ├── domain
+    │   │                               │   └── exceptions
+    │   │                               ├── ports
+    │   │                               │   └── out
+    │   │                               └── usecases
+    │   │                                   ├── command
+    │   │                                   └── query
     │   └── resources
     │       └── db
     │           └── changelog
@@ -69,12 +71,11 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                       │   └── adapters
         │                       └── wallet
         │                           ├── adapters
-        │                           │   ├── in
-        │                           │   │   └── controllers
         │                           │   └── out
         │                           │       └── findwallet
         │                           └── application
-        │                               ├── command
-        │                               └── query
+        │                               └── usecases
+        │                                   ├── command
+        │                                   └── query
         └── resources
 ```

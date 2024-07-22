@@ -1,6 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.domain.Wallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
