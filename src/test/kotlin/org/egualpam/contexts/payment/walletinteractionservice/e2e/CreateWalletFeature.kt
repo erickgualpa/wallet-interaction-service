@@ -1,14 +1,21 @@
 package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.data.TemporalUnitWithinOffset
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.time.Instant
+import java.time.temporal.ChronoUnit.SECONDS
 import java.util.UUID.randomUUID
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class CreateWalletFeature : AbstractIntegrationTest() {
@@ -45,11 +52,22 @@ class CreateWalletFeature : AbstractIntegrationTest() {
         put("/v1/wallets")
             .contentType("application/json")
             .content(request),
-    )
-        .andExpect(status().isNoContent)
+    ).andExpect(status().isNoContent)
 
     assertTrue(walletExists(walletId))
-    assertTrue(ownerExists(ownerId))
+
+    val ownerResult = findOwner(ownerId)
+    assertNotNull(ownerResult)
+    assertThat(ownerResult).satisfies(
+        {
+          assertEquals(ownerId, it.id)
+          assertEquals(username, it.username)
+          assertThat(it.createdAt).isCloseTo(
+              Instant.now(),
+              TemporalUnitWithinOffset(1, SECONDS),
+          )
+        },
+    )
   }
 
   @Test
@@ -81,8 +99,7 @@ class CreateWalletFeature : AbstractIntegrationTest() {
         put("/v1/wallets")
             .contentType("application/json")
             .content(request),
-    )
-        .andExpect(status().isBadRequest)
+    ).andExpect(status().isBadRequest)
   }
 
   private fun walletExists(walletId: String): Boolean {
@@ -100,9 +117,9 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     return count == 1
   }
 
-  private fun ownerExists(ownerId: String): Boolean {
+  private fun findOwner(ownerId: String): OwnerResult? {
     val sql = """
-        SELECT COUNT(*)
+        SELECT entity_id, username, created_at
         FROM owner
         WHERE entity_id=:walletId
       """
@@ -110,8 +127,18 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("walletId", ownerId)
 
-    val count = jdbcTemplate.queryForObject(sql, sqlParameters, Int::class.java)
+    return jdbcTemplate.queryForObject(sql, sqlParameters, mapIntoOwnerResult())
+  }
 
-    return count == 1
+  private fun mapIntoOwnerResult(): RowMapper<OwnerResult> {
+    return RowMapper { rs, _ ->
+      OwnerResult(
+          rs.getString("entity_id"),
+          rs.getString("username"),
+          rs.getTimestamp("created_at").toInstant(),
+      )
+    }
   }
 }
+
+data class OwnerResult(val id: String, val username: String, val createdAt: Instant)
