@@ -11,8 +11,9 @@ open class SaveWalletSpringDataJdbcAdapter(
 ) : SaveWalletPort {
   @Transactional
   override fun save(wallet: Wallet) {
-    val walletPersistenceEntity = WalletPersistenceEntity.from(wallet)
-    walletRepository.save(walletPersistenceEntity)
+    WalletPersistenceEntity.from(wallet).let {
+      walletRepository.save(it)
+    }
   }
 }
 
