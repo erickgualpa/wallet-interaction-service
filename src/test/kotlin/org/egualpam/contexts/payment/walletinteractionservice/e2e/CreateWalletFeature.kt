@@ -6,6 +6,7 @@ import org.assertj.core.data.TemporalUnitWithinOffset
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -128,7 +129,11 @@ class CreateWalletFeature : AbstractIntegrationTest() {
       )
     }
 
-    return jdbcTemplate.queryForObject(sql, sqlParameters, walletResultRowMapper)
+    return try {
+      jdbcTemplate.queryForObject(sql, sqlParameters, walletResultRowMapper)
+    } catch (e: EmptyResultDataAccessException) {
+      null
+    }
   }
 
   private fun findOwner(ownerId: String): OwnerResult? {
@@ -149,7 +154,11 @@ class CreateWalletFeature : AbstractIntegrationTest() {
       )
     }
 
-    return jdbcTemplate.queryForObject(sql, sqlParameters, ownerResultRowMapper)
+    return try {
+      jdbcTemplate.queryForObject(sql, sqlParameters, ownerResultRowMapper)
+    } catch (e: EmptyResultDataAccessException) {
+      null
+    }
   }
 }
 
