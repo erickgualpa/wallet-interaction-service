@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/v1/wallets")
 @RestController
-class PostWalletController(
+class PutWalletController(
   private val createWallet: CreateWallet
 ) {
 
