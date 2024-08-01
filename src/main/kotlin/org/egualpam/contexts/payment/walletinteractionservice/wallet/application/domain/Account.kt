@@ -7,4 +7,6 @@ class Account(
   private val currency: AccountCurrency
 ) : DomainEntity() {
   override fun getId() = id
+
+  fun getCurrency() = currency
 }

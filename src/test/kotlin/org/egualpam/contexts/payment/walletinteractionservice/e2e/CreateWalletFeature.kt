@@ -78,6 +78,19 @@ class CreateWalletFeature : AbstractIntegrationTest() {
           )
         },
     )
+
+    val accountResult = findAccount(accountId)
+    assertNotNull(accountResult)
+    assertThat(accountResult).satisfies(
+        {
+          assertEquals(accountId, it.id)
+          assertEquals(currency, it.currency)
+          assertThat(it.createdAt).isCloseTo(
+              Instant.now(),
+              TemporalUnitWithinOffset(1, SECONDS),
+          )
+        },
+    )
   }
 
   @Test
@@ -160,8 +173,35 @@ class CreateWalletFeature : AbstractIntegrationTest() {
       null
     }
   }
+
+  private fun findAccount(accountId: String): AccountResult? {
+    val sql = """
+        SELECT entity_id, currency, created_at
+        FROM account
+        WHERE entity_id=:accountId
+      """
+
+    val sqlParameters = MapSqlParameterSource()
+    sqlParameters.addValue("accountId", accountId)
+
+    val accountResultRowMapper = RowMapper { rs, _ ->
+      AccountResult(
+          rs.getString("entity_id"),
+          rs.getString("currency"),
+          rs.getTimestamp("created_at").toInstant(),
+      )
+    }
+
+    return try {
+      jdbcTemplate.queryForObject(sql, sqlParameters, accountResultRowMapper)
+    } catch (e: EmptyResultDataAccessException) {
+      null
+    }
+  }
 }
 
 data class WalletResult(val id: String, val createdAt: Instant)
 
 data class OwnerResult(val id: String, val username: String, val createdAt: Instant)
+
+data class AccountResult(val id: String, val currency: String, val createdAt: Instant)

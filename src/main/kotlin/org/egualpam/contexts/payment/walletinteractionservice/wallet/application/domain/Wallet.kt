@@ -35,5 +35,7 @@ class Wallet(
 
   fun getOwnerUsername() = owner.getUsername()
 
+  fun getAccountCurrency() = account.getCurrency()
+
   override fun getId() = id
 }

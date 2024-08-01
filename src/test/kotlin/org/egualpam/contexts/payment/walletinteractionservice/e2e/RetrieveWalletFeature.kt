@@ -23,14 +23,14 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
   fun `retrieve wallet`() {
     val walletPersistenceId = nextInt(100, 999)
     val walletEntityId = randomUUID().toString()
-    val accountId = randomUUID().toString()
-
-    createWallet(walletPersistenceId, walletEntityId, accountId)
+    createWallet(walletPersistenceId, walletEntityId)
 
     val ownerId = randomUUID().toString()
     val ownerUsername = randomAlphabetic(10)
-
     createOwner(ownerId, ownerUsername, walletPersistenceId, walletEntityId)
+
+    val accountId = randomUUID().toString()
+    createAccount(accountId, currency = "EUR", walletPersistenceId, walletEntityId)
 
     mockMvc.perform(get("/v1/wallets/{wallet-id}", walletEntityId))
         .andExpect(status().isOk)
@@ -70,16 +70,15 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
         .andExpect(status().isNotFound)
   }
 
-  private fun createWallet(persistenceId: Int, entityId: String, accountId: String) {
+  private fun createWallet(persistenceId: Int, entityId: String) {
     val sql = """
-        INSERT INTO wallet(id, entity_id, account_id, created_at)
-        VALUES(:persistenceId, :entityId, :accountId, :createdAt)
+        INSERT INTO wallet(id, entity_id, created_at)
+        VALUES(:persistenceId, :entityId, :createdAt)
       """
 
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("persistenceId", persistenceId)
     sqlParameters.addValue("entityId", entityId)
-    sqlParameters.addValue("accountId", accountId)
     sqlParameters.addValue("createdAt", Instant.now())
 
     jdbcTemplate.update(sql, sqlParameters)
@@ -99,6 +98,27 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("ownerEntityId", ownerEntityId)
     sqlParameters.addValue("username", ownerUsername)
+    sqlParameters.addValue("walletPersistenceId", walletPersistenceId)
+    sqlParameters.addValue("walletEntityId", walletEntityId)
+    sqlParameters.addValue("createdAt", Instant.now())
+
+    jdbcTemplate.update(sql, sqlParameters)
+  }
+
+  private fun createAccount(
+    accountEntityId: String,
+    currency: String,
+    walletPersistenceId: Int,
+    walletEntityId: String,
+  ) {
+    val sql = """
+        INSERT INTO account(entity_id, currency, wallet, wallet_entity_id, created_at)
+        VALUES(:accountEntityId, :currency, :walletPersistenceId, :walletEntityId, :createdAt)
+      """
+
+    val sqlParameters = MapSqlParameterSource()
+    sqlParameters.addValue("accountEntityId", accountEntityId)
+    sqlParameters.addValue("currency", currency)
     sqlParameters.addValue("walletPersistenceId", walletPersistenceId)
     sqlParameters.addValue("walletEntityId", walletEntityId)
     sqlParameters.addValue("createdAt", Instant.now())

@@ -17,7 +17,7 @@ class FindWalletSpringDataJdbcAdapter(
         WalletDto(
             it.entityId,
             WalletDto.OwnerDto(it.ownerId()),
-            WalletDto.AccountDto(it.accountId),
+            WalletDto.AccountDto(it.accountId()),
         )
       }
     }
