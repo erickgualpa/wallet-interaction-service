@@ -74,6 +74,7 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                           │   └── out
         │                           │       └── findwallet
         │                           └── application
+        │                               ├── domain
         │                               └── usecases
         │                                   ├── command
         │                                   └── query
