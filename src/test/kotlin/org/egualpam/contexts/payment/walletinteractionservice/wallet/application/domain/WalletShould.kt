@@ -10,7 +10,7 @@ class WalletShould {
   fun `define its identity by aggregate id`() {
     val walletId = randomUUID().toString()
 
-    val wallet = Wallet.create(
+    val wallet = Wallet(
         id = walletId,
         ownerId = randomUUID().toString(),
         ownerUsername = randomAlphabetic(5),
@@ -18,7 +18,7 @@ class WalletShould {
         accountCurrency = "EUR",
     )
 
-    val walletInDifferentState = Wallet.create(
+    val walletInDifferentState = Wallet(
         id = walletId,
         ownerId = randomUUID().toString(),
         ownerUsername = randomAlphabetic(5),

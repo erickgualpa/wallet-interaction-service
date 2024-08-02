@@ -13,6 +13,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import java.util.UUID.randomUUID
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class CreateWalletShould {
   @Test
@@ -42,6 +43,12 @@ class CreateWalletShould {
             assertEquals(ownerId, it.getOwnerId().value)
             assertEquals(ownerUsername, it.getOwnerUsername().value)
             assertEquals(accountId, it.getAccountId().value)
+          },
+      )
+      assertThat(firstValue.pullDomainEvents()).hasSize(1).first().satisfies(
+          {
+            assertNotNull(it.id())
+            assertNotNull(it.occurredOn())
           },
       )
     }

@@ -1,6 +1,14 @@
 package org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain
 
 abstract class AggregateRoot {
+  protected val domainEvents = arrayListOf<DomainEvent>()
+
+  fun pullDomainEvents(): List<DomainEvent> {
+    val domainEventsCopy = ArrayList(domainEvents)
+    domainEvents.clear()
+    return domainEventsCopy
+  }
+
   abstract fun getId(): AggregateId
 
   override fun equals(other: Any?): Boolean {

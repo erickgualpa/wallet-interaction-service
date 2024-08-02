@@ -8,7 +8,7 @@ class CreateWallet(
 ) {
   fun execute(createWalletCommand: CreateWalletCommand) {
     val wallet = createWalletCommand.let {
-      Wallet.create(
+      Wallet(
           it.walletId,
           it.ownerId,
           it.ownerUsername,

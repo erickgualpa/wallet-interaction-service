@@ -3,31 +3,31 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
 
 class Wallet(
-  private val id: WalletId,
-  private val owner: Owner,
-  private val account: Account
+  id: String,
+  ownerId: String,
+  ownerUsername: String,
+  accountId: String,
+  accountCurrency: String
 ) : AggregateRoot() {
 
-  companion object {
-    fun create(
-      id: String,
-      ownerId: String,
-      ownerUsername: String,
-      accountId: String,
-      accountCurrency: String
-    ): Wallet {
-      val walletId = WalletId(id)
-      val owner = Owner(
-          OwnerId(ownerId),
-          OwnerUsername(ownerUsername),
-      )
-      val account = Account(
-          AccountId(accountId),
-          AccountCurrency(accountCurrency),
-      )
-      return Wallet(walletId, owner, account)
-    }
+  private val id: WalletId
+  private val owner: Owner
+  private val account: Account
+
+  init {
+    this.id = WalletId(id)
+    this.owner = Owner(
+        OwnerId(ownerId),
+        OwnerUsername(ownerUsername),
+    )
+    this.account = Account(
+        AccountId(accountId),
+        AccountCurrency(accountCurrency),
+    )
+    this.domainEvents.add(WalletCreated(this))
   }
+
+  override fun getId() = id
 
   fun getAccountId() = account.getId()
 
@@ -36,6 +36,4 @@ class Wallet(
   fun getOwnerUsername() = owner.getUsername()
 
   fun getAccountCurrency() = account.getCurrency()
-
-  override fun getId() = id
 }
