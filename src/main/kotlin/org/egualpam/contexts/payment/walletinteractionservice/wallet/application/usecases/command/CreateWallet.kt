@@ -3,16 +3,16 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExistsPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 
 class CreateWallet(
-  private val walletExistsPort: WalletExistsPort,
+  private val walletExists: WalletExists,
   private val saveWalletPort: SaveWalletPort
 ) {
   fun execute(createWalletCommand: CreateWalletCommand) {
     val walletId = WalletId(createWalletCommand.walletId)
 
-    if (walletExistsPort.exists(walletId)) {
+    if (walletExists.with(walletId)) {
       return
     }
 
