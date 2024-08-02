@@ -5,8 +5,10 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.ou
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletSpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.SaveWalletSpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletRepository
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExistsPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -32,4 +34,11 @@ class WalletPortsAndAdaptersConfiguration {
   fun saveWalletSpringDataJdbcAdapter(
     walletRepository: WalletRepository
   ): SaveWalletPort = SaveWalletSpringDataJdbcAdapter(walletRepository)
+
+  @Bean
+  fun walletExistsFakeAdapter(): WalletExistsPort {
+    return object : WalletExistsPort {
+      override fun exists(walletId: WalletId) = false
+    }
+  }
 }

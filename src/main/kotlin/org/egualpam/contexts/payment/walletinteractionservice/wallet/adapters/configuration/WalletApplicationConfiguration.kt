@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExistsPort
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWallet
 import org.springframework.context.annotation.Bean
@@ -13,5 +14,8 @@ class WalletApplicationConfiguration {
   fun retrieveWallet(findWalletPort: FindWalletPort) = RetrieveWallet(findWalletPort)
 
   @Bean
-  fun createWallet(saveWalletPort: SaveWalletPort) = CreateWallet(saveWalletPort)
+  fun createWallet(
+    walletExistsPort: WalletExistsPort,
+    saveWalletPort: SaveWalletPort
+  ) = CreateWallet(walletExistsPort, saveWalletPort)
 }
