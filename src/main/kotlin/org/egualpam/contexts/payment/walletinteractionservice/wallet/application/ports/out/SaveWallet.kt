@@ -2,6 +2,6 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 
-interface SaveWalletPort {
+interface SaveWallet {
   fun save(wallet: Wallet)
 }

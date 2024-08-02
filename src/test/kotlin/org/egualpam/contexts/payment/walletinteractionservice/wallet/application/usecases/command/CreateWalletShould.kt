@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -30,7 +30,7 @@ class CreateWalletShould {
     val accountCurrency = "EUR"
 
     val walletExists = mock<WalletExists>()
-    val saveWalletPort = mock<SaveWalletPort>()
+    val saveWallet = mock<SaveWallet>()
     val createWalletCommand = CreateWalletCommand(
         walletId,
         ownerId,
@@ -39,10 +39,10 @@ class CreateWalletShould {
         accountCurrency,
     )
 
-    CreateWallet(walletExists, saveWalletPort).execute(createWalletCommand)
+    CreateWallet(walletExists, saveWallet).execute(createWalletCommand)
 
     argumentCaptor<Wallet> {
-      verify(saveWalletPort).save(capture())
+      verify(saveWallet).save(capture())
       assertThat(firstValue).satisfies(
           {
             assertEquals(walletId, it.getId().value)
@@ -71,7 +71,7 @@ class CreateWalletShould {
     val walletExists = mock<WalletExists> {
       on { with(WalletId(walletId)) } doReturn true
     }
-    val saveWalletPort = mock<SaveWalletPort>()
+    val saveWallet = mock<SaveWallet>()
     val createWalletCommand = CreateWalletCommand(
         walletId,
         ownerId,
@@ -80,9 +80,9 @@ class CreateWalletShould {
         accountCurrency,
     )
 
-    CreateWallet(walletExists, saveWalletPort).execute(createWalletCommand)
+    CreateWallet(walletExists, saveWallet).execute(createWalletCommand)
 
-    verify(saveWalletPort, never()).save(any())
+    verify(saveWallet, never()).save(any())
   }
 
   @Test
@@ -94,7 +94,7 @@ class CreateWalletShould {
     val accountCurrency = "EUR"
 
     val walletExists = mock<WalletExists>()
-    val saveWalletPort = mock<SaveWalletPort>()
+    val saveWallet = mock<SaveWallet>()
     val createWalletCommand = CreateWalletCommand(
         invalidWalletId,
         ownerId,
@@ -104,7 +104,7 @@ class CreateWalletShould {
     )
 
     val exception = assertThrows<InvalidDomainEntityId> {
-      CreateWallet(walletExists, saveWalletPort).execute(createWalletCommand)
+      CreateWallet(walletExists, saveWallet).execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("The provided id [$invalidWalletId] is invalid")
@@ -119,7 +119,7 @@ class CreateWalletShould {
     val accountCurrency = "EUR"
 
     val walletExists = mock<WalletExists>()
-    val saveWalletPort = mock<SaveWalletPort>()
+    val saveWallet = mock<SaveWallet>()
     val createWalletCommand = CreateWalletCommand(
         walletId,
         invalidOwnerId,
@@ -129,7 +129,7 @@ class CreateWalletShould {
     )
 
     val exception = assertThrows<InvalidDomainEntityId> {
-      CreateWallet(walletExists, saveWalletPort).execute(createWalletCommand)
+      CreateWallet(walletExists, saveWallet).execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("The provided id [$invalidOwnerId] is invalid")
@@ -144,7 +144,7 @@ class CreateWalletShould {
     val accountCurrency = "EUR"
 
     val walletExists = mock<WalletExists>()
-    val saveWalletPort = mock<SaveWalletPort>()
+    val saveWallet = mock<SaveWallet>()
     val createWalletCommand = CreateWalletCommand(
         walletId,
         ownerId,
@@ -154,7 +154,7 @@ class CreateWalletShould {
     )
 
     val exception = assertThrows<InvalidDomainEntityId> {
-      CreateWallet(walletExists, saveWalletPort).execute(createWalletCommand)
+      CreateWallet(walletExists, saveWallet).execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("The provided id [$invalidAccountId] is invalid")

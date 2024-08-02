@@ -6,8 +6,8 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.ou
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.SaveWalletSpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,23 +17,23 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 @Configuration
 class WalletPortsAndAdaptersConfiguration {
   @Bean
-  fun findWalletFakeAdapter(): FindWalletPort = FindWalletFakeAdapter()
+  fun findWalletFakeAdapter(): FindWallet = FindWalletFakeAdapter()
 
   @Bean
   fun findWalletMySQLAdapter(
     jdbcTemplate: NamedParameterJdbcTemplate
-  ): FindWalletPort = FindWalletMySQLAdapter(jdbcTemplate)
+  ): FindWallet = FindWalletMySQLAdapter(jdbcTemplate)
 
   @Primary
   @Bean
   fun findWalletSpringDataJdbcAdapter(
     walletRepository: WalletRepository
-  ): FindWalletPort = FindWalletSpringDataJdbcAdapter(walletRepository)
+  ): FindWallet = FindWalletSpringDataJdbcAdapter(walletRepository)
 
   @Bean
   fun saveWalletSpringDataJdbcAdapter(
     walletRepository: WalletRepository
-  ): SaveWalletPort = SaveWalletSpringDataJdbcAdapter(walletRepository)
+  ): SaveWallet = SaveWalletSpringDataJdbcAdapter(walletRepository)
 
   @Bean
   fun walletExistsFakeAdapter(): WalletExists {

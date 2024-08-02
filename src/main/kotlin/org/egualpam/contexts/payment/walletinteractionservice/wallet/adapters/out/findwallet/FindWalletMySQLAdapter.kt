@@ -1,7 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.WalletDto
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.RowMapper
@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
 class FindWalletMySQLAdapter(
   private var jdbcTemplate: NamedParameterJdbcTemplate
-) : FindWalletPort {
+) : FindWallet {
   override fun find(id: WalletId): WalletDto? {
     val sql = """
       SELECT id, owner_id, account_id

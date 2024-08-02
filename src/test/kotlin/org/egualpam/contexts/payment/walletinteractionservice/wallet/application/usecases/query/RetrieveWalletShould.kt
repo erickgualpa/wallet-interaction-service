@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.doReturn
@@ -19,7 +19,7 @@ class RetrieveWalletShould {
     val ownerId = randomUUID().toString()
     val accountId = randomUUID().toString()
 
-    val findWalletPort = mock<FindWalletPort> {
+    val findWallet = mock<FindWallet> {
       on {
         find(WalletId(walletId))
       } doReturn WalletDto(
@@ -30,7 +30,7 @@ class RetrieveWalletShould {
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
 
-    val result = RetrieveWallet(findWalletPort).execute(retrieveWalletQuery)
+    val result = RetrieveWallet(findWallet).execute(retrieveWalletQuery)
 
     assertThat(result).usingRecursiveComparison().isEqualTo(
         WalletDto(
@@ -45,9 +45,9 @@ class RetrieveWalletShould {
   fun `throw domain exception when wallet id is not valid`() {
     val invalidWalletId = randomAlphabetic(10)
 
-    val findWalletPort = mock<FindWalletPort>()
+    val findWallet = mock<FindWallet>()
     val retrieveWalletQuery = RetrieveWalletQuery(invalidWalletId)
-    val testSubject = RetrieveWallet(findWalletPort)
+    val testSubject = RetrieveWallet(findWallet)
 
     val exception = assertThrows<InvalidDomainEntityId> { testSubject.execute(retrieveWalletQuery) }
 
@@ -58,13 +58,13 @@ class RetrieveWalletShould {
   fun `throw domain exception when wallet not exists`() {
     val walletId = randomUUID().toString()
 
-    val findWalletPort = mock<FindWalletPort> {
+    val findWallet = mock<FindWallet> {
       on {
         find(WalletId(walletId))
       } doReturn null
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
-    val testSubject = RetrieveWallet(findWalletPort)
+    val testSubject = RetrieveWallet(findWallet)
 
     val exception = assertThrows<WalletNotExists> { testSubject.execute(retrieveWalletQuery) }
 

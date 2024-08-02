@@ -4,6 +4,6 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.application
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.WalletDto
 
 
-interface FindWalletPort {
+interface FindWallet {
   fun find(id: WalletId): WalletDto?
 }

@@ -2,12 +2,12 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWalletPort
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 
 class CreateWallet(
   private val walletExists: WalletExists,
-  private val saveWalletPort: SaveWalletPort
+  private val saveWallet: SaveWallet
 ) {
   fun execute(createWalletCommand: CreateWalletCommand) {
     val walletId = WalletId(createWalletCommand.walletId)
@@ -25,7 +25,7 @@ class CreateWallet(
           it.accountCurrency,
       )
     }
-    saveWalletPort.save(wallet)
+    saveWallet.save(wallet)
   }
 }
 
