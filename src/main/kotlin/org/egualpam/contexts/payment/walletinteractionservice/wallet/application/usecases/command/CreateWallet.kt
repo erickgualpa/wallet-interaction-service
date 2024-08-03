@@ -5,11 +5,11 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.application
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 
-class CreateWallet(
+open class CreateWallet(
   private val walletExists: WalletExists,
   private val saveWallet: SaveWallet
 ) {
-  fun execute(createWalletCommand: CreateWalletCommand) {
+  open fun execute(createWalletCommand: CreateWalletCommand) {
     val walletId = WalletId(createWalletCommand.walletId)
 
     if (walletExists.with(walletId)) {

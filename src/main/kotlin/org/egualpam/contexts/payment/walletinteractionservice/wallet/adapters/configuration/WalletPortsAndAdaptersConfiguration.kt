@@ -9,10 +9,13 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.application
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWalletCommand
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.transaction.support.TransactionTemplate
 
 @Configuration
 class WalletPortsAndAdaptersConfiguration {
@@ -39,6 +42,21 @@ class WalletPortsAndAdaptersConfiguration {
   fun walletExistsFakeAdapter(): WalletExists {
     return object : WalletExists {
       override fun with(walletId: WalletId) = false
+    }
+  }
+
+  @Bean("transactionalCreateWallet")
+  fun transactionalCreateWallet(
+    transactionalTemplate: TransactionTemplate,
+    walletExists: WalletExists,
+    saveWallet: SaveWallet
+  ): CreateWallet {
+    return object : CreateWallet(walletExists, saveWallet) {
+      override fun execute(createWalletCommand: CreateWalletCommand) {
+        transactionalTemplate.executeWithoutResult {
+          super.execute(createWalletCommand)
+        }
+      }
     }
   }
 }
