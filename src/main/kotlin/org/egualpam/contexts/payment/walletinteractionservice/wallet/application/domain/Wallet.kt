@@ -3,6 +3,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletAlreadyExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
 
 class Wallet private constructor(
   private val id: WalletId,
@@ -44,6 +45,10 @@ class Wallet private constructor(
   }
 
   override fun getId() = id
+
+  fun saveInto(walletRepository: WalletRepository) {
+    walletRepository.save(this)
+  }
 
   fun getAccountId() = account.getId()
 

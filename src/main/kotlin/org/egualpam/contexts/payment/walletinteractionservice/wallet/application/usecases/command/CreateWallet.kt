@@ -2,12 +2,12 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletAlreadyExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
 
 class CreateWallet(
   private val walletExists: WalletExists,
-  private val saveWallet: SaveWallet
+  private val walletRepository: WalletRepository
 ) {
   fun execute(createWalletCommand: CreateWalletCommand) {
     try {
@@ -19,7 +19,7 @@ class CreateWallet(
           createWalletCommand.accountCurrency,
           walletExists,
       )
-      saveWallet.save(wallet)
+      wallet.saveInto(walletRepository)
     } catch (_: WalletAlreadyExists) {
     }
   }

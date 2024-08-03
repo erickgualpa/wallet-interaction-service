@@ -3,12 +3,12 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletFakeAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletSpringDataJdbcAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.SaveWalletSpringDataJdbcAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletRepository
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.WalletRepositorySpringDataJdbcAdapter
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -27,13 +27,13 @@ class WalletPortsAndAdaptersConfiguration {
   @Primary
   @Bean
   fun findWalletSpringDataJdbcAdapter(
-    walletRepository: WalletRepository
-  ): FindWallet = FindWalletSpringDataJdbcAdapter(walletRepository)
+    walletCrudRepository: WalletCrudRepository
+  ): FindWallet = FindWalletSpringDataJdbcAdapter(walletCrudRepository)
 
   @Bean
-  fun saveWalletSpringDataJdbcAdapter(
-    walletRepository: WalletRepository
-  ): SaveWallet = SaveWalletSpringDataJdbcAdapter(walletRepository)
+  fun walletRepositorySpringDataJdbcAdapter(
+    walletCrudRepository: WalletCrudRepository
+  ): WalletRepository = WalletRepositorySpringDataJdbcAdapter(walletCrudRepository)
 
   @Bean
   fun walletExistsFakeAdapter(): WalletExists {

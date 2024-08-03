@@ -1,6 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`in`.controllers
 
-import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWalletQuery
@@ -23,7 +23,7 @@ class GetWalletController(
         retrieveWallet.execute(it)
       }
       ResponseEntity.ok(GetWalletResponse.from(walletDto))
-    } catch (e: InvalidDomainEntityId) {
+    } catch (e: InvalidAggregateId) {
       ResponseEntity.notFound().build()
     } catch (e: WalletNotExists) {
       ResponseEntity.notFound().build()

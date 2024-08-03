@@ -2,7 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.assertj.core.api.Assertions.assertThat
-import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
@@ -49,7 +49,7 @@ class RetrieveWalletShould {
     val retrieveWalletQuery = RetrieveWalletQuery(invalidWalletId)
     val testSubject = RetrieveWallet(findWallet)
 
-    val exception = assertThrows<InvalidDomainEntityId> { testSubject.execute(retrieveWalletQuery) }
+    val exception = assertThrows<InvalidAggregateId> { testSubject.execute(retrieveWalletQuery) }
 
     assertThat(exception).hasMessage("The provided id [$invalidWalletId] is invalid")
   }

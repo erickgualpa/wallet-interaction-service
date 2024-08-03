@@ -1,15 +1,15 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletRepository
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.WalletDto
 
 class FindWalletSpringDataJdbcAdapter(
-  private var walletRepository: WalletRepository
+  private var walletCrudRepository: WalletCrudRepository
 ) : FindWallet {
   override fun find(id: WalletId): WalletDto? {
-    val results = walletRepository.findByEntityId(id.value)
+    val results = walletCrudRepository.findByEntityId(id.value)
     return if (results.isEmpty()) {
       null
     } else {
