@@ -1,3 +1,14 @@
 package org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain
 
-interface AggregateId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import java.util.UUID
+
+open class AggregateId(value: String) {
+  init {
+    try {
+      UUID.fromString(value)
+    } catch (e: IllegalArgumentException) {
+      throw InvalidDomainEntityId(value)
+    }
+  }
+}

@@ -3,7 +3,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.shared.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import java.util.UUID
 
-abstract class DomainEntityId(value: String) {
+open class DomainEntityId(value: String) {
   init {
     try {
       UUID.fromString(value)
