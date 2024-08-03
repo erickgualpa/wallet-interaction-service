@@ -10,20 +10,17 @@ class Wallet(
   accountCurrency: String
 ) : AggregateRoot() {
 
-  private val id: WalletId
-  private val owner: Owner
-  private val account: Account
+  private val id: WalletId = WalletId(id)
+  private val owner: Owner = Owner(
+      OwnerId(ownerId),
+      OwnerUsername(ownerUsername),
+  )
+  private val account: Account = Account(
+      AccountId(accountId),
+      AccountCurrency(accountCurrency),
+  )
 
   init {
-    this.id = WalletId(id)
-    this.owner = Owner(
-        OwnerId(ownerId),
-        OwnerUsername(ownerUsername),
-    )
-    this.account = Account(
-        AccountId(accountId),
-        AccountCurrency(accountCurrency),
-    )
     this.domainEvents.add(WalletCreated(this))
   }
 

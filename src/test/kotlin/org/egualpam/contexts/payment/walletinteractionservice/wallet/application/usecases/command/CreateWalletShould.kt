@@ -5,6 +5,7 @@ import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletCreated
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.SaveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
@@ -53,6 +54,7 @@ class CreateWalletShould {
       )
       assertThat(firstValue.pullDomainEvents()).hasSize(1).first().satisfies(
           {
+            assertThat(it).isInstanceOf(WalletCreated::class.java)
             assertNotNull(it.id())
             assertNotNull(it.occurredOn())
           },
