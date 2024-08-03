@@ -3,9 +3,9 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletFakeAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletSpringDataJdbcAdapter
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.WalletExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.WalletRepositorySpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
@@ -36,9 +36,9 @@ class WalletPortsAndAdaptersConfiguration {
   ): WalletRepository = WalletRepositorySpringDataJdbcAdapter(walletCrudRepository)
 
   @Bean
-  fun walletExistsFakeAdapter(): WalletExists {
-    return object : WalletExists {
-      override fun with(walletId: WalletId) = false
-    }
+  fun walletExistsMySQLAdapter(
+    jdbcTemplate: NamedParameterJdbcTemplate
+  ): WalletExists {
+    return WalletExistsMySQLAdapter(jdbcTemplate)
   }
 }
