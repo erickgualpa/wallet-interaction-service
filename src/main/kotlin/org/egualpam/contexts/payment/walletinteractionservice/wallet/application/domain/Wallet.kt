@@ -5,7 +5,8 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 class Wallet private constructor(
   private val id: WalletId,
   private val owner: Owner,
-  private val account: Account
+  private val account: Account, // TODO: Remove this property since is used the list instead
+  private val accounts: MutableList<Account> = arrayListOf()
 ) : AggregateRoot() {
 
   companion object {
@@ -16,17 +17,19 @@ class Wallet private constructor(
       accountId: String,
       accountCurrency: String
     ): Wallet {
+      val account = Account(
+          AccountId(accountId),
+          AccountCurrency(accountCurrency),
+      )
       val wallet = Wallet(
           WalletId(id),
           Owner(
               OwnerId(ownerId),
               OwnerUsername(ownerUsername),
           ),
-          Account(
-              AccountId(accountId),
-              AccountCurrency(accountCurrency),
-          ),
+          account,
       )
+      wallet.accounts.add(account)
       wallet.domainEvents.add(WalletCreated(wallet))
       return wallet
     }
