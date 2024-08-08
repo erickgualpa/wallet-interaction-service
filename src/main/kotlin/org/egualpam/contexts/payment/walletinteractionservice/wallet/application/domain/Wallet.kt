@@ -1,9 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletAlreadyExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
 
 class Wallet private constructor(
   private val id: WalletId,
@@ -17,17 +14,10 @@ class Wallet private constructor(
       ownerId: String,
       ownerUsername: String,
       accountId: String,
-      accountCurrency: String,
-      walletExists: WalletExists
+      accountCurrency: String
     ): Wallet {
-      val walletId = WalletId(id)
-
-      if (walletExists.with(walletId)) {
-        throw WalletAlreadyExists(walletId)
-      }
-
       val wallet = Wallet(
-          walletId,
+          WalletId(id),
           Owner(
               OwnerId(ownerId),
               OwnerUsername(ownerUsername),
@@ -37,18 +27,12 @@ class Wallet private constructor(
               AccountCurrency(accountCurrency),
           ),
       )
-
       wallet.domainEvents.add(WalletCreated(wallet))
-
       return wallet
     }
   }
 
   override fun getId() = id
-
-  fun saveInto(walletRepository: WalletRepository) {
-    walletRepository.save(this)
-  }
 
   fun getAccountId() = account.getId()
 

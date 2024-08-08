@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.Instant
 import java.time.temporal.ChronoUnit.SECONDS
 import java.util.UUID.randomUUID
+import kotlin.random.Random.Default.nextInt
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -91,6 +92,50 @@ class CreateWalletFeature : AbstractIntegrationTest() {
           )
         },
     )
+  }
+
+  @Test
+  fun `get 409 CONFLICT when owner username already exists`() {
+    val existingWalletPersistenceId = nextInt(100, 999)
+    val existingWalletEntityId = randomUUID().toString()
+    createWallet(existingWalletPersistenceId, existingWalletEntityId)
+
+    val existingOwnerUsername = randomAlphabetic(10)
+    createOwner(
+        ownerEntityId = randomUUID().toString(),
+        existingOwnerUsername,
+        existingWalletPersistenceId,
+        existingWalletEntityId,
+    )
+
+    createAccount(
+        accountEntityId = randomUUID().toString(),
+        currency = "EUR",
+        existingWalletPersistenceId,
+        existingWalletEntityId,
+    )
+
+    val request = """
+      {
+        "wallet": {
+          "id": "${randomUUID()}",
+          "owner": {
+            "id": "${randomUUID()}",
+            "username": "$existingOwnerUsername"
+          },
+          "account": {
+            "id": "${randomUUID()}",
+            "currency": "EUR"
+          }
+        }
+      }
+    """
+
+    mockMvc.perform(
+        put("/v1/wallets")
+            .contentType("application/json")
+            .content(request),
+    ).andExpect(status().isConflict)
   }
 
   @Test
@@ -197,6 +242,62 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     } catch (e: EmptyResultDataAccessException) {
       null
     }
+  }
+
+  private fun createWallet(persistenceId: Int, entityId: String) {
+    val sql = """
+        INSERT INTO wallet(id, entity_id, created_at)
+        VALUES(:persistenceId, :entityId, :createdAt)
+      """
+
+    val sqlParameters = MapSqlParameterSource()
+    sqlParameters.addValue("persistenceId", persistenceId)
+    sqlParameters.addValue("entityId", entityId)
+    sqlParameters.addValue("createdAt", Instant.now())
+
+    jdbcTemplate.update(sql, sqlParameters)
+  }
+
+  private fun createOwner(
+    ownerEntityId: String,
+    ownerUsername: String,
+    walletPersistenceId: Int,
+    walletEntityId: String,
+  ) {
+    val sql = """
+        INSERT INTO owner(entity_id, username, wallet, wallet_entity_id, created_at)
+        VALUES(:ownerEntityId, :username, :walletPersistenceId, :walletEntityId, :createdAt)
+      """
+
+    val sqlParameters = MapSqlParameterSource()
+    sqlParameters.addValue("ownerEntityId", ownerEntityId)
+    sqlParameters.addValue("username", ownerUsername)
+    sqlParameters.addValue("walletPersistenceId", walletPersistenceId)
+    sqlParameters.addValue("walletEntityId", walletEntityId)
+    sqlParameters.addValue("createdAt", Instant.now())
+
+    jdbcTemplate.update(sql, sqlParameters)
+  }
+
+  private fun createAccount(
+    accountEntityId: String,
+    currency: String,
+    walletPersistenceId: Int,
+    walletEntityId: String,
+  ) {
+    val sql = """
+        INSERT INTO account(entity_id, currency, wallet, wallet_entity_id, created_at)
+        VALUES(:accountEntityId, :currency, :walletPersistenceId, :walletEntityId, :createdAt)
+      """
+
+    val sqlParameters = MapSqlParameterSource()
+    sqlParameters.addValue("accountEntityId", accountEntityId)
+    sqlParameters.addValue("currency", currency)
+    sqlParameters.addValue("walletPersistenceId", walletPersistenceId)
+    sqlParameters.addValue("walletEntityId", walletEntityId)
+    sqlParameters.addValue("createdAt", Instant.now())
+
+    jdbcTemplate.update(sql, sqlParameters)
   }
 }
 

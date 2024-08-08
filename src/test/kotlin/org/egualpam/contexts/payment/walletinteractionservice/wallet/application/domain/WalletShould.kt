@@ -19,7 +19,6 @@ class WalletShould {
         ownerUsername = randomAlphabetic(5),
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
-        walletExists,
     )
 
     val walletInDifferentState = Wallet.create(
@@ -28,7 +27,6 @@ class WalletShould {
         ownerUsername = randomAlphabetic(5),
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
-        walletExists,
     )
 
     assertTrue(wallet == walletInDifferentState)

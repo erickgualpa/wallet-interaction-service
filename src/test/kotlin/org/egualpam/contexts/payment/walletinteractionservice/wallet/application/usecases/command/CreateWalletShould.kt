@@ -5,9 +5,11 @@ import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletCreated
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.OwnerUsernameAlreadyExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
 import org.junit.jupiter.api.Test
@@ -161,5 +163,32 @@ class CreateWalletShould {
     }
 
     assertThat(exception).hasMessage("The provided id [$invalidAccountId] is invalid")
+  }
+
+  @Test
+  fun `throw domain exception when owner username already exists`() {
+    val walletId = randomUUID().toString()
+    val ownerId = randomUUID().toString()
+    val ownerUsername = randomAlphabetic(10)
+    val accountId = randomUUID().toString()
+    val accountCurrency = "EUR"
+
+    val walletExists = mock<WalletExists> {
+      on { with(OwnerUsername(ownerUsername)) } doReturn true
+    }
+    val walletRepository = mock<WalletRepository>()
+    val createWalletCommand = CreateWalletCommand(
+        walletId,
+        ownerId,
+        ownerUsername,
+        accountId,
+        accountCurrency,
+    )
+
+    val exception = assertThrows<OwnerUsernameAlreadyExists> {
+      CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
+    }
+
+    assertThat(exception).hasMessage("Wallet owner with username [${ownerUsername}] already exists")
   }
 }
