@@ -46,9 +46,7 @@ class PutWalletController(
           status(CONFLICT).build()
         }
 
-        else -> {
-          internalServerError().build()
-        }
+        else -> internalServerError().build()
       }
     }
   }

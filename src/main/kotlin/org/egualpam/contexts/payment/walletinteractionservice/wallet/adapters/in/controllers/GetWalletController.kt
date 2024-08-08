@@ -4,7 +4,12 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWalletQuery
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.internalServerError
+import org.springframework.http.ResponseEntity.notFound
+import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 class GetWalletController(
   private var retrieveWallet: RetrieveWallet
 ) {
+  private val logger: Logger = getLogger(this::class.java)
 
   @GetMapping("/{wallet-id}")
   fun getWallet(@PathVariable("wallet-id") walletId: String): ResponseEntity<GetWalletResponse> {
@@ -22,11 +28,16 @@ class GetWalletController(
       val walletDto = RetrieveWalletQuery(walletId).let {
         retrieveWallet.execute(it)
       }
-      ResponseEntity.ok(GetWalletResponse.from(walletDto))
-    } catch (e: InvalidAggregateId) {
-      ResponseEntity.notFound().build()
-    } catch (e: WalletNotExists) {
-      ResponseEntity.notFound().build()
+      ok(GetWalletResponse.from(walletDto))
+    } catch (e: RuntimeException) {
+      return when (e.javaClass) {
+        InvalidAggregateId::class.java, WalletNotExists::class.java -> {
+          logger.warn(e.message)
+          notFound().build()
+        }
+
+        else -> internalServerError().build()
+      }
     }
   }
 }
