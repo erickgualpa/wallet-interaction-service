@@ -5,7 +5,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 class Wallet private constructor(
   private val id: WalletId,
   private val owner: Owner,
-  private val accounts: MutableList<Account> = arrayListOf()
+  private val accounts: MutableSet<Account> = mutableSetOf()
 ) : AggregateRoot() {
 
   companion object {
@@ -35,11 +35,9 @@ class Wallet private constructor(
 
   override fun getId() = id
 
-  fun getAccountId() = accounts.first().getId()
-
   fun getOwnerId() = owner.getId()
 
   fun getOwnerUsername() = owner.getUsername()
 
-  fun getAccountCurrency() = accounts.first().getCurrency()
+  fun accounts(): Set<Account> = accounts
 }

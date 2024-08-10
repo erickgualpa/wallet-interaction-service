@@ -46,7 +46,10 @@ class PutWalletController(
           status(CONFLICT).build()
         }
 
-        else -> internalServerError().build()
+        else -> {
+          logger.error("Unexpected error processing request [$putWalletRequest]:", e)
+          internalServerError().build()
+        }
       }
     }
   }
