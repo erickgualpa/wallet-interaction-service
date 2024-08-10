@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.Instant
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextInt
@@ -32,27 +29,30 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
     val accountId = randomUUID().toString()
     createAccount(accountId, currency = "EUR", walletPersistenceId, walletEntityId)
 
-    mockMvc.perform(get("/v1/wallets/{wallet-id}", walletEntityId))
-        .andExpect(status().isOk)
-        .andExpect(content().contentType("application/json"))
-        .andExpect(
-            content().json(
-                """
-                  {
-                    "wallet": {
-                      "id": "$walletEntityId",
-                      "owner": {
-                        "id": "$ownerId"
-                      },
-                      "accounts": [
-                        {
-                          "id": "$accountId"
-                        }
-                      ]
+    webMvcTestClient.get()
+        .uri("/v1/wallets/{wallet-id}", walletEntityId)
+        .exchange()
+        .expectStatus()
+        .isOk
+        .expectHeader()
+        .contentType("application/json")
+        .expectBody()
+        .json(
+            """
+              {
+                "wallet": {
+                  "id": "$walletEntityId",
+                  "owner": {
+                    "id": "$ownerId"
+                  },
+                  "accounts": [
+                    {
+                      "id": "$accountId"
                     }
-                  }
-                """,
-            ),
+                  ]
+                }
+              }
+            """,
         )
   }
 
@@ -60,16 +60,22 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
   fun `get 404 NOT FOUND when wallet id is not valid`() {
     val invalidWalletId = randomAlphanumeric(10)
 
-    mockMvc.perform(get("/v1/wallets/{wallet-id}", invalidWalletId))
-        .andExpect(status().isNotFound)
+    webMvcTestClient.get()
+        .uri("/v1/wallets/{wallet-id}", invalidWalletId)
+        .exchange()
+        .expectStatus()
+        .isNotFound
   }
 
   @Test
   fun `get 404 NOT FOUND when wallet matching wallet id not exists`() {
-    val walletId = randomUUID().toString()
+    val randomWalletId = randomUUID().toString()
 
-    mockMvc.perform(get("/v1/wallets/{wallet-id}", walletId))
-        .andExpect(status().isNotFound)
+    webMvcTestClient.get()
+        .uri("/v1/wallets/{wallet-id}", randomWalletId)
+        .exchange()
+        .expectStatus()
+        .isNotFound
   }
 
   private fun createWallet(persistenceId: Int, entityId: String) {

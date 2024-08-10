@@ -1,7 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ApplicationContextInitializer
@@ -9,13 +8,9 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.transaction.annotation.Transactional
 import org.testcontainers.containers.ComposeContainer
 import java.io.File
 
-@Transactional
-@AutoConfigureMockMvc
 @ContextConfiguration(initializers = [AbstractIntegrationTest.Companion.MySQLInitializer::class])
 @ActiveProfiles("integration-test")
 @SpringBootTest(
@@ -23,9 +18,6 @@ import java.io.File
     classes = [WalletInteractionServiceApplication::class],
 )
 abstract class AbstractIntegrationTest {
-
-  @Autowired
-  protected lateinit var mockMvc: MockMvc
 
   @Autowired
   protected lateinit var webMvcTestClient: WebTestClient
