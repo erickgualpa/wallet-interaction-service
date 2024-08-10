@@ -42,10 +42,11 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │   ├── in
     │   │                           │   │   └── controllers
     │   │                           │   └── out
-    │   │                           │       ├── findwallet
-    │   │                           │       ├── savewallet
-    │   │                           │       └── shared
-    │   │                           │           └── springdatajdbc
+    │   │                           │       ├── shared
+    │   │                           │       │   └── springdatajdbc
+    │   │                           │       ├── walletexists
+    │   │                           │       ├── walletrepository
+    │   │                           │       └── walletsearchrepository
     │   │                           └── application
     │   │                               ├── domain
     │   │                               │   └── exceptions
@@ -71,8 +72,11 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                       │   └── adapters
         │                       └── wallet
         │                           ├── adapters
+        │                           │   ├── in
+        │                           │   │   └── controllers
         │                           │   └── out
-        │                           │       └── findwallet
+        │                           │       ├── walletexists
+        │                           │       └── walletsearchrepository
         │                           └── application
         │                               ├── domain
         │                               └── usecases
