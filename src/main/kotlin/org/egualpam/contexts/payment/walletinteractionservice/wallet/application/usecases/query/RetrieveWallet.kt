@@ -2,12 +2,12 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletSearchRepository
 
-class RetrieveWallet(private var findWallet: FindWallet) {
+class RetrieveWallet(private val walletSearchRepository: WalletSearchRepository) {
   fun execute(retrieveWalletQuery: RetrieveWalletQuery): WalletDto {
     val walletId = WalletId(retrieveWalletQuery.id)
-    return findWallet.find(walletId) ?: throw WalletNotExists(walletId)
+    return walletSearchRepository.search(walletId) ?: throw WalletNotExists(walletId)
   }
 }
 

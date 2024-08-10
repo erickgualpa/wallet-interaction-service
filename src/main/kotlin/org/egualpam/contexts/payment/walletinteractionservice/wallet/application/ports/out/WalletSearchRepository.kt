@@ -3,6 +3,6 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.WalletDto
 
-interface FindWallet {
-  fun find(id: WalletId): WalletDto?
+interface WalletSearchRepository {
+  fun search(id: WalletId): WalletDto?
 }

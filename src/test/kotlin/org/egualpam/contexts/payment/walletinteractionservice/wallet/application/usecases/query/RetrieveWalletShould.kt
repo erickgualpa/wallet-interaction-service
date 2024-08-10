@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletSearchRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.doReturn
@@ -19,9 +19,9 @@ class RetrieveWalletShould {
     val ownerId = randomUUID().toString()
     val accountId = randomUUID().toString()
 
-    val findWallet = mock<FindWallet> {
+    val walletSearchRepository = mock<WalletSearchRepository> {
       on {
-        find(WalletId(walletId))
+        search(WalletId(walletId))
       } doReturn WalletDto(
           walletId,
           WalletDto.OwnerDto(ownerId),
@@ -30,7 +30,7 @@ class RetrieveWalletShould {
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
 
-    val result = RetrieveWallet(findWallet).execute(retrieveWalletQuery)
+    val result = RetrieveWallet(walletSearchRepository).execute(retrieveWalletQuery)
 
     assertThat(result).usingRecursiveComparison().isEqualTo(
         WalletDto(
@@ -45,9 +45,9 @@ class RetrieveWalletShould {
   fun `throw domain exception when wallet id is not valid`() {
     val invalidWalletId = randomAlphabetic(10)
 
-    val findWallet = mock<FindWallet>()
+    val walletSearchRepository = mock<WalletSearchRepository>()
     val retrieveWalletQuery = RetrieveWalletQuery(invalidWalletId)
-    val testSubject = RetrieveWallet(findWallet)
+    val testSubject = RetrieveWallet(walletSearchRepository)
 
     val exception = assertThrows<InvalidAggregateId> { testSubject.execute(retrieveWalletQuery) }
 
@@ -58,13 +58,13 @@ class RetrieveWalletShould {
   fun `throw domain exception when wallet not exists`() {
     val walletId = randomUUID().toString()
 
-    val findWallet = mock<FindWallet> {
+    val walletSearchRepository = mock<WalletSearchRepository> {
       on {
-        find(WalletId(walletId))
+        search(WalletId(walletId))
       } doReturn null
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
-    val testSubject = RetrieveWallet(findWallet)
+    val testSubject = RetrieveWallet(walletSearchRepository)
 
     val exception = assertThrows<WalletNotExists> { testSubject.execute(retrieveWalletQuery) }
 
