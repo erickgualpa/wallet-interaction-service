@@ -1,7 +1,5 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletFakeAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletSpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.WalletExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.WalletRepositorySpringDataJdbcAdapter
@@ -16,14 +14,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
 @Configuration
 class WalletPortsAndAdaptersConfiguration {
-  @Bean
-  fun findWalletFakeAdapter(): FindWallet = FindWalletFakeAdapter()
-
-  @Bean
-  fun findWalletMySQLAdapter(
-    jdbcTemplate: NamedParameterJdbcTemplate
-  ): FindWallet = FindWalletMySQLAdapter(jdbcTemplate)
-
   @Primary
   @Bean
   fun findWalletSpringDataJdbcAdapter(

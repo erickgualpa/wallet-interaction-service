@@ -13,7 +13,11 @@ class RetrieveWallet(private var findWallet: FindWallet) {
 
 data class RetrieveWalletQuery(val id: String)
 
-data class WalletDto(val id: String, val owner: OwnerDto, val account: AccountDto) {
+data class WalletDto(
+  val id: String,
+  val owner: OwnerDto,
+  val accounts: Set<AccountDto>
+) {
   data class OwnerDto(val id: String)
   data class AccountDto(val id: String)
 }

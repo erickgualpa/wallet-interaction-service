@@ -25,7 +25,7 @@ class RetrieveWalletShould {
       } doReturn WalletDto(
           walletId,
           WalletDto.OwnerDto(ownerId),
-          WalletDto.AccountDto(accountId),
+          setOf(WalletDto.AccountDto(accountId)),
       )
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
@@ -36,7 +36,7 @@ class RetrieveWalletShould {
         WalletDto(
             walletId,
             WalletDto.OwnerDto(ownerId),
-            WalletDto.AccountDto(accountId),
+            setOf(WalletDto.AccountDto(accountId)),
         ),
     )
   }

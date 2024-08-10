@@ -36,7 +36,10 @@ class GetWalletController(
           notFound().build()
         }
 
-        else -> internalServerError().build()
+        else -> {
+          logger.error("Unexpected error processing request:")
+          internalServerError().build()
+        }
       }
     }
   }

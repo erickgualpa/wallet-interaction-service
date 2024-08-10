@@ -35,6 +35,5 @@ class WalletPersistenceEntity(
 
   fun ownerId() = this.persistenceOwner.entityId
 
-  // TODO: This is a workaround. It should be updated
-  fun accountId() = this.persistenceAccounts.first().entityId
+  fun accounts() = this.persistenceAccounts
 }

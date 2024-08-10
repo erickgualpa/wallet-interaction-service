@@ -44,9 +44,11 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
                       "owner": {
                         "id": "$ownerId"
                       },
-                      "account": {
-                        "id": "$accountId"
-                      }
+                      "accounts": [
+                        {
+                          "id": "$accountId"
+                        }
+                      ]
                     }
                   }
                 """,
