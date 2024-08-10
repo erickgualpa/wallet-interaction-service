@@ -9,9 +9,11 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.transaction.annotation.Transactional
 import org.testcontainers.containers.ComposeContainer
 import java.io.File
 
+@Transactional
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = [AbstractIntegrationTest.Companion.MySQLInitializer::class])
 @ActiveProfiles("integration-test")
