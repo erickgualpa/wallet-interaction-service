@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletPersistenceEntity

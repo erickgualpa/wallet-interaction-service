@@ -1,9 +1,9 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet.FindWalletSpringDataJdbcAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists.WalletExistsMySQLAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.savewallet.WalletRepositorySpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists.WalletExistsMySQLAdapter
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.WalletRepositorySpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.FindWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
