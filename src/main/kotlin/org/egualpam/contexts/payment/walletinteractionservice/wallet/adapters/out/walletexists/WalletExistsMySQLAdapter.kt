@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.findwallet
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
