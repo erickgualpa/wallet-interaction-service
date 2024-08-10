@@ -7,11 +7,11 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.Ab
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.time.Instant
 import java.time.temporal.ChronoUnit.SECONDS
 import java.util.UUID.randomUUID
@@ -49,11 +49,13 @@ class CreateWalletFeature : AbstractIntegrationTest() {
       }
     """
 
-    mockMvc.perform(
-        put("/v1/wallets")
-            .contentType("application/json")
-            .content(request),
-    ).andExpect(status().isNoContent)
+    webMvcTestClient.put()
+        .uri("/v1/wallets")
+        .header(CONTENT_TYPE, "application/json")
+        .bodyValue(request)
+        .exchange()
+        .expectStatus()
+        .isNoContent
 
     val walletResult = findWallet(walletId)
     assertNotNull(walletResult)
@@ -131,11 +133,13 @@ class CreateWalletFeature : AbstractIntegrationTest() {
       }
     """
 
-    mockMvc.perform(
-        put("/v1/wallets")
-            .contentType("application/json")
-            .content(request),
-    ).andExpect(status().isConflict)
+    webMvcTestClient.put()
+        .uri("/v1/wallets")
+        .header(CONTENT_TYPE, "application/json")
+        .bodyValue(request)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(CONFLICT)
   }
 
   @Test
@@ -163,11 +167,13 @@ class CreateWalletFeature : AbstractIntegrationTest() {
       }
     """
 
-    mockMvc.perform(
-        put("/v1/wallets")
-            .contentType("application/json")
-            .content(request),
-    ).andExpect(status().isBadRequest)
+    webMvcTestClient.put()
+        .uri("/v1/wallets")
+        .header(CONTENT_TYPE, "application/json")
+        .bodyValue(request)
+        .exchange()
+        .expectStatus()
+        .isBadRequest
   }
 
   private fun findWallet(walletId: String): WalletResult? {

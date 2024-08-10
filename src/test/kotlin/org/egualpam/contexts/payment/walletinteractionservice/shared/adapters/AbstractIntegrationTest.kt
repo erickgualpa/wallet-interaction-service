@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.transaction.annotation.Transactional
 import org.testcontainers.containers.ComposeContainer
@@ -25,6 +26,9 @@ abstract class AbstractIntegrationTest {
 
   @Autowired
   protected lateinit var mockMvc: MockMvc
+
+  @Autowired
+  protected lateinit var webMvcTestClient: WebTestClient
 
   companion object {
     private const val MYSQL = "mysql"

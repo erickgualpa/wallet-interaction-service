@@ -9,11 +9,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 class WalletExistsMySQLAdapter(
   private var jdbcTemplate: NamedParameterJdbcTemplate
 ) : WalletExists {
+  // TODO: Add integration test covering this methods
   override fun with(walletId: WalletId): Boolean {
     val sql = """
       SELECT COUNT(*)
       FROM wallet
-      WHERE id=:walletId
+      WHERE entity_id=:walletId
     """
 
     val sqlParameters = MapSqlParameterSource()
