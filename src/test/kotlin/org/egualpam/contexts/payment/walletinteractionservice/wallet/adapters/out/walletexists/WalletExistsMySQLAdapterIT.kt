@@ -12,10 +12,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import java.util.UUID.randomUUID
 import kotlin.test.assertTrue
 
-class WalletExistsMySQLAdapterIT(
-  @Autowired private val jdbcTemplate: NamedParameterJdbcTemplate,
-  @Autowired private val walletRepository: WalletRepository
-) : AbstractIntegrationTest() {
+class WalletExistsMySQLAdapterIT : AbstractIntegrationTest() {
+
+  @Autowired
+  private lateinit var jdbcTemplate: NamedParameterJdbcTemplate
+
+  @Autowired
+  private lateinit var walletRepository: WalletRepository
 
   @Test
   fun `return true when a wallet with given wallet id exists`() {
