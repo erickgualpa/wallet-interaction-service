@@ -5,6 +5,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.Wa
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.OwnerUsernameAlreadyExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
 import org.junit.jupiter.api.Test
@@ -117,6 +118,38 @@ class PutWalletControllerTest {
           "account": {
             "id": "${randomUUID()}",
             "currency": "EUR"
+          }
+        }
+      }
+    """
+
+    mockMvc.put("/v1/wallets") {
+      contentType = APPLICATION_JSON
+      content = request
+    }.andExpect {
+      status { isBadRequest() }
+    }
+  }
+
+  @Test
+  fun `get 400 BAD REQUEST when use case throws AccountCurrencyIsNotSupported`() {
+    val unsupportedCurrency = "USD"
+
+    given {
+      transactionTemplate.executeWithoutResult(any())
+    } willThrow { AccountCurrencyIsNotSupported(unsupportedCurrency) }
+
+    val request = """
+      {
+        "wallet": {
+          "id": "${randomUUID()}",
+          "owner": {
+            "id": "${randomUUID()}",
+            "username": "${randomAlphabetic(10)}"
+          },
+          "account": {
+            "id": "${randomUUID()}",
+            "currency": "$unsupportedCurrency"
           }
         }
       }

@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.OwnerUsernameAlreadyExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
 import org.slf4j.Logger
@@ -36,7 +37,9 @@ class PutWalletController(
       noContent().build()
     } catch (e: RuntimeException) {
       return when (e.javaClass) {
-        InvalidAggregateId::class.java, InvalidDomainEntityId::class.java -> {
+        InvalidAggregateId::class.java,
+        InvalidDomainEntityId::class.java,
+        AccountCurrencyIsNotSupported::class.java -> {
           logger.warn(e.message)
           badRequest().build()
         }
