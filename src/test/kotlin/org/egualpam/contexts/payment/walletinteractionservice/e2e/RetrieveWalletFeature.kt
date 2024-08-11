@@ -2,32 +2,37 @@ package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
+import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.AccountTestRepository
+import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.OwnerTestRepository
+import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import java.time.Instant
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextInt
 
-class RetrieveWalletFeature : AbstractIntegrationTest() {
-
-  @Autowired
-  private lateinit var jdbcTemplate: NamedParameterJdbcTemplate
-
+class RetrieveWalletFeature(
+  @Autowired private val walletTestRepository: WalletTestRepository,
+  @Autowired private val ownerTestRepository: OwnerTestRepository,
+  @Autowired private val accountTestRepository: AccountTestRepository
+) : AbstractIntegrationTest() {
   @Test
   fun `retrieve wallet`() {
     val walletPersistenceId = nextInt(100, 999)
     val walletEntityId = randomUUID().toString()
-    createWallet(walletPersistenceId, walletEntityId)
+    walletTestRepository.createWallet(walletPersistenceId, walletEntityId)
 
     val ownerId = randomUUID().toString()
     val ownerUsername = randomAlphabetic(10)
-    createOwner(ownerId, ownerUsername, walletPersistenceId, walletEntityId)
+    ownerTestRepository.createOwner(ownerId, ownerUsername, walletPersistenceId, walletEntityId)
 
     val accountId = randomUUID().toString()
-    createAccount(accountId, currency = "EUR", walletPersistenceId, walletEntityId)
+    accountTestRepository.createAccount(
+        accountId,
+        currency = "EUR",
+        walletPersistenceId,
+        walletEntityId,
+    )
 
     webMvcTestClient.get()
         .uri("/v1/wallets/{wallet-id}", walletEntityId)
@@ -76,61 +81,5 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
         .exchange()
         .expectStatus()
         .isNotFound
-  }
-
-  private fun createWallet(persistenceId: Int, entityId: String) {
-    val sql = """
-        INSERT INTO wallet(id, entity_id, created_at)
-        VALUES(:persistenceId, :entityId, :createdAt)
-      """
-
-    val sqlParameters = MapSqlParameterSource()
-    sqlParameters.addValue("persistenceId", persistenceId)
-    sqlParameters.addValue("entityId", entityId)
-    sqlParameters.addValue("createdAt", Instant.now())
-
-    jdbcTemplate.update(sql, sqlParameters)
-  }
-
-  private fun createOwner(
-    ownerEntityId: String,
-    ownerUsername: String,
-    walletPersistenceId: Int,
-    walletEntityId: String,
-  ) {
-    val sql = """
-        INSERT INTO owner(entity_id, username, wallet, wallet_entity_id, created_at)
-        VALUES(:ownerEntityId, :username, :walletPersistenceId, :walletEntityId, :createdAt)
-      """
-
-    val sqlParameters = MapSqlParameterSource()
-    sqlParameters.addValue("ownerEntityId", ownerEntityId)
-    sqlParameters.addValue("username", ownerUsername)
-    sqlParameters.addValue("walletPersistenceId", walletPersistenceId)
-    sqlParameters.addValue("walletEntityId", walletEntityId)
-    sqlParameters.addValue("createdAt", Instant.now())
-
-    jdbcTemplate.update(sql, sqlParameters)
-  }
-
-  private fun createAccount(
-    accountEntityId: String,
-    currency: String,
-    walletPersistenceId: Int,
-    walletEntityId: String,
-  ) {
-    val sql = """
-        INSERT INTO account(entity_id, currency, wallet, wallet_entity_id, created_at)
-        VALUES(:accountEntityId, :currency, :walletPersistenceId, :walletEntityId, :createdAt)
-      """
-
-    val sqlParameters = MapSqlParameterSource()
-    sqlParameters.addValue("accountEntityId", accountEntityId)
-    sqlParameters.addValue("currency", currency)
-    sqlParameters.addValue("walletPersistenceId", walletPersistenceId)
-    sqlParameters.addValue("walletEntityId", walletEntityId)
-    sqlParameters.addValue("createdAt", Instant.now())
-
-    jdbcTemplate.update(sql, sqlParameters)
   }
 }
