@@ -26,7 +26,7 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
         walletEntityId,
     )
 
-    webMvcTestClient.get()
+    webTestClient.get()
         .uri("/v1/wallets/{wallet-id}", walletEntityId)
         .exchange()
         .expectStatus()
@@ -57,7 +57,7 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
   fun `get 404 NOT FOUND when wallet id is not valid`() {
     val invalidWalletId = randomAlphanumeric(10)
 
-    webMvcTestClient.get()
+    webTestClient.get()
         .uri("/v1/wallets/{wallet-id}", invalidWalletId)
         .exchange()
         .expectStatus()
@@ -68,7 +68,7 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
   fun `get 404 NOT FOUND when wallet matching wallet id not exists`() {
     val randomWalletId = randomUUID().toString()
 
-    webMvcTestClient.get()
+    webTestClient.get()
         .uri("/v1/wallets/{wallet-id}", randomWalletId)
         .exchange()
         .expectStatus()

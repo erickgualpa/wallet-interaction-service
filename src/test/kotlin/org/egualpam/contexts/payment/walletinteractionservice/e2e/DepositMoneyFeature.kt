@@ -28,7 +28,7 @@ class DepositMoneyFeature : AbstractIntegrationTest() {
       }
     """
 
-    webMvcTestClient.put()
+    webTestClient.put()
         .uri("/v1/wallets/{wallet-id}/deposit", walletId)
         .header(CONTENT_TYPE, "application/json")
         .bodyValue(request)

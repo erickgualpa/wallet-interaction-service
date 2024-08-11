@@ -7,7 +7,7 @@ class ApplicationHealthCheck : AbstractIntegrationTest() {
 
   @Test
   fun `application status should be UP`() {
-    webMvcTestClient.get()
+    webTestClient.get()
         .uri("/actuator/health")
         .exchange()
         .expectStatus()

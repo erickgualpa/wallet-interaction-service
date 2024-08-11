@@ -38,7 +38,7 @@ class CreateWalletFeature : AbstractIntegrationTest() {
       }
     """
 
-    webMvcTestClient.put()
+    webTestClient.put()
         .uri("/v1/wallets")
         .header(CONTENT_TYPE, "application/json")
         .bodyValue(request)

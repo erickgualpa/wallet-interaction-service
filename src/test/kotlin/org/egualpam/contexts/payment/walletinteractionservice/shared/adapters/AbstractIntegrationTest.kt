@@ -23,7 +23,7 @@ import java.io.File
 abstract class AbstractIntegrationTest {
 
   @Autowired
-  protected lateinit var webMvcTestClient: WebTestClient
+  protected lateinit var webTestClient: WebTestClient
 
   @Autowired
   protected lateinit var walletTestRepository: WalletTestRepository
