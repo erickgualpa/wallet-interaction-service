@@ -2,20 +2,12 @@ package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
-import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.AccountTestRepository
-import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.OwnerTestRepository
-import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextInt
 
-class RetrieveWalletFeature(
-  @Autowired private val walletTestRepository: WalletTestRepository,
-  @Autowired private val ownerTestRepository: OwnerTestRepository,
-  @Autowired private val accountTestRepository: AccountTestRepository
-) : AbstractIntegrationTest() {
+class RetrieveWalletFeature : AbstractIntegrationTest() {
   @Test
   fun `retrieve wallet`() {
     val walletPersistenceId = nextInt(100, 999)

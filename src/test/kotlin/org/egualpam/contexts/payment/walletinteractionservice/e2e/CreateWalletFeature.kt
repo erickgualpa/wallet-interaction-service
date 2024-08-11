@@ -3,12 +3,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.e2e
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.TemporalUnitWithinOffset
-import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.AccountTestRepository
-import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.OwnerTestRepository
-import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.time.Instant
 import java.time.temporal.ChronoUnit.SECONDS
@@ -16,11 +12,7 @@ import java.util.UUID.randomUUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class CreateWalletFeature(
-  @Autowired private val walletTestRepository: WalletTestRepository,
-  @Autowired private val ownerTestRepository: OwnerTestRepository,
-  @Autowired private val accountTestRepository: AccountTestRepository
-) : AbstractIntegrationTest() {
+class CreateWalletFeature : AbstractIntegrationTest() {
   @Test
   fun `create wallet`() {
     val walletId = randomUUID().toString()
