@@ -16,17 +16,11 @@ class Wallet private constructor(
       accountId: String,
       accountCurrency: String
     ): Wallet {
-      val account = Account(
-          AccountId(accountId),
-          AccountCurrency(accountCurrency),
-      )
       val wallet = Wallet(
           WalletId(id),
-          Owner(
-              OwnerId(ownerId),
-              OwnerUsername(ownerUsername),
-          ),
+          Owner.create(ownerId, ownerUsername),
       )
+      val account = Account.create(accountId, accountCurrency)
       wallet.accounts.add(account)
       wallet.domainEvents.add(WalletCreated(wallet))
       return wallet
