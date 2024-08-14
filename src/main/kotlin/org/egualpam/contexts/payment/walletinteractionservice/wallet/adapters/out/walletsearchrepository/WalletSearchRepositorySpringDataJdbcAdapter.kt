@@ -9,17 +9,12 @@ class WalletSearchRepositorySpringDataJdbcAdapter(
   private var walletCrudRepository: WalletCrudRepository
 ) : WalletSearchRepository {
   override fun search(id: WalletId): WalletDto? {
-    val results = walletCrudRepository.findByEntityId(id.value)
-    return if (results.isEmpty()) {
-      null
-    } else {
-      results.first().let {
-        WalletDto(
-            it.entityId,
-            WalletDto.OwnerDto(it.ownerId()),
-            it.accounts().map { a -> WalletDto.AccountDto(a.entityId) }.toSet(),
-        )
-      }
+    return walletCrudRepository.findByEntityId(id.value)?.let {
+      WalletDto(
+          it.entityId,
+          WalletDto.OwnerDto(it.ownerId()),
+          it.accounts().map { a -> WalletDto.AccountDto(a.entityId) }.toSet(),
+      )
     }
   }
 }

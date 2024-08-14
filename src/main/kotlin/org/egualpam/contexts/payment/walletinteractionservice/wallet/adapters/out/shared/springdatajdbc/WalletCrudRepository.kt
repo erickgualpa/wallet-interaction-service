@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface WalletCrudRepository : CrudRepository<WalletPersistenceEntity, String> {
-  fun findByEntityId(entityId: String): List<WalletPersistenceEntity>
+  fun findByEntityId(entityId: String): WalletPersistenceEntity?
 }
