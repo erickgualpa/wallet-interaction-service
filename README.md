@@ -42,6 +42,7 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │   ├── in
     │   │                           │   │   └── controllers
     │   │                           │   └── out
+    │   │                           │       ├── depositexists
     │   │                           │       ├── shared
     │   │                           │       │   └── springdatajdbc
     │   │                           │       ├── walletexists
@@ -67,15 +68,20 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                   └── walletinteractionservice
         │                       ├── architecture
         │                       ├── e2e
+        │                       │   └── helper
         │                       ├── health
+        │                       ├── journey
         │                       ├── shared
         │                       │   └── adapters
+        │                       │       └── configuration
         │                       └── wallet
         │                           ├── adapters
         │                           │   ├── in
         │                           │   │   └── controllers
         │                           │   └── out
+        │                           │       ├── depositexists
         │                           │       ├── walletexists
+        │                           │       ├── walletrepository
         │                           │       └── walletsearchrepository
         │                           └── application
         │                               ├── domain
