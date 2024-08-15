@@ -19,11 +19,15 @@ class DepositMoney(
 
     val walletId = WalletId(depositMoneyCommand.walletId)
     val wallet = walletRepository.find(walletId) ?: throw WalletNotExists(walletId)
-    wallet.depositAmount(
-        depositId = depositMoneyCommand.depositId,
-        amount = depositMoneyCommand.depositAmount,
-        currency = depositMoneyCommand.depositCurrency,
-    )
+
+    depositMoneyCommand.let {
+      wallet.depositAmount(
+          depositId = it.depositId,
+          amount = it.depositAmount,
+          currency = it.depositCurrency,
+      )
+    }
+
     walletRepository.save(wallet)
   }
 }
