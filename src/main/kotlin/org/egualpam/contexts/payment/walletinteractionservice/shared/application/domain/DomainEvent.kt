@@ -2,7 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.shared.applicatio
 
 import java.time.Instant
 
-abstract class DomainEvent {
+abstract class DomainEvent(private val aggregateRoot: AggregateRoot) {
   abstract fun id(): DomainEventId
 
   abstract fun occurredOn(): Instant

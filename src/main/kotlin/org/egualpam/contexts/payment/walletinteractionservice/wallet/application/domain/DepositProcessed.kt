@@ -4,7 +4,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
 import java.time.Instant
 
-class DepositProcessed(val wallet: Wallet) : DomainEvent() {
+class DepositProcessed(wallet: Wallet) : DomainEvent(wallet) {
   private val id = DomainEventId.generate()
   private val occurredOn = Instant.now()
 
