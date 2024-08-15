@@ -3,6 +3,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.assertj.core.api.Assertions.assertThat
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
@@ -36,6 +38,9 @@ class CreateWalletShould {
 
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+
     val createWalletCommand = CreateWalletCommand(
         walletId,
         ownerId,
@@ -43,8 +48,7 @@ class CreateWalletShould {
         accountId,
         accountCurrency,
     )
-
-    CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
+    testSubject.execute(createWalletCommand)
 
     argumentCaptor<Wallet> {
       verify(walletRepository).save(capture())
@@ -62,7 +66,12 @@ class CreateWalletShould {
             assertEquals(accountCurrency, it.getCurrency().value)
           },
       )
-      assertThat(firstValue.pullDomainEvents()).hasSize(1).first().satisfies(
+    }
+
+    argumentCaptor<Set<DomainEvent>> {
+      verify(eventBus).publish(capture())
+      assertThat(firstValue).hasSize(1)
+      assertThat(firstValue).first().satisfies(
           {
             assertThat(it).isInstanceOf(WalletCreated::class.java)
             assertNotNull(it.id())
@@ -80,6 +89,9 @@ class CreateWalletShould {
       on { with(WalletId(existingWalletId)) } doReturn true
     }
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+
     val createWalletCommand = CreateWalletCommand(
         walletId = existingWalletId,
         ownerId = randomUUID().toString(),
@@ -87,10 +99,10 @@ class CreateWalletShould {
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
     )
+    testSubject.execute(createWalletCommand)
 
-    CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
-
-    verify(walletRepository, never()).save(any())
+    verify(walletRepository, never()).save(any<Wallet>())
+    verify(eventBus, never()).publish(any<Set<DomainEvent>>())
   }
 
   @Test
@@ -99,6 +111,9 @@ class CreateWalletShould {
 
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+
     val createWalletCommand = CreateWalletCommand(
         walletId = invalidWalletId,
         ownerId = randomUUID().toString(),
@@ -106,9 +121,8 @@ class CreateWalletShould {
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
     )
-
     val exception = assertThrows<InvalidAggregateId> {
-      CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
+      testSubject.execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("The provided id [$invalidWalletId] is invalid")
@@ -120,6 +134,9 @@ class CreateWalletShould {
 
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
         ownerId = invalidOwnerId,
@@ -127,9 +144,8 @@ class CreateWalletShould {
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
     )
-
     val exception = assertThrows<InvalidDomainEntityId> {
-      CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
+      testSubject.execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("The provided id [$invalidOwnerId] is invalid")
@@ -141,6 +157,9 @@ class CreateWalletShould {
 
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
         ownerId = randomUUID().toString(),
@@ -148,9 +167,8 @@ class CreateWalletShould {
         accountId = invalidAccountId,
         accountCurrency = "EUR",
     )
-
     val exception = assertThrows<InvalidDomainEntityId> {
-      CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
+      testSubject.execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("The provided id [$invalidAccountId] is invalid")
@@ -164,6 +182,9 @@ class CreateWalletShould {
       on { with(OwnerUsername(existingOwnerUsername)) } doReturn true
     }
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
         ownerId = randomUUID().toString(),
@@ -171,9 +192,8 @@ class CreateWalletShould {
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
     )
-
     val exception = assertThrows<OwnerUsernameAlreadyExists> {
-      CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
+      testSubject.execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("Wallet owner with username [${existingOwnerUsername}] already exists")
@@ -185,6 +205,9 @@ class CreateWalletShould {
 
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
         ownerId = randomUUID().toString(),
@@ -192,9 +215,8 @@ class CreateWalletShould {
         accountId = randomUUID().toString(),
         accountCurrency = unsupportedCurrency,
     )
-
     val exception = assertThrows<AccountCurrencyIsNotSupported> {
-      CreateWallet(walletExists, walletRepository).execute(createWalletCommand)
+      testSubject.execute(createWalletCommand)
     }
 
     assertThat(exception).hasMessage("The provided currency [$unsupportedCurrency] is not supported")

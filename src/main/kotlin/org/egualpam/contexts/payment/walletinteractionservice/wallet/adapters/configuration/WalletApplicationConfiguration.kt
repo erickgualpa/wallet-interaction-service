@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration
 
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.DepositExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
@@ -20,12 +21,14 @@ class WalletApplicationConfiguration {
   @Bean
   fun createWallet(
     walletExists: WalletExists,
-    walletRepository: WalletRepository
-  ) = CreateWallet(walletExists, walletRepository)
+    walletRepository: WalletRepository,
+    eventBus: EventBus
+  ) = CreateWallet(walletExists, walletRepository, eventBus)
 
   @Bean
   fun depositMoney(
     depositExists: DepositExists,
-    walletRepository: WalletRepository
-  ) = DepositMoney(depositExists, walletRepository)
+    walletRepository: WalletRepository,
+    eventBus: EventBus
+  ) = DepositMoney(depositExists, walletRepository, eventBus)
 }

@@ -2,6 +2,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.assertj.core.api.Assertions.assertThat
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.DepositId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.DepositProcessed
@@ -22,6 +24,7 @@ import org.mockito.kotlin.verify
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextDouble
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class DepositMoneyShould {
   @Test
@@ -49,6 +52,8 @@ class DepositMoneyShould {
           ),
       )
     }
+    val eventBus = mock<EventBus>()
+    val testSubject = DepositMoney(depositExists, walletRepository, eventBus)
 
     val depositMoneyCommand = DepositMoneyCommand(
         walletId = walletId,
@@ -56,8 +61,7 @@ class DepositMoneyShould {
         depositAmount = depositAmount,
         depositCurrency = accountCurrency,
     )
-
-    DepositMoney(depositExists, walletRepository).execute(depositMoneyCommand)
+    testSubject.execute(depositMoneyCommand)
 
     argumentCaptor<Wallet> {
       verify(walletRepository).save(capture())
@@ -73,11 +77,18 @@ class DepositMoneyShould {
             assertEquals(depositAmount, it.amount().value)
           },
       )
+    }
 
-      assertThat(firstValue.pullDomainEvents())
-          .hasSize(1)
-          .first()
-          .isInstanceOf(DepositProcessed::class.java)
+    argumentCaptor<Set<DomainEvent>> {
+      verify(eventBus).publish(capture())
+      assertThat(firstValue).hasSize(1)
+      assertThat(firstValue).first().satisfies(
+          {
+            assertThat(it).isInstanceOf(DepositProcessed::class.java)
+            assertNotNull(it.id())
+            assertNotNull(it.occurredOn())
+          },
+      )
     }
   }
 
@@ -89,6 +100,8 @@ class DepositMoneyShould {
       on { with(DepositId(depositId)) } doReturn true
     }
     val walletRepository = mock<WalletRepository>()
+    val eventBus = mock<EventBus>()
+    val depositMoney = DepositMoney(depositExists, walletRepository, eventBus)
 
     val depositMoneyCommand = DepositMoneyCommand(
         walletId = randomUUID().toString(),
@@ -96,11 +109,11 @@ class DepositMoneyShould {
         depositAmount = nextDouble(10.0, 10000.0),
         depositCurrency = "EUR",
     )
-
-    DepositMoney(depositExists, walletRepository).execute(depositMoneyCommand)
+    depositMoney.execute(depositMoneyCommand)
 
     verify(walletRepository, never()).find(any<WalletId>())
     verify(walletRepository, never()).save(any<Wallet>())
+    verify(eventBus, never()).publish(any<Set<DomainEvent>>())
   }
 
   @Test
@@ -113,6 +126,8 @@ class DepositMoneyShould {
         find(WalletId(walletId))
       } doReturn null
     }
+    val eventBus = mock<EventBus>()
+    val testSubject = DepositMoney(depositExists, walletRepository, eventBus)
 
     val depositMoneyCommand = DepositMoneyCommand(
         walletId = walletId,
@@ -120,10 +135,10 @@ class DepositMoneyShould {
         depositAmount = nextDouble(10.0, 10000.0),
         depositCurrency = "EUR",
     )
-
     val exception = assertThrows<WalletNotExists> {
-      DepositMoney(depositExists, walletRepository).execute(depositMoneyCommand)
+      testSubject.execute(depositMoneyCommand)
     }
+
     assertThat(exception).hasMessage("Wallet with id [$walletId] not exists")
   }
 }
