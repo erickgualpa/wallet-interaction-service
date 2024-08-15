@@ -20,8 +20,13 @@ open class WalletRepositorySpringDataJdbcAdapter(
   }
 
   override fun save(wallet: Wallet) {
-    saveWallet(wallet)
-    saveWalletOwner(wallet)
+    walletCrudRepository.saveWallet(wallet.getId().value, Instant.now())
+    walletCrudRepository.saveOwner(
+        entityId = wallet.getOwnerId().value,
+        createdAt = Instant.now(),
+        username = wallet.getOwnerUsername().value,
+        walletEntityId = wallet.getId().value,
+    )
     wallet.accounts().forEach { account ->
       saveAccount(account, wallet.getId())
       account.deposits().forEach { deposit ->
