@@ -1,12 +1,15 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc
 
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Account
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Deposit
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Owner
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.WalletDto
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
-import java.time.Instant.now
 
 @Table("wallet")
 class WalletPersistenceEntity(
@@ -16,23 +19,19 @@ class WalletPersistenceEntity(
   private val owner: OwnerPersistenceEntity,
   private val accounts: Set<AccountPersistenceEntity>
 ) {
-  companion object {
-    fun from(wallet: Wallet) = WalletPersistenceEntity(
-        id = null,
-        entityId = wallet.getId().value,
-        createdAt = now(),
-        owner = OwnerPersistenceEntity.from(wallet),
-        accounts = wallet.accounts().map {
-          AccountPersistenceEntity(
-              id = null,
-              entityId = it.getId().value,
-              walletEntityId = wallet.getId().value,
-              currency = it.getCurrency().value,
-              createdAt = now(),
-          )
-        }.toSet(),
-    )
-  }
+  fun toDomainEntity() = Wallet(
+      id = WalletId(this.entityId),
+      owner = this.owner.let {
+        Owner.create(it.entityId, it.username)
+      },
+      accounts = this.accounts.map {
+        Account.create(
+            it.entityId,
+            it.currency,
+            it.deposits.map { d -> Deposit.create(d.entityId, d.amount) }.toMutableSet(),
+        )
+      }.toMutableSet(),
+  )
 
   fun toWalletDto() = WalletDto(
       id = this.entityId,

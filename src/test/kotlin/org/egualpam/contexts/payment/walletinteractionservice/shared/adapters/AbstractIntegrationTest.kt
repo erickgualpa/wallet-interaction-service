@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters
 
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.AccountTestRepository
+import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.DepositTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.OwnerTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletTestRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,6 +34,9 @@ abstract class AbstractIntegrationTest {
 
   @Autowired
   protected lateinit var accountTestRepository: AccountTestRepository
+
+  @Autowired
+  protected lateinit var depositTestRepository: DepositTestRepository
 
   companion object {
     private const val MYSQL = "mysql"

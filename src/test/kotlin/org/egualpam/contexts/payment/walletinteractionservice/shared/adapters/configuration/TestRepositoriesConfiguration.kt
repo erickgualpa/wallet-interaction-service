@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.configuration
 
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.AccountTestRepository
+import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.DepositTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.OwnerTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletTestRepository
 import org.springframework.context.annotation.Bean
@@ -23,4 +24,9 @@ class TestRepositoriesConfiguration {
   fun accountTestRepository(
     jdbcTemplate: NamedParameterJdbcTemplate
   ) = AccountTestRepository(jdbcTemplate)
+
+  @Bean
+  fun depositTestRepository(
+    jdbcTemplate: NamedParameterJdbcTemplate
+  ) = DepositTestRepository(jdbcTemplate)
 }
