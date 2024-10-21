@@ -1,7 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
-import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.EventBus
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.depositexists.DepositExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists.WalletExistsMySQLAdapter

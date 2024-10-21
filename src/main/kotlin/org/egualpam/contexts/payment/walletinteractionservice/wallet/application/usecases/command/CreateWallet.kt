@@ -1,6 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command
 
-import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.EventBus
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
