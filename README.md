@@ -34,8 +34,10 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                       │   ├── adapters
     │   │                       │   │   └── configuration
     │   │                       │   └── application
-    │   │                       │       └── domain
-    │   │                       │           └── exceptions
+    │   │                       │       ├── domain
+    │   │                       │       │   └── exceptions
+    │   │                       │       └── ports
+    │   │                       │           └── out
     │   │                       └── wallet
     │   │                           ├── adapters
     │   │                           │   ├── configuration
