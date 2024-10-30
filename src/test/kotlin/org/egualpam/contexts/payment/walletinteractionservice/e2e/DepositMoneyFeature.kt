@@ -55,6 +55,60 @@ class DepositMoneyFeature : AbstractIntegrationTest() {
     )
   }
 
+  @Test
+  fun `request multiple deposits`() {
+    val walletId = randomUUID().toString()
+    createWallet(walletId)
+
+    val amount = nextDouble(10.0, 10000.0)
+    val currency = "EUR"
+
+    // First deposit
+    val firstDepositId = randomUUID().toString()
+    val firstDepositRequest = """
+      {
+        "deposit": {
+          "id": "$firstDepositId",
+          "amount": "$amount",
+          "currency": "$currency"
+        }
+      }
+    """
+
+    webTestClient.put()
+        .uri("/v1/wallets/{wallet-id}/deposit", walletId)
+        .header(CONTENT_TYPE, "application/json")
+        .bodyValue(firstDepositRequest)
+        .exchange()
+        .expectStatus()
+        .isNoContent
+
+    // Next deposit
+    val nextDepositId = randomUUID().toString()
+    val nextDepositRequest = """
+      {
+        "deposit": {
+          "id": "$nextDepositId",
+          "amount": "$amount",
+          "currency": "$currency"
+        }
+      }
+    """
+
+    webTestClient.put()
+        .uri("/v1/wallets/{wallet-id}/deposit", walletId)
+        .header(CONTENT_TYPE, "application/json")
+        .bodyValue(nextDepositRequest)
+        .exchange()
+        .expectStatus()
+        .isNoContent
+
+    val firstDepositResult = depositTestRepository.findDeposit(firstDepositId)
+    assertNotNull(firstDepositResult)
+    val nextDepositResult = depositTestRepository.findDeposit(nextDepositId)
+    assertNotNull(nextDepositResult)
+  }
+
   private fun createWallet(walletId: String) {
     val walletPersistenceId = nextInt(100, 999)
     walletTestRepository.createWallet(walletPersistenceId, walletId)
