@@ -24,7 +24,7 @@ class WalletPortsAndAdaptersConfiguration {
   ): WalletSearchRepository = SpringJdbcCoreWalletSearchRepository(jdbcTemplate)
 
   @Bean
-  fun walletRepositorySpringDataJdbcAdapter(
+  fun springJdbcCoreWalletRepository(
     jdbcTemplate: NamedParameterJdbcTemplate
   ): WalletRepository = SpringJdbcCoreWalletRepository(
       jdbcTemplate,
