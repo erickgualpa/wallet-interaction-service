@@ -45,8 +45,6 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │   │   └── controllers
     │   │                           │   └── out
     │   │                           │       ├── depositexists
-    │   │                           │       ├── shared
-    │   │                           │       │   └── springdatajdbc
     │   │                           │       ├── walletexists
     │   │                           │       ├── walletrepository
     │   │                           │       │   └── springjdbccore
