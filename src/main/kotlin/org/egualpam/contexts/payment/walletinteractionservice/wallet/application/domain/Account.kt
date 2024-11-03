@@ -17,6 +17,16 @@ class Account private constructor(
         AccountCurrency(currency),
         deposits,
     )
+
+    fun load(
+      id: String,
+      currency: String,
+      deposits: MutableSet<Deposit> = mutableSetOf()
+    ) = Account(
+        AccountId(id),
+        AccountCurrency(currency),
+        deposits,
+    )
   }
 
   override fun getId() = id

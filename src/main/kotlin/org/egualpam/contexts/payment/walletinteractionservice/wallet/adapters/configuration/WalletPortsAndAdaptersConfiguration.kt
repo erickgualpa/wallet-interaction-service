@@ -5,7 +5,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.depositexists.DepositExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists.WalletExistsMySQLAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.WalletRepositorySpringDataJdbcAdapter
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.springjdbccore.SpringJdbcCoreWalletRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletsearchrepository.WalletSearchRepositorySpringDataJdbcAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.DepositExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
@@ -28,10 +28,8 @@ class WalletPortsAndAdaptersConfiguration {
 
   @Bean
   fun walletRepositorySpringDataJdbcAdapter(
-    walletCrudRepository: WalletCrudRepository,
     jdbcTemplate: NamedParameterJdbcTemplate
-  ): WalletRepository = WalletRepositorySpringDataJdbcAdapter(
-      walletCrudRepository,
+  ): WalletRepository = SpringJdbcCoreWalletRepository(
       jdbcTemplate,
   )
 

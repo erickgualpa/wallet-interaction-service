@@ -16,6 +16,14 @@ class Deposit private constructor(
         DepositId(id),
         DepositAmount(amount),
     )
+
+    fun load(
+      id: String,
+      amount: Double
+    ) = Deposit(
+        DepositId(id),
+        DepositAmount(amount),
+    )
   }
 
   fun amount() = amount

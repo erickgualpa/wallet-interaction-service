@@ -14,6 +14,14 @@ class Owner private constructor(
         OwnerId(id),
         OwnerUsername(username),
     )
+
+    fun load(
+      id: String,
+      username: String
+    ) = Owner(
+        OwnerId(id),
+        OwnerUsername(username),
+    )
   }
 
   override fun getId() = id
