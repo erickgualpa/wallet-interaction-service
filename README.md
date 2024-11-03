@@ -51,6 +51,7 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                           │       ├── walletrepository
     │   │                           │       │   └── springjdbccore
     │   │                           │       └── walletsearchrepository
+    │   │                           │           └── springjdbccore
     │   │                           └── application
     │   │                               ├── domain
     │   │                               │   └── exceptions
@@ -87,6 +88,7 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                           │       ├── walletrepository
         │                           │       │   └── springjdbccore
         │                           │       └── walletsearchrepository
+        │                           │           └── springjdbccore
         │                           └── application
         │                               ├── domain
         │                               └── usecases

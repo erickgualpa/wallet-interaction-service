@@ -3,10 +3,9 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.depositexists.DepositExistsMySQLAdapter
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.shared.springdatajdbc.WalletCrudRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists.WalletExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.springjdbccore.SpringJdbcCoreWalletRepository
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletsearchrepository.WalletSearchRepositorySpringDataJdbcAdapter
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletsearchrepository.springjdbccore.SpringJdbcCoreWalletSearchRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.DepositExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
@@ -15,16 +14,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
 @Configuration
 class WalletPortsAndAdaptersConfiguration {
-  @Primary
   @Bean
-  fun walletSearchRepositorySpringDataJdbcAdapter(
-    walletCrudRepository: WalletCrudRepository
-  ): WalletSearchRepository = WalletSearchRepositorySpringDataJdbcAdapter(walletCrudRepository)
+  fun springJdbcCoreWalletSearchRepository(
+    jdbcTemplate: NamedParameterJdbcTemplate
+  ): WalletSearchRepository = SpringJdbcCoreWalletSearchRepository(jdbcTemplate)
 
   @Bean
   fun walletRepositorySpringDataJdbcAdapter(
