@@ -36,10 +36,8 @@ class SaveWallet(
 
   private fun saveWalletOwner(wallet: Wallet) {
     val sql = """
-      INSERT IGNORE INTO owner(entity_id, created_at, username, wallet_entity_id, wallet)
-      SELECT :entityId, :createdAt, :username, :walletEntityId, id
-      FROM wallet
-      WHERE entity_id=:walletEntityId
+      INSERT IGNORE INTO owner(entity_id, created_at, username, wallet_entity_id)
+      VALUES(:entityId, :createdAt, :username, :walletEntityId)
     """
     val sqlParameterSource = MapSqlParameterSource()
     sqlParameterSource.addValue("entityId", wallet.getOwnerId().value)
@@ -51,10 +49,8 @@ class SaveWallet(
 
   private fun saveAccount(account: Account, walletId: WalletId) {
     val sql = """
-      INSERT IGNORE INTO account(entity_id, created_at, currency, wallet_entity_id, wallet)
-      SELECT :entityId, :createdAt, :currency, :walletEntityId, id
-      FROM wallet
-      WHERE entity_id=:walletEntityId
+      INSERT IGNORE INTO account(entity_id, created_at, currency, wallet_entity_id)
+      VALUES(:entityId, :createdAt, :currency, :walletEntityId)
     """
     val sqlParameterSource = MapSqlParameterSource()
     sqlParameterSource.addValue("entityId", account.getId().value)
@@ -66,10 +62,8 @@ class SaveWallet(
 
   private fun saveDeposit(deposit: Deposit, accountId: AccountId) {
     val sql = """
-      INSERT IGNORE INTO deposit(entity_id, created_at, amount, account_entity_id, account)
-      SELECT :entityId, :createdAt, :amount, :accountEntityId, id
-      FROM account
-      WHERE entity_id=:accountEntityId
+      INSERT IGNORE INTO deposit(entity_id, created_at, amount, account_entity_id)
+      VALUES(:entityId, :createdAt, :amount, :accountEntityId)
     """
     val sqlParameterSource = MapSqlParameterSource()
     sqlParameterSource.addValue("entityId", deposit.getId().value)

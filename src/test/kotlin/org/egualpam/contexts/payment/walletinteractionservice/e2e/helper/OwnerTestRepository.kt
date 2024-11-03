@@ -12,18 +12,16 @@ class OwnerTestRepository(
   fun createOwner(
     ownerEntityId: String,
     ownerUsername: String,
-    walletPersistenceId: Int,
     walletEntityId: String,
   ) {
     val sql = """
-        INSERT INTO owner(entity_id, username, wallet, wallet_entity_id, created_at)
-        VALUES(:ownerEntityId, :username, :walletPersistenceId, :walletEntityId, :createdAt)
+        INSERT INTO owner(entity_id, username, wallet_entity_id, created_at)
+        VALUES(:ownerEntityId, :username, :walletEntityId, :createdAt)
       """
 
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("ownerEntityId", ownerEntityId)
     sqlParameters.addValue("username", ownerUsername)
-    sqlParameters.addValue("walletPersistenceId", walletPersistenceId)
     sqlParameters.addValue("walletEntityId", walletEntityId)
     sqlParameters.addValue("createdAt", Instant.now())
 

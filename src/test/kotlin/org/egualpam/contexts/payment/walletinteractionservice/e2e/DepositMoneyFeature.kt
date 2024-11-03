@@ -10,7 +10,6 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit.SECONDS
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextDouble
-import kotlin.random.Random.Default.nextInt
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -110,18 +109,16 @@ class DepositMoneyFeature : AbstractIntegrationTest() {
   }
 
   private fun createWallet(walletId: String) {
-    val walletPersistenceId = nextInt(100, 999)
-    walletTestRepository.createWallet(walletPersistenceId, walletId)
+    walletTestRepository.createWallet(walletId)
 
     val ownerId = randomUUID().toString()
     val ownerUsername = randomAlphabetic(10)
-    ownerTestRepository.createOwner(ownerId, ownerUsername, walletPersistenceId, walletId)
+    ownerTestRepository.createOwner(ownerId, ownerUsername, walletId)
 
     val accountId = randomUUID().toString()
     accountTestRepository.createAccount(
         accountEntityId = accountId,
         currency = "EUR",
-        walletPersistenceId = walletPersistenceId,
         walletEntityId = walletId,
     )
   }

@@ -9,14 +9,13 @@ import java.time.Instant
 class WalletTestRepository(
   private val jdbcTemplate: NamedParameterJdbcTemplate
 ) {
-  fun createWallet(persistenceId: Int, entityId: String) {
+  fun createWallet(entityId: String) {
     val sql = """
-        INSERT INTO wallet(id, entity_id, created_at)
-        VALUES(:persistenceId, :entityId, :createdAt)
+        INSERT INTO wallet(entity_id, created_at)
+        VALUES(:entityId, :createdAt)
       """
 
     val sqlParameters = MapSqlParameterSource()
-    sqlParameters.addValue("persistenceId", persistenceId)
     sqlParameters.addValue("entityId", entityId)
     sqlParameters.addValue("createdAt", Instant.now())
 

@@ -5,24 +5,21 @@ import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.junit.jupiter.api.Test
 import java.util.UUID.randomUUID
-import kotlin.random.Random.Default.nextInt
 
 class RetrieveWalletFeature : AbstractIntegrationTest() {
   @Test
   fun `retrieve wallet`() {
-    val walletPersistenceId = nextInt(100, 999)
     val walletEntityId = randomUUID().toString()
-    walletTestRepository.createWallet(walletPersistenceId, walletEntityId)
+    walletTestRepository.createWallet(walletEntityId)
 
     val ownerId = randomUUID().toString()
     val ownerUsername = randomAlphabetic(10)
-    ownerTestRepository.createOwner(ownerId, ownerUsername, walletPersistenceId, walletEntityId)
+    ownerTestRepository.createOwner(ownerId, ownerUsername, walletEntityId)
 
     val accountId = randomUUID().toString()
     accountTestRepository.createAccount(
         accountId,
         currency = "EUR",
-        walletPersistenceId,
         walletEntityId,
     )
 
