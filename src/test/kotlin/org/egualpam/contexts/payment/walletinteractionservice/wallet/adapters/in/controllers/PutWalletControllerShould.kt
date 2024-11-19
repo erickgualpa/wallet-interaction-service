@@ -24,7 +24,7 @@ import java.util.UUID.randomUUID
 
 @ContextConfiguration(classes = [WalletInteractionServiceApplication::class])
 @WebMvcTest(PutWalletController::class)
-class PutWalletControllerTest {
+class PutWalletControllerShould {
 
   @MockBean
   private lateinit var transactionTemplate: TransactionTemplate
