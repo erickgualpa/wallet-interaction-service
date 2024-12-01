@@ -11,7 +11,7 @@
     <groupId>org.egualpam.contexts.payment</groupId>
     <artifactId>wallet-interaction-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>wallet-interaction.service</name>
+    <name>wallet-interaction-service</name>
     <url/>
 
     <properties>
