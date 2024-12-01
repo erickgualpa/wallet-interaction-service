@@ -37,7 +37,7 @@ class GetWalletController(
         }
 
         else -> {
-          logger.error("Unexpected error processing request:")
+          logger.error("Unexpected error processing request:", e)
           internalServerError().build()
         }
       }
