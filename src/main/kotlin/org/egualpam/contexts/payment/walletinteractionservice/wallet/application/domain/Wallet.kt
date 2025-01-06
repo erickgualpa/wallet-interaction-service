@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
+import java.time.Instant
 
 class Wallet(
   private val id: WalletId,
@@ -25,7 +26,16 @@ class Wallet(
       val account = Account.create(accountId, accountCurrency)
       wallet.accounts.add(account)
 
-      wallet.domainEvents.add(WalletCreated(domainEventId, wallet))
+      val walletCreated = WalletCreated(
+          id = domainEventId,
+          walletId = wallet.id,
+          occurredOn = Instant.now(),
+          ownerId = wallet.owner.getId(),
+          ownerUsername = wallet.owner.getUsername(),
+          accountId = wallet.accounts.first().getId(),
+          accountCurrency = wallet.accounts.first().getCurrency(),
+      )
+      wallet.domainEvents.add(walletCreated)
       return wallet
     }
   }
@@ -37,11 +47,22 @@ class Wallet(
     domainEventId: DomainEventId
   ) {
     val accountCurrency = AccountCurrency(currency)
-    this.accounts.first { it.getCurrency() == accountCurrency }.depositAmount(
+    val account = this.accounts.first { it.getCurrency() == accountCurrency }
+
+    account.depositAmount(
         depositId,
         amount,
     )
-    this.domainEvents.add(DepositProcessed(domainEventId, this))
+
+    val depositProcessed = DepositProcessed(
+        id = domainEventId,
+        walletId = this.id,
+        occurredOn = Instant.now(),
+        depositId = DepositId(depositId),
+        amount = DepositAmount(amount),
+        accountCurrency,
+    )
+    this.domainEvents.add(depositProcessed)
   }
 
   override fun getId() = id

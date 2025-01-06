@@ -1,11 +1,16 @@
-package org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain;
+package org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain
 
 import java.time.Instant
 
-abstract class DomainEvent(private val aggregateRoot: AggregateRoot) {
-  abstract fun id(): DomainEventId
+abstract class DomainEvent(
+  private val id: DomainEventId,
+  private val aggregateId: AggregateId,
+  private val occurredOn: Instant
+) {
 
-  abstract fun occurredOn(): Instant
+  fun id() = id
+  fun aggregateId() = aggregateId
+  fun occurredOn() = occurredOn
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

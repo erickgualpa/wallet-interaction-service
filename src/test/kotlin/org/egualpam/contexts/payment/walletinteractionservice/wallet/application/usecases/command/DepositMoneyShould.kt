@@ -93,7 +93,8 @@ class DepositMoneyShould {
       assertThat(firstValue).first().satisfies(
           {
             assertThat(it).isInstanceOf(DepositProcessed::class.java)
-            assertNotNull(it.id())
+            assertThat(it.id()).isEqualTo(domainEventId)
+            assertThat(it.aggregateId()).isEqualTo(WalletId(walletId))
             assertNotNull(it.occurredOn())
           },
       )
