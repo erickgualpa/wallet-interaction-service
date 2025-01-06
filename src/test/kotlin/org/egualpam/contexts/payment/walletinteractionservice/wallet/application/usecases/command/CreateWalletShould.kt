@@ -4,9 +4,11 @@ import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
-import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletCreated
@@ -35,11 +37,17 @@ class CreateWalletShould {
     val ownerUsername = randomAlphabetic(10)
     val accountId = randomUUID().toString()
     val accountCurrency = "EUR"
+    val domainEventId = DomainEventId.generate()
 
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn domainEventId
+    }
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val createWalletCommand = CreateWalletCommand(
         walletId,
@@ -74,7 +82,7 @@ class CreateWalletShould {
       assertThat(firstValue).first().satisfies(
           {
             assertThat(it).isInstanceOf(WalletCreated::class.java)
-            assertNotNull(it.id())
+            assertThat(it.id()).isEqualTo(domainEventId)
             assertNotNull(it.occurredOn())
           },
       )
@@ -85,12 +93,13 @@ class CreateWalletShould {
   fun `not create wallet when already exists`() {
     val existingWalletId = randomUUID().toString()
 
+    val domainEventIdSupplier = mock<DomainEventIdSupplier>()
     val walletExists = mock<WalletExists> {
       on { with(WalletId(existingWalletId)) } doReturn true
     }
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val createWalletCommand = CreateWalletCommand(
         walletId = existingWalletId,
@@ -109,10 +118,11 @@ class CreateWalletShould {
   fun `throw domain exception when wallet id is invalid`() {
     val invalidWalletId = randomAlphanumeric(10)
 
+    val domainEventIdSupplier = mock<DomainEventIdSupplier>()
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val createWalletCommand = CreateWalletCommand(
         walletId = invalidWalletId,
@@ -132,10 +142,15 @@ class CreateWalletShould {
   fun `throw domain exception when owner id is invalid`() {
     val invalidOwnerId = randomAlphanumeric(10)
 
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn DomainEventId.generate()
+    }
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
@@ -155,10 +170,15 @@ class CreateWalletShould {
   fun `throw domain exception when account id is invalid`() {
     val invalidAccountId = randomAlphabetic(10)
 
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn DomainEventId.generate()
+    }
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
@@ -178,12 +198,17 @@ class CreateWalletShould {
   fun `throw domain exception when owner username already exists`() {
     val existingOwnerUsername = randomAlphabetic(10)
 
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn DomainEventId.generate()
+    }
     val walletExists = mock<WalletExists> {
       on { with(OwnerUsername(existingOwnerUsername)) } doReturn true
     }
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
@@ -203,10 +228,15 @@ class CreateWalletShould {
   fun `throw domain exception when account currency is not supported`() {
     val unsupportedCurrency = "USD"
 
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn DomainEventId.generate()
+    }
     val walletExists = mock<WalletExists>()
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val testSubject = CreateWallet(walletExists, walletRepository, eventBus)
+    val testSubject = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),

@@ -4,8 +4,8 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
 import java.time.Instant
 
-class WalletCreated(wallet: Wallet) : DomainEvent(wallet) {
-  private val id = DomainEventId.generate()
+class WalletCreated(private val id: DomainEventId, wallet: Wallet) : DomainEvent(wallet) {
+  // TODO: Set this as a constructor parameter
   private val occurredOn = Instant.now()
 
   override fun id() = id

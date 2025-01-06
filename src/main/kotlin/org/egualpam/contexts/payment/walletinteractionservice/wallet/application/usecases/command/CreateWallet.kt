@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command
 
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
@@ -11,7 +12,8 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.application
 class CreateWallet(
   private val walletExists: WalletExists,
   private val walletRepository: WalletRepository,
-  private val eventBus: EventBus
+  private val eventBus: EventBus,
+  private val domainEventIdSupplier: DomainEventIdSupplier
 ) {
   fun execute(createWalletCommand: CreateWalletCommand) {
     val walletId = WalletId(createWalletCommand.walletId)
@@ -30,6 +32,7 @@ class CreateWallet(
         createWalletCommand.ownerUsername,
         createWalletCommand.accountId,
         createWalletCommand.accountCurrency,
+        domainEventIdSupplier.get(),
     )
 
     walletRepository.save(wallet)

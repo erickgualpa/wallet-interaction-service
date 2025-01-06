@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.o
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
@@ -18,6 +19,9 @@ class WalletExistsMySQLAdapterIT : AbstractIntegrationTest() {
   private lateinit var jdbcTemplate: NamedParameterJdbcTemplate
 
   @Autowired
+  private lateinit var domainEventIdSupplier: DomainEventIdSupplier
+
+  @Autowired
   private lateinit var walletRepository: WalletRepository
 
   @Test
@@ -29,6 +33,7 @@ class WalletExistsMySQLAdapterIT : AbstractIntegrationTest() {
         ownerUsername = randomAlphabetic(5),
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
+        domainEventId = domainEventIdSupplier.get(),
     )
 
     walletRepository.save(wallet)
@@ -48,6 +53,7 @@ class WalletExistsMySQLAdapterIT : AbstractIntegrationTest() {
         ownerUsername.value,
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
+        domainEventId = domainEventIdSupplier.get(),
     )
 
     walletRepository.save(wallet)

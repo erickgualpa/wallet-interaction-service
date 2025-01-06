@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
 
 class Wallet(
   private val id: WalletId,
@@ -14,7 +15,8 @@ class Wallet(
       ownerId: String,
       ownerUsername: String,
       accountId: String,
-      accountCurrency: String
+      accountCurrency: String,
+      domainEventId: DomainEventId
     ): Wallet {
       val wallet = Wallet(
           WalletId(id),
@@ -22,7 +24,8 @@ class Wallet(
       )
       val account = Account.create(accountId, accountCurrency)
       wallet.accounts.add(account)
-      wallet.domainEvents.add(WalletCreated(wallet))
+
+      wallet.domainEvents.add(WalletCreated(domainEventId, wallet))
       return wallet
     }
   }
