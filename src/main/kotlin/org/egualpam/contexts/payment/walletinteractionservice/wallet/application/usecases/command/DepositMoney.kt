@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command
 
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.DepositId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
@@ -10,7 +11,8 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.application
 class DepositMoney(
   private val depositExists: DepositExists,
   private val walletRepository: WalletRepository,
-  private val eventBus: EventBus
+  private val eventBus: EventBus,
+  private val domainEventIdSupplier: DomainEventIdSupplier
 ) {
   fun execute(depositMoneyCommand: DepositMoneyCommand) {
     val depositId = DepositId(depositMoneyCommand.depositId)
@@ -27,6 +29,7 @@ class DepositMoney(
           depositId = it.depositId,
           amount = it.depositAmount,
           currency = it.depositCurrency,
+          domainEventId = domainEventIdSupplier.get(),
       )
     }
 

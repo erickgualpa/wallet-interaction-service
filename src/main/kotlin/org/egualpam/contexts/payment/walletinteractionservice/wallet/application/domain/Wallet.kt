@@ -30,13 +30,18 @@ class Wallet(
     }
   }
 
-  fun depositAmount(depositId: String, amount: Double, currency: String) {
+  fun depositAmount(
+    depositId: String,
+    amount: Double,
+    currency: String,
+    domainEventId: DomainEventId
+  ) {
     val accountCurrency = AccountCurrency(currency)
     this.accounts.first { it.getCurrency() == accountCurrency }.depositAmount(
         depositId,
         amount,
     )
-    this.domainEvents.add(DepositProcessed(this))
+    this.domainEvents.add(DepositProcessed(domainEventId, this))
   }
 
   override fun getId() = id

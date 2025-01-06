@@ -31,6 +31,7 @@ class WalletApplicationConfiguration {
   fun depositMoney(
     depositExists: DepositExists,
     walletRepository: WalletRepository,
-    eventBus: EventBus
-  ) = DepositMoney(depositExists, walletRepository, eventBus)
+    eventBus: EventBus,
+    domainEventIdSupplier: DomainEventIdSupplier
+  ) = DepositMoney(depositExists, walletRepository, eventBus, domainEventIdSupplier)
 }

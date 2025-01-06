@@ -3,6 +3,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.DepositId
@@ -33,6 +35,7 @@ class DepositMoneyShould {
     val depositId = randomUUID().toString()
     val depositAmount = nextDouble(10.0, 10000.0)
     val accountCurrency = "EUR"
+    val domainEventId = DomainEventId.generate()
 
     val depositExists = mock<DepositExists>()
     val walletRepository = mock<WalletRepository> {
@@ -53,7 +56,12 @@ class DepositMoneyShould {
       )
     }
     val eventBus = mock<EventBus>()
-    val testSubject = DepositMoney(depositExists, walletRepository, eventBus)
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn domainEventId
+    }
+    val testSubject = DepositMoney(depositExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val depositMoneyCommand = DepositMoneyCommand(
         walletId = walletId,
@@ -101,7 +109,13 @@ class DepositMoneyShould {
     }
     val walletRepository = mock<WalletRepository>()
     val eventBus = mock<EventBus>()
-    val depositMoney = DepositMoney(depositExists, walletRepository, eventBus)
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn DomainEventId.generate()
+    }
+    val depositMoney =
+        DepositMoney(depositExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val depositMoneyCommand = DepositMoneyCommand(
         walletId = randomUUID().toString(),
@@ -127,7 +141,12 @@ class DepositMoneyShould {
       } doReturn null
     }
     val eventBus = mock<EventBus>()
-    val testSubject = DepositMoney(depositExists, walletRepository, eventBus)
+    val domainEventIdSupplier = mock<DomainEventIdSupplier> {
+      on {
+        get()
+      } doReturn DomainEventId.generate()
+    }
+    val testSubject = DepositMoney(depositExists, walletRepository, eventBus, domainEventIdSupplier)
 
     val depositMoneyCommand = DepositMoneyCommand(
         walletId = walletId,
