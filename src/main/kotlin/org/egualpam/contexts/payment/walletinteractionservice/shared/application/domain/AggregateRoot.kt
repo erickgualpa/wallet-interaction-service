@@ -1,13 +1,13 @@
 package org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain
 
 abstract class AggregateRoot {
-  // TODO: Make domainEvents a Set
-  protected val domainEvents = arrayListOf<DomainEvent>()
+
+  protected val domainEvents = mutableSetOf<DomainEvent>()
 
   fun pullDomainEvents(): Set<DomainEvent> {
-    val domainEventsCopy = ArrayList(domainEvents)
+    val domainEventsCopy = domainEvents.toSet()
     domainEvents.clear()
-    return domainEventsCopy.toSet()
+    return domainEventsCopy
   }
 
   abstract fun getId(): AggregateId
