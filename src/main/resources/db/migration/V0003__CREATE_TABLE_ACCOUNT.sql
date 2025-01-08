@@ -1,11 +1,4 @@
-databaseChangeLog:
-  - changeSet:
-      id: 3
-      author: wallet-interaction-service
-      changes:
-        - sql:
-            sql: |
-              CREATE TABLE account (
+CREATE TABLE account (
                 entity_id CHAR(36) PRIMARY KEY,
                 currency CHAR(255) NOT NULL,
                 created_at TIMESTAMP NOT NULL,

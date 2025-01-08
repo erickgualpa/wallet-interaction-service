@@ -6,5 +6,3 @@ spring:
     username: wis-db-user
     password: wis-db-pw
     driver-class-name: com.mysql.cj.jdbc.Driver
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yml

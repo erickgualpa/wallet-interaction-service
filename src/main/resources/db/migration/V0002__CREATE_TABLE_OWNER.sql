@@ -1,11 +1,4 @@
-databaseChangeLog:
-  - changeSet:
-      id: 2
-      author: wallet-interaction-service
-      changes:
-        - sql:
-            sql: |
-              CREATE TABLE owner (
+CREATE TABLE owner (
                 entity_id CHAR(36) PRIMARY KEY,
                 username CHAR(255) NOT NULL,
                 created_at TIMESTAMP NOT NULL,

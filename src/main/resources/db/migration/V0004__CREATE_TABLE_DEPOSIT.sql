@@ -1,11 +1,4 @@
-databaseChangeLog:
-  - changeSet:
-      id: 4
-      author: wallet-interaction-service
-      changes:
-        - sql:
-            sql: |
-              CREATE TABLE deposit (
+CREATE TABLE deposit (
                 entity_id CHAR(36) PRIMARY KEY,
                 created_at TIMESTAMP NOT NULL,
                 account_entity_id CHAR(36) NOT NULL,
