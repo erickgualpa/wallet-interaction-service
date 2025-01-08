@@ -60,7 +60,7 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │                                   └── query
     │   └── resources
     │       └── db
-    │           └── changelog
+    │           └── migration
     └── test
         ├── kotlin
         │   └── org
