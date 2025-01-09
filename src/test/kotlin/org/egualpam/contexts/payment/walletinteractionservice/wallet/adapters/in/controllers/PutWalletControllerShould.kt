@@ -14,9 +14,9 @@ import org.mockito.kotlin.given
 import org.mockito.kotlin.willThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.put
 import org.springframework.transaction.support.TransactionTemplate
@@ -26,10 +26,10 @@ import java.util.UUID.randomUUID
 @WebMvcTest(PutWalletController::class)
 class PutWalletControllerShould {
 
-  @MockBean
+  @MockitoBean
   private lateinit var transactionTemplate: TransactionTemplate
 
-  @MockBean
+  @MockitoBean
   private lateinit var createWallet: CreateWallet
 
   @Autowired
