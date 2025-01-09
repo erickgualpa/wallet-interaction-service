@@ -1,9 +1,9 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`in`.controllers
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.WalletInteractionServiceApplication
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.OwnerUsernameAlreadyExists
@@ -37,7 +37,7 @@ class PutWalletControllerShould {
 
   @Test
   fun `get 409 CONFLICT use case throws OwnerUsernameAlreadyExists`() {
-    val existingOwnerUsername = randomAlphabetic(5)
+    val existingOwnerUsername = getRandomAlphabetic(5)
 
     given {
       transactionTemplate.executeWithoutResult(any())
@@ -69,7 +69,7 @@ class PutWalletControllerShould {
 
   @Test
   fun `get 400 BAD REQUEST when use case throws InvalidAggregateId`() {
-    val invalidWalletId = randomAlphabetic(10)
+    val invalidWalletId = getRandomAlphabetic(10)
 
     given {
       transactionTemplate.executeWithoutResult(any())
@@ -81,7 +81,7 @@ class PutWalletControllerShould {
           "id": "$invalidWalletId",
           "owner": {
             "id": "${randomUUID()}",
-            "username": "${randomAlphabetic(10)}"
+            "username": "${getRandomAlphabetic(10)}"
           },
           "account": {
             "id": "${randomUUID()}",
@@ -101,7 +101,7 @@ class PutWalletControllerShould {
 
   @Test
   fun `get 400 BAD REQUEST when use case throws InvalidDomainEntityId`() {
-    val invalidOwnerId = randomAlphabetic(10)
+    val invalidOwnerId = getRandomAlphabetic(10)
 
     given {
       transactionTemplate.executeWithoutResult(any())
@@ -113,7 +113,7 @@ class PutWalletControllerShould {
           "id": "${randomUUID()}",
           "owner": {
             "id": "$invalidOwnerId",
-            "username": "${randomAlphabetic(10)}"
+            "username": "${getRandomAlphabetic(10)}"
           },
           "account": {
             "id": "${randomUUID()}",
@@ -145,7 +145,7 @@ class PutWalletControllerShould {
           "id": "${randomUUID()}",
           "owner": {
             "id": "${randomUUID()}",
-            "username": "${randomAlphabetic(10)}"
+            "username": "${getRandomAlphabetic(10)}"
           },
           "account": {
             "id": "${randomUUID()}",

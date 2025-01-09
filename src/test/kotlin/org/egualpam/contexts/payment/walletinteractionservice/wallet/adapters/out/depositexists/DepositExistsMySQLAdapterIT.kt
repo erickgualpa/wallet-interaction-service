@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.depositexists
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.DepositId
@@ -11,7 +12,6 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.application
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextDouble
 import kotlin.test.assertTrue
@@ -31,7 +31,7 @@ class DepositExistsMySQLAdapterIT(
         id = WalletId(randomUUID().toString()),
         owner = Owner.create(
             id = randomUUID().toString(),
-            username = randomAlphabetic(5),
+            username = getRandomAlphabetic(5),
         ),
         accounts = mutableSetOf(
             Account.create(

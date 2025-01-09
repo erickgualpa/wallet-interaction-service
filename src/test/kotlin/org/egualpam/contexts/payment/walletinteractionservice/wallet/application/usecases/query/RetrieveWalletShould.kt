@@ -1,8 +1,8 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletSearchRepository
@@ -43,7 +43,7 @@ class RetrieveWalletShould {
 
   @Test
   fun `throw domain exception when wallet id is not valid`() {
-    val invalidWalletId = randomAlphabetic(10)
+    val invalidWalletId = getRandomAlphabetic(10)
 
     val walletSearchRepository = mock<WalletSearchRepository>()
     val retrieveWalletQuery = RetrieveWalletQuery(invalidWalletId)

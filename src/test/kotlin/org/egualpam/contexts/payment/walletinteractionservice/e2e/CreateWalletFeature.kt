@@ -1,9 +1,9 @@
 package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.TemporalUnitWithinOffset
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.junit.jupiter.api.Test
 import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.time.Instant
@@ -19,7 +19,7 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     val ownerId = randomUUID().toString()
     val accountId = randomUUID().toString()
 
-    val username = randomAlphabetic(10)
+    val username = getRandomAlphabetic(10)
     val currency = "EUR"
 
     val request = """

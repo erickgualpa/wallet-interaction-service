@@ -1,8 +1,8 @@
 package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
-import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphanumeric
 import org.junit.jupiter.api.Test
 import java.util.UUID.randomUUID
 
@@ -13,7 +13,7 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
     walletTestRepository.createWallet(walletEntityId)
 
     val ownerId = randomUUID().toString()
-    val ownerUsername = randomAlphabetic(10)
+    val ownerUsername = getRandomAlphabetic(10)
     ownerTestRepository.createOwner(ownerId, ownerUsername, walletEntityId)
 
     val accountId = randomUUID().toString()
@@ -52,7 +52,7 @@ class RetrieveWalletFeature : AbstractIntegrationTest() {
 
   @Test
   fun `get 404 NOT FOUND when wallet id is not valid`() {
-    val invalidWalletId = randomAlphanumeric(10)
+    val invalidWalletId = getRandomAlphanumeric(10)
 
     webTestClient.get()
         .uri("/v1/wallets/{wallet-id}", invalidWalletId)

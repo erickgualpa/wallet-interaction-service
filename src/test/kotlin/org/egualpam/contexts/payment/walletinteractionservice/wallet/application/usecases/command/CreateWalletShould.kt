@@ -1,7 +1,5 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
-import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
@@ -9,6 +7,8 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphanumeric
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletCreated
@@ -34,7 +34,7 @@ class CreateWalletShould {
   fun `create wallet`() {
     val walletId = randomUUID().toString()
     val ownerId = randomUUID().toString()
-    val ownerUsername = randomAlphabetic(10)
+    val ownerUsername = getRandomAlphabetic(10)
     val accountId = randomUUID().toString()
     val accountCurrency = "EUR"
     val domainEventId = DomainEventId.generate()
@@ -105,7 +105,7 @@ class CreateWalletShould {
     val createWalletCommand = CreateWalletCommand(
         walletId = existingWalletId,
         ownerId = randomUUID().toString(),
-        ownerUsername = randomAlphabetic(10),
+        ownerUsername = getRandomAlphabetic(10),
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
     )
@@ -117,7 +117,7 @@ class CreateWalletShould {
 
   @Test
   fun `throw domain exception when wallet id is invalid`() {
-    val invalidWalletId = randomAlphanumeric(10)
+    val invalidWalletId = getRandomAlphanumeric(10)
 
     val domainEventIdSupplier = mock<DomainEventIdSupplier>()
     val walletExists = mock<WalletExists>()
@@ -128,7 +128,7 @@ class CreateWalletShould {
     val createWalletCommand = CreateWalletCommand(
         walletId = invalidWalletId,
         ownerId = randomUUID().toString(),
-        ownerUsername = randomAlphabetic(10),
+        ownerUsername = getRandomAlphabetic(10),
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
     )
@@ -141,7 +141,7 @@ class CreateWalletShould {
 
   @Test
   fun `throw domain exception when owner id is invalid`() {
-    val invalidOwnerId = randomAlphanumeric(10)
+    val invalidOwnerId = getRandomAlphanumeric(10)
 
     val domainEventIdSupplier = mock<DomainEventIdSupplier> {
       on {
@@ -156,7 +156,7 @@ class CreateWalletShould {
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
         ownerId = invalidOwnerId,
-        ownerUsername = randomAlphabetic(10),
+        ownerUsername = getRandomAlphabetic(10),
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
     )
@@ -169,7 +169,7 @@ class CreateWalletShould {
 
   @Test
   fun `throw domain exception when account id is invalid`() {
-    val invalidAccountId = randomAlphabetic(10)
+    val invalidAccountId = getRandomAlphabetic(10)
 
     val domainEventIdSupplier = mock<DomainEventIdSupplier> {
       on {
@@ -184,7 +184,7 @@ class CreateWalletShould {
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
         ownerId = randomUUID().toString(),
-        ownerUsername = randomAlphabetic(10),
+        ownerUsername = getRandomAlphabetic(10),
         accountId = invalidAccountId,
         accountCurrency = "EUR",
     )
@@ -197,7 +197,7 @@ class CreateWalletShould {
 
   @Test
   fun `throw domain exception when owner username already exists`() {
-    val existingOwnerUsername = randomAlphabetic(10)
+    val existingOwnerUsername = getRandomAlphabetic(10)
 
     val domainEventIdSupplier = mock<DomainEventIdSupplier> {
       on {
@@ -242,7 +242,7 @@ class CreateWalletShould {
     val createWalletCommand = CreateWalletCommand(
         walletId = randomUUID().toString(),
         ownerId = randomUUID().toString(),
-        ownerUsername = randomAlphabetic(10),
+        ownerUsername = getRandomAlphabetic(10),
         accountId = randomUUID().toString(),
         accountCurrency = unsupportedCurrency,
     )

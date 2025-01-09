@@ -1,7 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.journey
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.junit.jupiter.api.Test
 import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.util.UUID.randomUUID
@@ -19,7 +19,7 @@ class FullJourneyTest : AbstractIntegrationTest() {
           "id": "$walletId",
           "owner": {
             "id": "${randomUUID()}",
-            "username": "${randomAlphabetic(10)}"
+            "username": "${getRandomAlphabetic(10)}"
           },
           "account": {
             "id": "${randomUUID()}",

@@ -1,8 +1,8 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
+import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
@@ -30,7 +30,7 @@ class WalletExistsMySQLAdapterIT : AbstractIntegrationTest() {
     val wallet = Wallet.create(
         walletId.value,
         ownerId = randomUUID().toString(),
-        ownerUsername = randomAlphabetic(5),
+        ownerUsername = getRandomAlphabetic(5),
         accountId = randomUUID().toString(),
         accountCurrency = "EUR",
         domainEventId = domainEventIdSupplier.get(),
@@ -46,7 +46,7 @@ class WalletExistsMySQLAdapterIT : AbstractIntegrationTest() {
 
   @Test
   fun `return true when a wallet with given owner username exists`() {
-    val ownerUsername = OwnerUsername(randomAlphabetic(5))
+    val ownerUsername = OwnerUsername(getRandomAlphabetic(5))
     val wallet = Wallet.create(
         id = randomUUID().toString(),
         ownerId = randomUUID().toString(),
