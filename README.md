@@ -30,10 +30,13 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │           └── contexts
     │   │               └── payment
     │   │                   └── walletinteractionservice
-    │   │                       ├── deposit
+    │   │                       ├── account
     │   │                       │   └── adapters
     │   │                       │       └── in
     │   │                       │           └── controllers
+    │   │                       ├── deposit
+    │   │                       │   └── adapters
+    │   │                       │       └── in
     │   │                       ├── shared
     │   │                       │   ├── adapters
     │   │                       │   │   └── configuration

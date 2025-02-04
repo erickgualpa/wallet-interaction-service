@@ -13,7 +13,8 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
   @Test
   fun `deposit money`() {
     val walletId = randomUUID().toString()
-    createWallet(walletId)
+    val accountId = randomUUID().toString()
+    createWallet(walletId, accountId)
 
     val depositId = randomUUID().toString()
     val amount = nextDouble(10.0, 10000.0)
@@ -24,12 +25,12 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
         "id": "$depositId",
         "amount": "$amount",
         "currency": "$currency",
-        "walletId": "$walletId"
+        "accountId": "$accountId"
       }
     """
 
     webTestClient.put()
-        .uri("/v1/deposits")
+        .uri("/v1/accounts/{accountId}/deposits", accountId)
         .header(CONTENT_TYPE, "application/json")
         .bodyValue(request)
         .exchange()
@@ -55,7 +56,8 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
   @Test
   fun `request multiple deposits`() {
     val walletId = randomUUID().toString()
-    createWallet(walletId)
+    val accountId = randomUUID().toString()
+    createWallet(walletId, accountId)
 
     val amount = nextDouble(10.0, 10000.0)
     val currency = "EUR"
@@ -106,14 +108,13 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
     assertNotNull(nextDepositResult)
   }
 
-  private fun createWallet(walletId: String) {
+  private fun createWallet(walletId: String, accountId: String) {
     walletTestRepository.createWallet(walletId)
 
     val ownerId = randomUUID().toString()
     val ownerUsername = getRandomAlphabetic(10)
     ownerTestRepository.createOwner(ownerId, ownerUsername, walletId)
 
-    val accountId = randomUUID().toString()
     accountTestRepository.createAccount(
         accountEntityId = accountId,
         currency = "EUR",
