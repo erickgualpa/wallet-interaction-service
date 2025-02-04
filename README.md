@@ -30,6 +30,10 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   │           └── contexts
     │   │               └── payment
     │   │                   └── walletinteractionservice
+    │   │                       ├── deposit
+    │   │                       │   └── adapters
+    │   │                       │       └── in
+    │   │                       │           └── controllers
     │   │                       ├── shared
     │   │                       │   ├── adapters
     │   │                       │   │   └── configuration
@@ -74,8 +78,9 @@ https://alistair.cockburn.us/hexagonal-architecture
         │                       ├── health
         │                       ├── journey
         │                       ├── shared
-        │                       │   └── adapters
-        │                       │       └── configuration
+        │                       │   ├── adapters
+        │                       │   │   └── configuration
+        │                       │   └── helper
         │                       └── wallet
         │                           ├── adapters
         │                           │   ├── in
