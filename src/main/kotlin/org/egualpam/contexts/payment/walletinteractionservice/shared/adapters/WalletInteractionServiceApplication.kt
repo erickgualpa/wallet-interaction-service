@@ -9,6 +9,7 @@ import org.springframework.boot.runApplication
       "org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration",
       "org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.in.controllers",
       "org.egualpam.contexts.payment.walletinteractionservice.account.adapters.in.controllers",
+      "org.egualpam.contexts.payment.walletinteractionservice.account.adapters.configuration",
     ],
 )
 class WalletInteractionServiceApplication
