@@ -28,9 +28,11 @@ class DepositMoneyShould {
     val depositAmount = nextDouble()
     val currency = "EUR"
     val accountId = randomUUID().toString()
+    val walletId = randomUUID().toString()
 
     val existing = Account.load(
         accountId,
+        walletId,
         currency,
         deposits = mutableSetOf(),
     )
@@ -50,9 +52,9 @@ class DepositMoneyShould {
     )
     testSubject.execute(command)
 
-
     val expected = Account.load(
         accountId,
+        walletId,
         currency,
         mutableSetOf(Deposit.load(depositId, depositAmount)),
     )

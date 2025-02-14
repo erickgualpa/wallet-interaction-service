@@ -18,6 +18,7 @@ class AccountApplicationConfiguration {
       override fun find(id: AccountId) =
           Account.load(
               id = randomUUID().toString(),
+              walletId = randomUUID().toString(),
               currency = "EUR",
               mutableSetOf(),
           )

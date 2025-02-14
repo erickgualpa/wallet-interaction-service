@@ -7,15 +7,22 @@ import java.time.Instant
 
 class Account(
   private val id: AccountId,
+  private val walletId: AccountWalletId,
   private val currency: AccountCurrency,
   private val deposits: MutableSet<Deposit> = mutableSetOf()
 ) : AggregateRoot() {
   override fun getId() = id
 
   companion object {
-    fun load(id: String, currency: String, deposits: MutableSet<Deposit>): Account {
+    fun load(
+      id: String,
+      walletId: String,
+      currency: String,
+      deposits: MutableSet<Deposit>
+    ): Account {
       return Account(
           id = AccountId(id),
+          walletId = AccountWalletId(walletId),
           currency = AccountCurrency(currency),
           deposits,
       )
