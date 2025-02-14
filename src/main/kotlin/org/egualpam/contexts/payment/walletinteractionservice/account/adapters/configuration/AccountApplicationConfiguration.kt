@@ -14,7 +14,13 @@ class AccountApplicationConfiguration {
   @Bean("depositMoneyV2")
   fun depositMoney(): DepositMoney {
     val fakeRepository = object : AccountRepository {
-      override fun find(id: AccountId) = Account.load(id = randomUUID().toString())
+      override fun find(id: AccountId) =
+          Account.load(
+              id = randomUUID().toString(),
+              currency = "EUR",
+              mutableSetOf(),
+          )
+
       override fun save(account: Account) {
       }
     }

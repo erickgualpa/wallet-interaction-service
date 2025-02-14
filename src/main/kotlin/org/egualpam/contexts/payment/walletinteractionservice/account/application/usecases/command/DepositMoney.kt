@@ -8,6 +8,12 @@ class DepositMoney(private val repository: AccountRepository) {
   fun execute(command: DepositMoneyCommand) {
     val accountId = AccountId(command.accountId)
     val account = repository.find(accountId) ?: TODO("Not yet implemented")
+
+    account.depositAmount(
+        depositId = command.id,
+        amount = command.amount,
+    )
+
     repository.save(account)
   }
 }

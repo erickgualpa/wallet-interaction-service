@@ -3,6 +3,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.argumentCaptor
@@ -16,10 +17,16 @@ class DepositMoneyShould {
 
   @Test
   fun `deposit money`() {
-    val accountId = randomUUID().toString()
+    val depositId = randomUUID().toString()
+    val depositAmount = nextDouble()
     val currency = "EUR"
+    val accountId = randomUUID().toString()
 
-    val existing = Account.load(accountId)
+    val existing = Account.load(
+        accountId,
+        currency,
+        deposits = mutableSetOf(),
+    )
 
     val repository = mock<AccountRepository> {
       on { find(AccountId(accountId)) } doReturn existing
@@ -28,15 +35,19 @@ class DepositMoneyShould {
     val testSubject = DepositMoney(repository)
 
     val command = DepositMoneyCommand(
-        id = randomUUID().toString(),
-        amount = nextDouble(),
+        depositId,
+        amount = depositAmount,
         currency,
         accountId,
     )
     testSubject.execute(command)
 
 
-    val expected = Account.load(accountId)
+    val expected = Account.load(
+        accountId,
+        currency,
+        mutableSetOf(Deposit.load(depositId, depositAmount)),
+    )
     argumentCaptor<Account> {
       verify(repository).save(capture())
       assertThat(firstValue).usingRecursiveComparison().isEqualTo(expected)
