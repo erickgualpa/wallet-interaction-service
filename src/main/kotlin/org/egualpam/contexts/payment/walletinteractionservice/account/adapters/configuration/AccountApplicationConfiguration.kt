@@ -6,6 +6,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.account.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.usecases.command.DepositMoney
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.UUID.randomUUID
 
 @Configuration
 class AccountApplicationConfiguration {
@@ -13,7 +14,7 @@ class AccountApplicationConfiguration {
   @Bean("depositMoneyV2")
   fun depositMoney(): DepositMoney {
     val fakeRepository = object : AccountRepository {
-      override fun find(id: AccountId): Account? = null
+      override fun find(id: AccountId) = Account.load(id = randomUUID().toString())
       override fun save(account: Account) {
       }
     }

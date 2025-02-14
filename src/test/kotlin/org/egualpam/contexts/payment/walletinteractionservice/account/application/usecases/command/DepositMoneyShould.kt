@@ -17,6 +17,8 @@ class DepositMoneyShould {
   @Test
   fun `deposit money`() {
     val accountId = randomUUID().toString()
+    val currency = "EUR"
+
     val existing = Account.load(accountId)
 
     val repository = mock<AccountRepository> {
@@ -28,14 +30,16 @@ class DepositMoneyShould {
     val command = DepositMoneyCommand(
         id = randomUUID().toString(),
         amount = nextDouble(),
-        currency = "EUR",
+        currency,
         accountId,
     )
     testSubject.execute(command)
 
+
+    val expected = Account.load(accountId)
     argumentCaptor<Account> {
       verify(repository).save(capture())
-      assertThat(firstValue).isNotNull();
+      assertThat(firstValue).usingRecursiveComparison().isEqualTo(expected)
     }
   }
 }
