@@ -2,6 +2,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AccountCurrency
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateRoot
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
+import java.time.Instant
 
 class Account(
   private val id: AccountId,
@@ -21,8 +23,18 @@ class Account(
   }
 
   fun depositAmount(depositId: String, amount: Double) {
-    Deposit.create(depositId, amount).let {
-      this.deposits.add(it)
-    }
+    val deposit = Deposit.create(depositId, amount)
+    this.deposits.add(deposit)
+
+    val depositProcessed = DepositProcessed(
+        DomainEventId.generate(),
+        this.id,
+        Instant.now(),
+        deposit.getId(),
+        deposit.amount(),
+        this.currency,
+    )
+
+    this.domainEvents.add(depositProcessed)
   }
 }

@@ -5,7 +5,10 @@ import org.egualpam.contexts.payment.walletinteractionservice.account.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.DepositProcessed
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
@@ -35,8 +38,9 @@ class DepositMoneyShould {
     val repository = mock<AccountRepository> {
       on { find(AccountId(accountId)) } doReturn existing
     }
+    val eventBus = mock<EventBus>()
 
-    val testSubject = DepositMoney(repository)
+    val testSubject = DepositMoney(repository, eventBus)
 
     val command = DepositMoneyCommand(
         depositId,
@@ -56,6 +60,11 @@ class DepositMoneyShould {
       verify(repository).save(capture())
       assertThat(firstValue).usingRecursiveComparison().isEqualTo(expected)
     }
+
+    argumentCaptor<Set<DomainEvent>> {
+      verify(eventBus).publish(capture())
+      assertThat(firstValue).hasSize(1).first().isInstanceOf(DepositProcessed::class.java)
+    }
   }
 
   @Test
@@ -68,8 +77,9 @@ class DepositMoneyShould {
     val repository = mock<AccountRepository> {
       on { find(AccountId(accountId)) } doReturn null
     }
+    val eventBus = mock<EventBus>()
 
-    val testSubject = DepositMoney(repository)
+    val testSubject = DepositMoney(repository, eventBus)
 
     val command = DepositMoneyCommand(
         depositId,
@@ -84,5 +94,6 @@ class DepositMoneyShould {
     assertThat(exception).hasMessage("Account with id [$accountId] not exists")
 
     verify(repository, never()).save(any<Account>())
+    verify(eventBus, never()).publish(any())
   }
 }

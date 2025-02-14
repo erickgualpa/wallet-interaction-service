@@ -3,9 +3,12 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 
-class DepositMoney(private val repository: AccountRepository) {
-
+class DepositMoney(
+  private val repository: AccountRepository,
+  private val eventBus: EventBus
+) {
   fun execute(command: DepositMoneyCommand) {
     val accountId = AccountId(command.accountId)
     val account = repository.find(accountId) ?: throw AccountNotExists(accountId)
@@ -16,6 +19,7 @@ class DepositMoney(private val repository: AccountRepository) {
     )
 
     repository.save(account)
+    eventBus.publish(account.pullDomainEvents())
   }
 }
 
