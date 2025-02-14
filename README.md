@@ -14,91 +14,72 @@
 ./mvnw clean verify
 ```
 
-📣 This project has been structured following Hexagonal Architecture principles:
+---
+
+### 📣 This project has been structured following the Hexagonal Architecture principles:
+
 https://alistair.cockburn.us/hexagonal-architecture
 
-[//]: # (Directory tree below was generated using 'tree -d -I target' command)
+[//]: # (Directory tree below was generated using 'tree -d' command in the 'src/main/kotlin/org/egualpam/contexts/payment/walletinteractionservice/wallet' directory)
+
+💰Wallet module directory structure
 
 ```
 .
-├── etc
-└── src
-    ├── main
-    │   ├── kotlin
-    │   │   └── org
-    │   │       └── egualpam
-    │   │           └── contexts
-    │   │               └── payment
-    │   │                   └── walletinteractionservice
-    │   │                       ├── account
-    │   │                       │   └── adapters
-    │   │                       │       └── in
-    │   │                       │           └── controllers
-    │   │                       ├── deposit
-    │   │                       │   └── adapters
-    │   │                       │       └── in
-    │   │                       ├── shared
-    │   │                       │   ├── adapters
-    │   │                       │   │   └── configuration
-    │   │                       │   └── application
-    │   │                       │       ├── domain
-    │   │                       │       │   └── exceptions
-    │   │                       │       └── ports
-    │   │                       │           └── out
-    │   │                       └── wallet
-    │   │                           ├── adapters
-    │   │                           │   ├── configuration
-    │   │                           │   ├── in
-    │   │                           │   │   └── controllers
-    │   │                           │   └── out
-    │   │                           │       ├── depositexists
-    │   │                           │       ├── walletexists
-    │   │                           │       ├── walletrepository
-    │   │                           │       │   └── springjdbccore
-    │   │                           │       └── walletsearchrepository
-    │   │                           │           └── springjdbccore
-    │   │                           └── application
-    │   │                               ├── domain
-    │   │                               │   └── exceptions
-    │   │                               ├── ports
-    │   │                               │   └── out
-    │   │                               └── usecases
-    │   │                                   ├── command
-    │   │                                   └── query
-    │   └── resources
-    │       └── db
-    │           └── migration
-    └── test
-        ├── kotlin
-        │   └── org
-        │       └── egualpam
-        │           └── contexts
-        │               └── payment
-        │                   └── walletinteractionservice
-        │                       ├── architecture
-        │                       ├── e2e
-        │                       │   └── helper
-        │                       ├── health
-        │                       ├── journey
-        │                       ├── shared
-        │                       │   ├── adapters
-        │                       │   │   └── configuration
-        │                       │   └── helper
-        │                       └── wallet
-        │                           ├── adapters
-        │                           │   ├── in
-        │                           │   │   └── controllers
-        │                           │   └── out
-        │                           │       ├── depositexists
-        │                           │       ├── walletexists
-        │                           │       ├── walletrepository
-        │                           │       │   └── springjdbccore
-        │                           │       └── walletsearchrepository
-        │                           │           └── springjdbccore
-        │                           └── application
-        │                               ├── domain
-        │                               └── usecases
-        │                                   ├── command
-        │                                   └── query
-        └── resources
+├── adapters
+│   ├── configuration
+│   ├── in
+│   │   └── controllers
+│   └── out
+│       ├── depositexists
+│       ├── walletexists
+│       ├── walletrepository
+│       │   └── springjdbccore
+│       └── walletsearchrepository
+│           └── springjdbccore
+└── application
+    ├── domain
+    │   └── exceptions
+    ├── ports
+    │   └── out
+    └── usecases
+        ├── command
+        └── query
+```
+
+🧪 Tests directory structure
+
+[//]: # (Directory tree below was generated using 'tree -d' command in the 'src/test/java/org/egualpam/contexts/hotelmanagement' directory)
+
+```
+.
+├── account
+│   └── application
+│       └── usecases
+│           └── command
+├── architecture
+├── e2e
+│   └── helper
+├── health
+├── journey
+├── shared
+│   ├── adapters
+│   │   └── configuration
+│   └── helper
+└── wallet
+    ├── adapters
+    │   ├── in
+    │   │   └── controllers
+    │   └── out
+    │       ├── depositexists
+    │       ├── walletexists
+    │       ├── walletrepository
+    │       │   └── springjdbccore
+    │       └── walletsearchrepository
+    │           └── springjdbccore
+    └── application
+        ├── domain
+        └── usecases
+            ├── command
+            └── query
 ```
