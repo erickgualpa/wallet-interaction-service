@@ -3,12 +3,16 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextDouble
@@ -36,7 +40,7 @@ class DepositMoneyShould {
 
     val command = DepositMoneyCommand(
         depositId,
-        amount = depositAmount,
+        depositAmount,
         currency,
         accountId,
     )
@@ -52,5 +56,33 @@ class DepositMoneyShould {
       verify(repository).save(capture())
       assertThat(firstValue).usingRecursiveComparison().isEqualTo(expected)
     }
+  }
+
+  @Test
+  fun `throw domain exception when account not exists`() {
+    val depositId = randomUUID().toString()
+    val depositAmount = nextDouble()
+    val currency = "EUR"
+    val accountId = randomUUID().toString()
+
+    val repository = mock<AccountRepository> {
+      on { find(AccountId(accountId)) } doReturn null
+    }
+
+    val testSubject = DepositMoney(repository)
+
+    val command = DepositMoneyCommand(
+        depositId,
+        depositAmount,
+        currency,
+        accountId,
+    )
+    val exception = assertThrows<AccountNotExists> {
+      testSubject.execute(command)
+    }
+
+    assertThat(exception).hasMessage("Account with id [$accountId] not exists")
+
+    verify(repository, never()).save(any<Account>())
   }
 }

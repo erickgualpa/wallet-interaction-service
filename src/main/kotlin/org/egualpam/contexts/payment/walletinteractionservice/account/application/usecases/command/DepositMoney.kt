@@ -1,13 +1,14 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.application.usecases.command
 
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 
 class DepositMoney(private val repository: AccountRepository) {
 
   fun execute(command: DepositMoneyCommand) {
     val accountId = AccountId(command.accountId)
-    val account = repository.find(accountId) ?: TODO("Not yet implemented")
+    val account = repository.find(accountId) ?: throw AccountNotExists(accountId)
 
     account.depositAmount(
         depositId = command.id,
