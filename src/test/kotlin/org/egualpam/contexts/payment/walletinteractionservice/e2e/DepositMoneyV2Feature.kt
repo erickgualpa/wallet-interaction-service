@@ -1,10 +1,14 @@
 package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.data.TemporalUnitWithinOffset
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
+import java.time.Instant
+import java.time.temporal.ChronoUnit.SECONDS
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextDouble
 import kotlin.test.assertNotNull
@@ -37,18 +41,17 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
         .expectStatus()
         .isNoContent
 
-    // TODO: Enable once new endpoint is available
-    /*val depositResult = depositTestRepository.findDeposit(depositId)
+    val depositResult = depositTestRepository.findDeposit(depositId)
+    assertNotNull(depositResult)
     assertThat(depositResult).satisfies(
         {
-          assertNotNull(it)
-          assertEquals(depositId, it.id)
+          assertThat(it.id).isEqualTo(depositId)
           assertThat(it.createdAt).isCloseTo(
               Instant.now(),
               TemporalUnitWithinOffset(1, SECONDS),
           )
         },
-    )*/
+    )
   }
 
   // TODO: Update this test to perform request against new API

@@ -44,4 +44,8 @@ class Account(
 
     this.domainEvents.add(depositProcessed)
   }
+
+  fun walletId() = walletId
+  fun currency() = currency
+  fun deposits() = deposits
 }

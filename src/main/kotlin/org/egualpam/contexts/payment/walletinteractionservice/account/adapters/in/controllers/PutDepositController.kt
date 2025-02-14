@@ -4,6 +4,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.account.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.usecases.command.DepositMoneyCommand
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.noContent
+import org.springframework.transaction.support.TransactionTemplate
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/accounts")
 @RestController
 class PutDepositController(
+  private val transactionTemplate: TransactionTemplate,
   private val depositMoney: DepositMoney
 ) {
 
@@ -27,8 +29,10 @@ class PutDepositController(
         putDepositRequest.currency,
         putDepositRequest.accountId,
     )
-    depositMoney.execute(command)
-    return noContent().build();
+    transactionTemplate.executeWithoutResult {
+      depositMoney.execute(command)
+    }
+    return noContent().build()
   }
 }
 
