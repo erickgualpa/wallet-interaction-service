@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain
 
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AccountCurrency
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventId
 import java.time.Instant
