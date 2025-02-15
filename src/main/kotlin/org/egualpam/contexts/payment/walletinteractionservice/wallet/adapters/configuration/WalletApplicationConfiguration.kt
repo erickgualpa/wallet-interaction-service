@@ -2,12 +2,10 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.DepositExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletSearchRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.DepositMoney
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWallet
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,12 +24,4 @@ class WalletApplicationConfiguration {
     eventBus: EventBus,
     domainEventIdSupplier: DomainEventIdSupplier
   ) = CreateWallet(walletExists, walletRepository, eventBus, domainEventIdSupplier)
-
-  @Bean
-  fun depositMoney(
-    depositExists: DepositExists,
-    walletRepository: WalletRepository,
-    eventBus: EventBus,
-    domainEventIdSupplier: DomainEventIdSupplier
-  ) = DepositMoney(depositExists, walletRepository, eventBus, domainEventIdSupplier)
 }
