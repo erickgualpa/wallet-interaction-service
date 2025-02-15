@@ -11,6 +11,7 @@ class FullJourneyTest : AbstractIntegrationTest() {
   @Test
   fun `full journey`() {
     val walletId = randomUUID().toString()
+    val accountId = randomUUID()
     val currency = "EUR"
 
     val createWalletRequest = """
@@ -22,7 +23,7 @@ class FullJourneyTest : AbstractIntegrationTest() {
             "username": "${getRandomAlphabetic(10)}"
           },
           "account": {
-            "id": "${randomUUID()}",
+            "id": "$accountId",
             "currency": "$currency"
           }
         }
@@ -43,20 +44,18 @@ class FullJourneyTest : AbstractIntegrationTest() {
         .expectStatus()
         .isOk
 
-    val walletDepositRequest = """
+    val accountDepositRequest = """
       {
-        "deposit": {
-          "id": "${randomUUID()}",
-          "amount": "${nextDouble(10.0, 10000.0)}",
-          "currency": "$currency"
-        }
+        "id": "${randomUUID()}",
+        "amount": "${nextDouble(10.0, 10000.0)}",
+        "currency": "$currency"
       }
     """
 
     webTestClient.put()
-        .uri("/v1/wallets/{wallet-id}/deposit", walletId)
+        .uri("/v1/accounts/{account-id}/deposits", accountId)
         .header(CONTENT_TYPE, "application/json")
-        .bodyValue(walletDepositRequest)
+        .bodyValue(accountDepositRequest)
         .exchange()
         .expectStatus()
         .isNoContent
