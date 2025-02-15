@@ -1,7 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.springjdbccore
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Account
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Owner
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
@@ -81,41 +80,7 @@ class FindWallet(
   private fun mapAccount(account: PersistenceAccountDto): Account {
     val accountId = account.id
     val accountCurrency = account.currency
-
-    val deposits = findDeposit(accountId)
-        .map { it.toDomainEntity() }
-        .let {
-          val mutableSetOf = mutableSetOf<Deposit>()
-          mutableSetOf.addAll(it)
-          mutableSetOf
-        }
-
-    return Account.load(accountId, accountCurrency, deposits)
-  }
-
-  private fun findDeposit(accountId: String): MutableList<PersistenceDepositDto> {
-    val queryDeposits = """
-        SELECT entity_id, amount
-        FROM deposit
-        WHERE account_entity_id=:accountId
-      """
-
-    val queryDepositsParameterSource = MapSqlParameterSource()
-    queryDepositsParameterSource.addValue("accountId", accountId)
-
-    val rowMapper = RowMapper<PersistenceDepositDto> { rs, _ ->
-      rs.let {
-        val id = rs.getString("entity_id")
-        val amount = rs.getDouble("amount")
-        PersistenceDepositDto(id, amount)
-      }
-    }
-
-    return jdbcTemplate.query(
-        queryDeposits,
-        queryDepositsParameterSource,
-        rowMapper,
-    )
+    return Account.load(accountId, accountCurrency)
   }
 
   data class PersistenceOwnerDto(val id: String, val username: String) {
@@ -123,8 +88,4 @@ class FindWallet(
   }
 
   data class PersistenceAccountDto(val id: String, val currency: String)
-
-  data class PersistenceDepositDto(val id: String, val amount: Double) {
-    fun toDomainEntity() = Deposit.load(id, amount)
-  }
 }

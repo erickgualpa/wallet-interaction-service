@@ -23,6 +23,7 @@ class Wallet(
           WalletId(id),
           Owner.create(ownerId, ownerUsername),
       )
+      // TODO: Make this actions be triggered by domain event
       val account = Account.create(accountId, accountCurrency)
       wallet.accounts.add(account)
 

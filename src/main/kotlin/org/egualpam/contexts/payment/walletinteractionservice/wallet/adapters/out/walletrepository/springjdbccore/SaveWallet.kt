@@ -17,9 +17,6 @@ class SaveWallet(
     saveWalletOwner(wallet)
     wallet.accounts().forEach { account ->
       saveAccount(account, wallet.getId())
-      account.deposits().forEach { deposit ->
-        saveDeposit(deposit, account.getId())
-      }
     }
   }
 

@@ -33,6 +33,7 @@ class WalletPortsAndAdaptersConfiguration {
     return WalletExistsMySQLAdapter(jdbcTemplate)
   }
 
+  // TODO: Move this into 'AccountPortsAndAdaptersConfiguration'
   @Bean
   fun depositExistsMySQLAdapter(
     jdbcTemplate: NamedParameterJdbcTemplate
