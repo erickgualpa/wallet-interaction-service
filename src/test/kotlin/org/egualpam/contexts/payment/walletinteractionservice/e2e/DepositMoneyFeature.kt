@@ -12,7 +12,7 @@ import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextDouble
 import kotlin.test.assertNotNull
 
-class DepositMoneyV2Feature : AbstractIntegrationTest() {
+class DepositMoneyFeature : AbstractIntegrationTest() {
   @Test
   fun `deposit money`() {
     val walletId = randomUUID().toString()
