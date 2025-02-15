@@ -1,8 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.springjdbccore
 
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Account
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.AccountId
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
@@ -54,19 +52,6 @@ class SaveWallet(
     sqlParameterSource.addValue("createdAt", Instant.now())
     sqlParameterSource.addValue("currency", account.getCurrency().value)
     sqlParameterSource.addValue("walletEntityId", walletId.value)
-    jdbcTemplate.update(sql, sqlParameterSource)
-  }
-
-  private fun saveDeposit(deposit: Deposit, accountId: AccountId) {
-    val sql = """
-      INSERT IGNORE INTO deposit(entity_id, created_at, amount, account_entity_id)
-      VALUES(:entityId, :createdAt, :amount, :accountEntityId)
-    """
-    val sqlParameterSource = MapSqlParameterSource()
-    sqlParameterSource.addValue("entityId", deposit.getId().value)
-    sqlParameterSource.addValue("createdAt", Instant.now())
-    sqlParameterSource.addValue("amount", deposit.amount().value)
-    sqlParameterSource.addValue("accountEntityId", accountId.value)
     jdbcTemplate.update(sql, sqlParameterSource)
   }
 }
