@@ -27,7 +27,7 @@ class PutDepositController(
         putDepositRequest.id,
         putDepositRequest.amount,
         putDepositRequest.currency,
-        putDepositRequest.accountId,
+        accountId,
     )
     transactionTemplate.executeWithoutResult {
       depositMoney.execute(command)
@@ -39,6 +39,5 @@ class PutDepositController(
 data class PutDepositRequest(
   val id: String,
   val amount: Double,
-  val currency: String,
-  val accountId: String
+  val currency: String
 )

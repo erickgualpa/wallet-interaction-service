@@ -28,8 +28,7 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
       {
         "id": "$depositId",
         "amount": "$amount",
-        "currency": "$currency",
-        "accountId": "$accountId"
+        "currency": "$currency"
       }
     """
 
