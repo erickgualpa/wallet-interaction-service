@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.TemporalUnitWithinOffset
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.time.Instant
@@ -33,7 +32,7 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
     """
 
     webTestClient.put()
-        .uri("/v1/accounts/{accountId}/deposits", accountId)
+        .uri("/v1/accounts/{account-id}/deposits", accountId)
         .header(CONTENT_TYPE, "application/json")
         .bodyValue(request)
         .exchange()
@@ -53,8 +52,6 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
     )
   }
 
-  // TODO: Update this test to perform request against new API
-  @Disabled
   @Test
   fun `request multiple deposits`() {
     val walletId = randomUUID().toString()
@@ -68,16 +65,14 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
     val firstDepositId = randomUUID().toString()
     val firstDepositRequest = """
       {
-        "deposit": {
-          "id": "$firstDepositId",
-          "amount": "$amount",
-          "currency": "$currency"
-        }
+        "id": "$firstDepositId",
+        "amount": "$amount",
+        "currency": "$currency"
       }
     """
 
     webTestClient.put()
-        .uri("/v1/wallets/{wallet-id}/deposit", walletId)
+        .uri("/v1/accounts/{account-id}/deposits", accountId)
         .header(CONTENT_TYPE, "application/json")
         .bodyValue(firstDepositRequest)
         .exchange()
@@ -88,16 +83,14 @@ class DepositMoneyV2Feature : AbstractIntegrationTest() {
     val nextDepositId = randomUUID().toString()
     val nextDepositRequest = """
       {
-        "deposit": {
-          "id": "$nextDepositId",
-          "amount": "$amount",
-          "currency": "$currency"
-        }
+        "id": "$nextDepositId",
+        "amount": "$amount",
+        "currency": "$currency"
       }
     """
 
     webTestClient.put()
-        .uri("/v1/wallets/{wallet-id}/deposit", walletId)
+        .uri("/v1/accounts/{account-id}/deposits", accountId)
         .header(CONTENT_TYPE, "application/json")
         .bodyValue(nextDepositRequest)
         .exchange()
