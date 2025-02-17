@@ -2,7 +2,14 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.
 
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.usecases.command.DepositMoney
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.usecases.command.DepositMoneyCommand
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.badRequest
+import org.springframework.http.ResponseEntity.internalServerError
 import org.springframework.http.ResponseEntity.noContent
 import org.springframework.transaction.support.TransactionTemplate
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class PutDepositController(
   private val transactionTemplate: TransactionTemplate,
-  private val depositMoney: DepositMoney
+  private val depositMoney: DepositMoney,
 ) {
+  private val logger: Logger = getLogger(this::class.java)
 
   @PutMapping("/{account-id}/deposits")
   fun putDeposit(
@@ -29,10 +37,26 @@ class PutDepositController(
         putDepositRequest.currency,
         accountId,
     )
-    transactionTemplate.executeWithoutResult {
-      depositMoney.execute(command)
+    return try {
+      transactionTemplate.executeWithoutResult {
+        depositMoney.execute(command)
+      }
+      noContent().build()
+    } catch (e: RuntimeException) {
+      when (e.javaClass) {
+        InvalidAggregateId::class.java,
+        InvalidDomainEntityId::class.java,
+        AccountCurrencyIsNotSupported::class.java -> {
+          logger.warn(e.message)
+          badRequest().build()
+        }
+
+        else -> {
+          logger.error("Unexpected error processing request [$putDepositRequest]:", e)
+          internalServerError().build()
+        }
+      }
     }
-    return noContent().build()
   }
 }
 
