@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.TemporalUnitWithinOffset
+import org.awaitility.Awaitility.await
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.junit.jupiter.api.Test
@@ -9,6 +10,7 @@ import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.time.Instant
 import java.time.temporal.ChronoUnit.SECONDS
 import java.util.UUID.randomUUID
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -83,5 +85,11 @@ class CreateWalletFeature : AbstractIntegrationTest() {
           )
         },
     )
+
+    // TODO: Assert 'WalletCreated' domain event has been published into RabbitMQ Stream
+    /*await().atMost(5, TimeUnit.SECONDS)
+        .untilAsserted {
+          assertNotNull(walletStreamTestConsumer.consume())
+        }*/
   }
 }

@@ -8,3 +8,24 @@ services:
       - MYSQL_ROOT_PASSWORD=wis-db-pw
     ports:
       - '3306:3306'
+    networks:
+      - wallet-interaction-service-network
+
+  rabbitmq:
+    image: rabbitmq:4.0-management-alpine
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: test-rabbitmq-user
+      RABBITMQ_DEFAULT_PASS: test-rabbitmq-password
+    healthcheck:
+      test: rabbitmq-diagnostics -q check_running
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    networks:
+      - wallet-interaction-service-network
+networks:
+  wallet-interaction-service-network:
+    driver: bridge
