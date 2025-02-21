@@ -11,3 +11,9 @@ spring:
     port: ${message-broker.rabbitmq.amqp-port}
     username: ${message-broker.rabbitmq.admin-username}
     password: ${message-broker.rabbitmq.admin-password}
+message-broker:
+  rabbitmq:
+    host: localhost
+    amqp-port: 5672
+    admin-username: test-rabbitmq-user
+    admin-password: test-rabbitmq-password

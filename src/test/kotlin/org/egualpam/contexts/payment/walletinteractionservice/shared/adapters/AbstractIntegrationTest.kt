@@ -81,11 +81,8 @@ abstract class AbstractIntegrationTest {
         )
         TestPropertyValues.of(
             "message-broker.rabbitmq.host=$host",
-            "message-broker.rabbitmq.amqp-port=$RABBITMQ_PORT",
-            "message-broker.rabbitmq.admin-username=test-rabbitmq-user",
-            "message-broker.rabbitmq.admin-password=test-rabbitmq-password",
-        )
-            .applyTo(applicationContext.environment)
+            "message-broker.rabbitmq.amqp-port=$port",
+        ).applyTo(applicationContext.environment)
       }
     }
   }
