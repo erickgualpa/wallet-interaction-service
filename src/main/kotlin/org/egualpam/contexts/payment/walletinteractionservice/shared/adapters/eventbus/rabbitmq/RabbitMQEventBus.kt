@@ -22,7 +22,7 @@ class RabbitMQEventBus(
           .addData(content.toByteArray())
           .build()
 
-      rabbitStreamTemplate.send(message).get()
+      rabbitStreamTemplate.send(message)
       logger.info("Event [${it.javaClass.simpleName}] has been published")
     }
   }
