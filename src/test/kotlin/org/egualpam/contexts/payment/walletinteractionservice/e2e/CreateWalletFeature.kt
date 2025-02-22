@@ -87,9 +87,10 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     )
 
     // TODO: Assert 'WalletCreated' domain event has been published into RabbitMQ Stream
-    /*await().atMost(5, TimeUnit.SECONDS)
+    await()
+        .atMost(10, TimeUnit.SECONDS)
         .untilAsserted {
           assertNotNull(walletStreamTestConsumer.consume())
-        }*/
+        }
   }
 }

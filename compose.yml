@@ -16,6 +16,7 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
+      - '5552:5552'
     environment:
       RABBITMQ_DEFAULT_USER: test-rabbitmq-user
       RABBITMQ_DEFAULT_PASS: test-rabbitmq-password
@@ -24,6 +25,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+    volumes:
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
     networks:
       - wallet-interaction-service-network
 networks:

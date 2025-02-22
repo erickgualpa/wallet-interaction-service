@@ -15,5 +15,6 @@ message-broker:
   rabbitmq:
     host: localhost
     amqp-port: 5672
+    stream-port: 5552
     admin-username: test-rabbitmq-user
     admin-password: test-rabbitmq-password

@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class RabbitMqProperties(
   val host: String,
   val amqpPort: Int,
+  val streamPort: Int,
   val adminUsername: String,
   val adminPassword: String
 )
