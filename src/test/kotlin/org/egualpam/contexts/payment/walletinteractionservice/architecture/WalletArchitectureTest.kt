@@ -13,9 +13,20 @@ class WalletArchitectureTest {
   @Test
   fun `wallet entity should be the wallet aggregate root`() {
     classes().that()
-        .resideInAPackage("..domain..")
+        .resideInAPackage("..wallet..domain..")
         .and()
         .haveNameMatching(".*Wallet")
+        .should()
+        .beAssignableTo(AggregateRoot::class.java)
+        .check(importedClasses)
+  }
+
+  @Test
+  fun `account entity should be the account aggregate root`() {
+    classes().that()
+        .resideInAPackage("..account..domain..")
+        .and()
+        .haveNameMatching(".*Account")
         .should()
         .beAssignableTo(AggregateRoot::class.java)
         .check(importedClasses)
