@@ -86,17 +86,19 @@ class CreateWalletFeature : AbstractIntegrationTest() {
         },
     )
 
-    // TODO: Assert 'WalletCreated' domain event has been published into RabbitMQ Stream
     await()
         .atMost(10, TimeUnit.SECONDS)
         .untilAsserted {
           val published = walletStreamTestConsumer.consume()
-          assertNotNull(published)
-          assertThat(published).satisfies(
-              {
-                assertThat(it.type).isEqualTo("payment.wallet.created")
-              },
-          )
+          assertThat(published).isNotEmpty
+          assertThat(published).anySatisfy {
+            assertThat(it.type).isEqualTo("payment.wallet.created")
+
+            val eventContent = it.data
+            assertThat(eventContent["walletId"]).isEqualTo(walletId)
+            // TODO: Assert missing fields
+          }
+
         }
   }
 }

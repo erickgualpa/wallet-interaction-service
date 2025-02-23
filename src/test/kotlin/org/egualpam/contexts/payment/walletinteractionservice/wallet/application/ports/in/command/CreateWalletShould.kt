@@ -82,8 +82,8 @@ class CreateWalletShould {
       assertThat(firstValue).first().satisfies(
           {
             assertThat(it).isInstanceOf(WalletCreated::class.java)
-            assertThat(it.id()).isEqualTo(domainEventId)
-            assertThat(it.aggregateId()).isEqualTo(WalletId(walletId))
+            assertThat(it.id()).isEqualTo(domainEventId.value)
+            assertThat(it.aggregateId()).isEqualTo(walletId)
             assertNotNull(it.occurredOn())
           },
       )

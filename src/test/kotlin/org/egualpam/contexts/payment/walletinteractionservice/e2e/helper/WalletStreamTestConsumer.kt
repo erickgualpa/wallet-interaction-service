@@ -27,8 +27,8 @@ class WalletStreamTestConsumer(
         .build()
   }
 
-  fun consume(): PublicEventResult? {
-    return consumed.firstOrNull()?.let {
+  fun consume(): List<PublicEventResult> {
+    return consumed.map {
       objectMapper.readValue<PublicEventResult>(it)
     }
   }
@@ -36,5 +36,6 @@ class WalletStreamTestConsumer(
 
 data class PublicEventResult(
   val id: String,
-  val type: String
+  val type: String,
+  val data: Map<String, Any>
 )

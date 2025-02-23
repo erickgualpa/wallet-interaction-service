@@ -2,4 +2,4 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.applicatio
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.AggregateId
 
-data class WalletId(val value: String) : AggregateId(value)
+class WalletId(value: String) : AggregateId(value)

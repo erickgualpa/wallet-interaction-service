@@ -8,8 +8,8 @@ abstract class DomainEvent(
   private val occurredOn: Instant
 ) {
 
-  fun id() = id
-  fun aggregateId() = aggregateId
+  fun id() = id.value
+  fun aggregateId() = aggregateId.value
   fun occurredOn() = occurredOn
 
   override fun equals(other: Any?): Boolean {

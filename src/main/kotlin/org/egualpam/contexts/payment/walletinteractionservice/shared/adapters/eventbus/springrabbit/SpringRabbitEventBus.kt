@@ -2,6 +2,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.e
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.shared.PublicEvent
+import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.shared.PublicEventData
+import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.shared.WalletCreatedPublicEventData
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletCreated
@@ -20,8 +22,9 @@ class SpringRabbitEventBus(
     domainEvents
         .map {
           PublicEvent(
-              id = it.id().value,
+              id = it.id(),
               type = typeFrom(it),
+              data = contentFrom(it),
           )
         }
         .forEach {
@@ -42,6 +45,15 @@ class SpringRabbitEventBus(
       return "payment.wallet.created"
     }
 
+    // TODO: Use custom exception
+    throw RuntimeException("Domain event not supported")
+  }
+
+  private fun contentFrom(domainEvent: DomainEvent): PublicEventData {
+    if (WalletCreated::class.java.isInstance(domainEvent)) {
+      val walletCreated = WalletCreated::class.java.cast(domainEvent)
+      return WalletCreatedPublicEventData.from(walletCreated)
+    }
     // TODO: Use custom exception
     throw RuntimeException("Domain event not supported")
   }
