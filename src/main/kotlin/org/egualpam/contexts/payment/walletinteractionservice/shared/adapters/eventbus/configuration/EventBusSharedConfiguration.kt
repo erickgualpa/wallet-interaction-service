@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.configuration.eventbus
+package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.stream.Address
