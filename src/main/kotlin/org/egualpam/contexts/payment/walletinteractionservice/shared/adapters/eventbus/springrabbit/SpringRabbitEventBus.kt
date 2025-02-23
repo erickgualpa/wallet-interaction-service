@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.rabbitmq
+package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.springrabbit
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.shared.PublicEvent
@@ -9,8 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate
 
-// TODO: Rename this to SpringRabbitEventBus
-class RabbitMQEventBus(
+class SpringRabbitEventBus(
   private val objectMapper: ObjectMapper,
   private val rabbitStreamTemplate: RabbitStreamTemplate
 ) : EventBus {

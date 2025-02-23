@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.stream.Address
 import com.rabbitmq.stream.Environment
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.configuration.RabbitMqProperties
-import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.rabbitmq.RabbitMQEventBus
+import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.eventbus.springrabbit.SpringRabbitEventBus
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.slf4j.Logger
@@ -59,6 +59,6 @@ class EventBusSharedConfiguration {
         PAYMENT_WALLET_STREAM_NAME,
     )
 
-    return RabbitMQEventBus(objectMapper, rabbitStreamTemplate)
+    return SpringRabbitEventBus(objectMapper, rabbitStreamTemplate)
   }
 }
