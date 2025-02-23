@@ -22,6 +22,6 @@ class TestConsumersConfiguration {
         .password(rabbitMqProperties.adminPassword)
         .build()
 
-    return WalletStreamTestConsumer(environment)
+    return WalletStreamTestConsumer(environment, objectMapper)
   }
 }

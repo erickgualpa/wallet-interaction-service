@@ -90,7 +90,13 @@ class CreateWalletFeature : AbstractIntegrationTest() {
     await()
         .atMost(10, TimeUnit.SECONDS)
         .untilAsserted {
-          assertNotNull(walletStreamTestConsumer.consume())
+          val published = walletStreamTestConsumer.consume()
+          assertNotNull(published)
+          assertThat(published).satisfies(
+              {
+                assertThat(it.type).isEqualTo("payment.wallet.created")
+              },
+          )
         }
   }
 }

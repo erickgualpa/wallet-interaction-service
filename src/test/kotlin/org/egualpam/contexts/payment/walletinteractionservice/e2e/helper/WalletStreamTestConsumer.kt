@@ -1,10 +1,13 @@
 package org.egualpam.contexts.payment.walletinteractionservice.e2e.helper
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.rabbitmq.stream.Environment
 import com.rabbitmq.stream.OffsetSpecification.first
 
 class WalletStreamTestConsumer(
-  environment: Environment
+  environment: Environment,
+  private val objectMapper: ObjectMapper
 ) {
 
   private val consumed = mutableSetOf<String>()
@@ -24,7 +27,14 @@ class WalletStreamTestConsumer(
         .build()
   }
 
-  fun consume(): String {
-    return consumed.first()
+  fun consume(): PublicEventResult? {
+    return consumed.firstOrNull()?.let {
+      objectMapper.readValue<PublicEventResult>(it)
+    }
   }
 }
+
+data class PublicEventResult(
+  val id: String,
+  val type: String
+)
