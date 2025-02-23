@@ -18,7 +18,7 @@
 
 ### 📣 This project has been structured following the Hexagonal Architecture principles:
 
-https://alistair.cockburn.us/hexagonal-architecture
+https://alistair.cockburn.us/hexagonal-architecture/
 
 [//]: # (Directory tree below was generated using 'tree -d' command in the 'src/main/kotlin/org/egualpam/contexts/payment/walletinteractionservice/wallet' directory)
 
