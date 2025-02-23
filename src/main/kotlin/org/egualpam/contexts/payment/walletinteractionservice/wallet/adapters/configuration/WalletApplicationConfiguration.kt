@@ -2,11 +2,11 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.c
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.command.CreateWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.query.RetrieveWallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletExists
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletRepository
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletSearchRepository
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWallet
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

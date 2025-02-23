@@ -7,7 +7,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.Rand
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.OwnerUsername
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.OwnerUsernameAlreadyExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.command.CreateWallet
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given

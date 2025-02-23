@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.account.application.usecases.command
+package org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command
 
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account

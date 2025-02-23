@@ -4,7 +4,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.OwnerUsernameAlreadyExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command.CreateWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.command.CreateWallet
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.HttpStatus.CONFLICT

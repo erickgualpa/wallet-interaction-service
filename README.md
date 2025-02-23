@@ -40,23 +40,24 @@ https://alistair.cockburn.us/hexagonal-architecture
 └── application
     ├── domain
     │   └── exceptions
-    ├── ports
-    │   └── out
-    └── usecases
-        ├── command
-        └── query
+    └── ports
+        ├── in
+        │   ├── command
+        │   └── query
+        └── out
 ```
 
 🧪 Tests directory structure
 
-[//]: # (Directory tree below was generated using 'tree -d' command in the 'src/test/java/org/egualpam/contexts/hotelmanagement' directory)
+[//]: # (Directory tree below was generated using 'tree -d' command in the 'src/test/kotlin/org/egualpam/contexts/payment/walletinteractionservice' directory)
 
 ```
 .
 ├── account
 │   └── application
-│       └── usecases
-│           └── command
+│       └── ports
+│           └── in
+│               └── command
 ├── architecture
 ├── e2e
 │   └── helper
@@ -71,7 +72,6 @@ https://alistair.cockburn.us/hexagonal-architecture
     │   ├── in
     │   │   └── controllers
     │   └── out
-    │       ├── depositexists
     │       ├── walletexists
     │       ├── walletrepository
     │       │   └── springjdbccore
@@ -79,7 +79,8 @@ https://alistair.cockburn.us/hexagonal-architecture
     │           └── springjdbccore
     └── application
         ├── domain
-        └── usecases
-            ├── command
-            └── query
+        └── ports
+            └── in
+                ├── command
+                └── query
 ```

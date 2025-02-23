@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.account.application.usecases.command
+package org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command
 
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists

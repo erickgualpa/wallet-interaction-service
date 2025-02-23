@@ -2,8 +2,8 @@ package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.`
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.WalletNotExists
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWallet
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.query.RetrieveWalletQuery
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.query.RetrieveWallet
+import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.query.RetrieveWalletQuery
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.ResponseEntity

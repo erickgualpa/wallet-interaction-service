@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.usecases.command
+package org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.command
 
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEventIdSupplier
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus

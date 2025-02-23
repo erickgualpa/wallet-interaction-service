@@ -10,10 +10,10 @@ class HexagonalArchitectureTest {
       ClassFileImporter().importPackages("org.egualpam.contexts.payment.walletinteractionservice")
 
   @Test
-  fun `domain should not depend on application use cases`() {
+  fun `domain should not depend on application ports`() {
     noClasses().that().resideInAPackage("..domain..")
         .should().dependOnClassesThat()
-        .resideInAnyPackage("..usecases..")
+        .resideInAnyPackage("..ports..")
         .check(importedClasses)
   }
 
