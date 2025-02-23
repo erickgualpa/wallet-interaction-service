@@ -13,5 +13,9 @@ class WalletCreated(
   private val ownerUsername: OwnerUsername,
   private val accountId: AccountId,
   private val accountCurrency: AccountCurrency,
-) :
-  DomainEvent(id, walletId, occurredOn)
+) : DomainEvent(id, walletId, occurredOn) {
+  fun ownerId() = ownerId.value
+  fun ownerUsername() = ownerUsername.value
+  fun accountId() = accountId.value
+  fun accountCurrency() = accountCurrency.value
+}

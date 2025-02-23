@@ -24,6 +24,9 @@ class SpringRabbitEventBus(
           PublicEvent(
               id = it.id(),
               type = typeFrom(it),
+              version = versionFrom(it),
+              occurredOn = it.occurredOn(),
+              aggregateId = it.aggregateId(),
               data = contentFrom(it),
           )
         }
@@ -41,7 +44,7 @@ class SpringRabbitEventBus(
 
   // TODO: Extend and refactor once other events are also published
   private fun typeFrom(domainEvent: DomainEvent): String {
-    if (WalletCreated::class.java.isInstance(domainEvent)) {
+    if (domainEvent is WalletCreated) {
       return "payment.wallet.created"
     }
 
@@ -49,11 +52,21 @@ class SpringRabbitEventBus(
     throw RuntimeException("Domain event not supported")
   }
 
-  private fun contentFrom(domainEvent: DomainEvent): PublicEventData {
-    if (WalletCreated::class.java.isInstance(domainEvent)) {
-      val walletCreated = WalletCreated::class.java.cast(domainEvent)
-      return WalletCreatedPublicEventData.from(walletCreated)
+  // TODO: Check an actual approach to handle versioning
+  private fun versionFrom(domainEvent: DomainEvent): String {
+    if (domainEvent is WalletCreated) {
+      return "1.0"
     }
+
+    // TODO: Use custom exception
+    throw RuntimeException("Domain event not supported")
+  }
+
+  private fun contentFrom(domainEvent: DomainEvent): PublicEventData {
+    if (domainEvent is WalletCreated) {
+      return WalletCreatedPublicEventData.from(domainEvent)
+    }
+
     // TODO: Use custom exception
     throw RuntimeException("Domain event not supported")
   }

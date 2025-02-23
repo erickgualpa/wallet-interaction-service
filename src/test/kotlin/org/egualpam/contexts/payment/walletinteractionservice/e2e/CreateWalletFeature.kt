@@ -93,12 +93,15 @@ class CreateWalletFeature : AbstractIntegrationTest() {
           assertThat(published).isNotEmpty
           assertThat(published).anySatisfy {
             assertThat(it.type).isEqualTo("payment.wallet.created")
+            assertThat(it.aggregateId).isEqualTo(walletId)
+            assertThat(it.version).isEqualTo("1.0")
 
-            val eventContent = it.data
-            assertThat(eventContent["walletId"]).isEqualTo(walletId)
-            // TODO: Assert missing fields
+            val eventData = it.data
+            assertThat(eventData["ownerId"]).isEqualTo(ownerId)
+            assertThat(eventData["ownerUsername"]).isEqualTo(username)
+            assertThat(eventData["accountId"]).isEqualTo(accountId)
+            assertThat(eventData["accountCurrency"]).isEqualTo(currency)
           }
-
         }
   }
 }

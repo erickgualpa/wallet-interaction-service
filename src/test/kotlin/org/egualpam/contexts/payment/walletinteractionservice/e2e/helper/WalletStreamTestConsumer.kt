@@ -37,5 +37,7 @@ class WalletStreamTestConsumer(
 data class PublicEventResult(
   val id: String,
   val type: String,
-  val data: Map<String, Any>
+  val version: String,
+  val aggregateId: String,
+  val data: Map<String, Any>,
 )

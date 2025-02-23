@@ -82,9 +82,16 @@ class CreateWalletShould {
       assertThat(firstValue).first().satisfies(
           {
             assertThat(it).isInstanceOf(WalletCreated::class.java)
-            assertThat(it.id()).isEqualTo(domainEventId.value)
-            assertThat(it.aggregateId()).isEqualTo(walletId)
-            assertNotNull(it.occurredOn())
+            val walletCreated = it as WalletCreated
+
+            assertThat(walletCreated.id()).isEqualTo(domainEventId.value)
+            assertThat(walletCreated.aggregateId()).isEqualTo(walletId)
+            assertNotNull(walletCreated.occurredOn())
+
+            assertThat(walletCreated.ownerId()).isEqualTo(ownerId)
+            assertThat(walletCreated.ownerUsername()).isEqualTo(ownerUsername)
+            assertThat(walletCreated.accountId()).isEqualTo(accountId)
+            assertThat(walletCreated.accountCurrency()).isEqualTo(accountCurrency)
           },
       )
     }
