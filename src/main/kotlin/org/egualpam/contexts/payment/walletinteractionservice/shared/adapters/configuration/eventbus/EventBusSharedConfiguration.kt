@@ -33,24 +33,31 @@ class EventBusSharedConfiguration {
   }
 
   @Bean
-  fun eventBus(
-    rabbitMqProperties: RabbitMqProperties,
-    objectMapper: ObjectMapper
-  ): EventBus {
-    // TODO: Check if 'Environment' should be a bean
-    val environment = Environment.builder()
+  fun rabbitMqEnvironment(
+    rabbitMqProperties: RabbitMqProperties
+  ): Environment {
+    return Environment.builder()
         .addressResolver {
           Address(rabbitMqProperties.host, rabbitMqProperties.streamPort)
         }
         .username(rabbitMqProperties.adminUsername)
         .password(rabbitMqProperties.adminPassword)
         .build()
+  }
 
-    environment.streamCreator()
+  @Bean
+  fun eventBus(
+    rabbitMqEnvironment: Environment,
+    objectMapper: ObjectMapper
+  ): EventBus {
+    rabbitMqEnvironment.streamCreator()
         .stream(PAYMENT_WALLET_STREAM_NAME)
         .create()
 
-    val rabbitStreamTemplate = RabbitStreamTemplate(environment, PAYMENT_WALLET_STREAM_NAME)
+    val rabbitStreamTemplate = RabbitStreamTemplate(
+        rabbitMqEnvironment,
+        PAYMENT_WALLET_STREAM_NAME,
+    )
 
     return RabbitMQEventBus(objectMapper, rabbitStreamTemplate)
   }
