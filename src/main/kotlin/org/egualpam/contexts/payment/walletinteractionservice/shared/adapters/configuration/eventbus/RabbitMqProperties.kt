@@ -1,4 +1,4 @@
-package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.configuration
+package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.configuration.eventbus
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
