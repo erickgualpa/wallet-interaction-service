@@ -4,12 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rabbitmq.stream.Environment
 import com.rabbitmq.stream.OffsetSpecification.next
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.CreateAccount
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.CreateAccountCommand
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.transaction.support.TransactionTemplate
 
 class CreateAccountConsumer(
   environment: Environment,
-  private val objectMapper: ObjectMapper
+  private val objectMapper: ObjectMapper,
+  private val transactionTemplate: TransactionTemplate,
+  private val createAccount: CreateAccount,
 ) {
 
   private val logger: Logger = LoggerFactory.getLogger(this::class.java)
@@ -20,12 +25,24 @@ class CreateAccountConsumer(
 
   init {
     environment.consumerBuilder()
-        .name("test-consumer")
+        .name("create-account-consumer")
         .stream(STREAM_NAME)
         .offset(next())
         .messageHandler { _, message ->
           val event = objectMapper.readValue<WalletCreatedEvent>(message.bodyAsBinary)
-          logger.info("Event [${event.type}] has been consumed")
+
+          val command = CreateAccountCommand(
+              event.data["accountId"] as String,
+              event.data["accountCurrency"] as String,
+          )
+
+          try {
+            transactionTemplate.executeWithoutResult {
+              createAccount.execute(command)
+            }
+          } catch (e: RuntimeException) {
+            logger.error("Unexpected error processing event [$event]:", e)
+          }
         }
         .build()
   }
@@ -34,5 +51,6 @@ class CreateAccountConsumer(
     val id: String,
     val type: String,
     val version: String,
+    val data: Map<String, Any>
   )
 }

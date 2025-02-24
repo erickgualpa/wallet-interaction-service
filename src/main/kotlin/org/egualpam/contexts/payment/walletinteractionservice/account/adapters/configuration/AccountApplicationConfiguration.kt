@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.configuration
 
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.CreateAccount
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.DepositMoney
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
@@ -15,4 +16,7 @@ class AccountApplicationConfiguration {
     accountRepository: AccountRepository,
     @Qualifier("fakeEventBus") eventBus: EventBus
   ) = DepositMoney(accountRepository, eventBus)
+
+  @Bean
+  fun createAccount() = CreateAccount()
 }
