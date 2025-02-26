@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.
 
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.CreateAccount
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.DepositMoney
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.springframework.beans.factory.annotation.Qualifier
@@ -18,5 +19,11 @@ class AccountApplicationConfiguration {
   ) = DepositMoney(accountRepository, eventBus)
 
   @Bean
-  fun createAccount() = CreateAccount()
+  fun createAccount(
+    accountExists: AccountExists,
+    accountRepository: AccountRepository,
+    @Qualifier("fakeEventBus") eventBus: EventBus
+  ): CreateAccount {
+    return CreateAccount(accountExists, accountRepository, eventBus)
+  }
 }

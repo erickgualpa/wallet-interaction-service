@@ -14,6 +14,28 @@ class Account(
   override fun getId() = id
 
   companion object {
+    fun create(
+      id: String,
+      walletId: String,
+      currency: String,
+    ): Account {
+      val account = Account(
+          id = AccountId(id),
+          walletId = AccountWalletId(walletId),
+          currency = AccountCurrency(currency),
+      )
+
+      val event = AccountCreated(
+          id = DomainEventId.generate(),
+          accountId = account.id,
+          occurredOn = Instant.now(),
+      )
+
+      account.addDomainEvent(event)
+
+      return account
+    }
+
     fun load(
       id: String,
       walletId: String,

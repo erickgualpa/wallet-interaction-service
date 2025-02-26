@@ -34,6 +34,7 @@ class CreateAccountConsumer(
           val command = CreateAccountCommand(
               event.data["accountId"] as String,
               event.data["accountCurrency"] as String,
+              walletId = event.aggregateId,
           )
 
           try {
@@ -51,6 +52,7 @@ class CreateAccountConsumer(
     val id: String,
     val type: String,
     val version: String,
+    val aggregateId: String,
     val data: Map<String, Any>
   )
 }

@@ -3,8 +3,10 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.stream.Environment
 import org.egualpam.contexts.payment.walletinteractionservice.account.adapters.`in`.consumers.CreateAccountConsumer
+import org.egualpam.contexts.payment.walletinteractionservice.account.adapters.out.accountexists.AccountExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.account.adapters.out.accountrepository.springjdbccore.SpringJdbcCoreAccountRepository
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.CreateAccount
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -30,4 +32,9 @@ class AccountPortsAndAdaptersConfiguration {
       transactionTemplate,
       createAccount,
   )
+
+  @Bean
+  fun accountExists(
+    jdbcTemplate: NamedParameterJdbcTemplate
+  ): AccountExists = AccountExistsMySQLAdapter(jdbcTemplate)
 }

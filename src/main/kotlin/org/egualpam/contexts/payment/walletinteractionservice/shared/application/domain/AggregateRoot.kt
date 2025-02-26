@@ -2,7 +2,12 @@ package org.egualpam.contexts.payment.walletinteractionservice.shared.applicatio
 
 abstract class AggregateRoot {
 
+  // TODO: Make this private
   protected val domainEvents = mutableSetOf<DomainEvent>()
+
+  fun addDomainEvent(event: DomainEvent) {
+    domainEvents.add(event)
+  }
 
   fun pullDomainEvents(): Set<DomainEvent> {
     val domainEventsCopy = domainEvents.toSet()
