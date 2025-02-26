@@ -34,7 +34,8 @@ class Wallet(
           accountId = AccountId(accountId),
           accountCurrency = AccountCurrency(accountCurrency),
       )
-      wallet.domainEvents.add(walletCreated)
+
+      wallet.addDomainEvent(walletCreated)
       return wallet
     }
   }
