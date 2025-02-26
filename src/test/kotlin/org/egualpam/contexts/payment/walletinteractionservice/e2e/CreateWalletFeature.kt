@@ -73,23 +73,11 @@ class CreateWalletFeature : AbstractIntegrationTest() {
         },
     )
 
-    val accountResult = accountTestRepository.findAccount(accountId)
-    assertThat(accountResult).satisfies(
-        {
-          assertNotNull(it)
-          assertEquals(accountId, it.id)
-          assertEquals(currency, it.currency)
-          assertThat(it.createdAt).isCloseTo(
-              Instant.now(),
-              TemporalUnitWithinOffset(1, SECONDS),
-          )
-        },
-    )
-
     await()
         .atMost(10, TimeUnit.SECONDS)
         .untilAsserted {
           val published = walletStreamTestConsumer.consume()
+
           assertThat(published).isNotEmpty
           assertThat(published).anySatisfy {
             assertThat(it.type).isEqualTo("payment.wallet.created")
@@ -102,6 +90,19 @@ class CreateWalletFeature : AbstractIntegrationTest() {
             assertThat(eventData["accountId"]).isEqualTo(accountId)
             assertThat(eventData["accountCurrency"]).isEqualTo(currency)
           }
+
+          val accountResult = accountTestRepository.findAccount(accountId)
+          assertThat(accountResult).satisfies(
+              {
+                assertNotNull(it)
+                assertEquals(accountId, it.id)
+                assertEquals(currency, it.currency)
+                assertThat(it.createdAt).isCloseTo(
+                    Instant.now(),
+                    TemporalUnitWithinOffset(1, SECONDS),
+                )
+              },
+          )
         }
   }
 }

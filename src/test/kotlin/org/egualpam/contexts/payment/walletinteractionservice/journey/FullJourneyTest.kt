@@ -44,6 +44,8 @@ class FullJourneyTest : AbstractIntegrationTest() {
         .expectStatus()
         .isOk
 
+    waitForAccountProcessing()
+
     val accountDepositRequest = """
       {
         "id": "${randomUUID()}",
@@ -59,5 +61,9 @@ class FullJourneyTest : AbstractIntegrationTest() {
         .exchange()
         .expectStatus()
         .isNoContent
+  }
+
+  private fun waitForAccountProcessing() {
+    Thread.sleep(100)
   }
 }

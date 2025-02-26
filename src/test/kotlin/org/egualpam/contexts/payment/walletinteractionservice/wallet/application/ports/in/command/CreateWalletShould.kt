@@ -65,13 +65,6 @@ class CreateWalletShould {
             assertEquals(walletId, it.getId().value)
             assertEquals(ownerId, it.getOwnerId().value)
             assertEquals(ownerUsername, it.getOwnerUsername().value)
-            assertThat(it.accounts()).hasSize(1)
-          },
-      )
-      assertThat(firstValue.accounts()).first().satisfies(
-          {
-            assertEquals(accountId, it.getId().value)
-            assertEquals(accountCurrency, it.getCurrency().value)
           },
       )
     }

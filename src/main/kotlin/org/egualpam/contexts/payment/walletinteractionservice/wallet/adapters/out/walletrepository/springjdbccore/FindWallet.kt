@@ -1,6 +1,5 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.springjdbccore
 
-import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Owner
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.Wallet
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
@@ -16,13 +15,9 @@ class FindWallet(
     return findOwner(walletId.value)
         ?.toDomainEntity()
         ?.let { owner ->
-          val accounts = findAccounts(walletId)
-              .map { mapAccount(it) }
-              .toMutableSet()
           Wallet(
               id = walletId,
               owner = owner,
-              accounts = accounts,
           )
         }
   }
@@ -50,37 +45,6 @@ class FindWallet(
     } catch (e: EmptyResultDataAccessException) {
       null
     }
-  }
-
-  private fun findAccounts(walletId: WalletId): MutableList<PersistenceAccountDto> {
-    val queryAccount = """
-        SELECT entity_id, currency
-        FROM account
-        WHERE wallet_entity_id=:walletId
-      """
-
-    val sqlParameterSource = MapSqlParameterSource()
-    sqlParameterSource.addValue("walletId", walletId.value)
-
-    val rowMapper = RowMapper<PersistenceAccountDto> { rs, _ ->
-      rs.let {
-        val id = rs.getString("entity_id")
-        val currency = rs.getString("currency")
-        PersistenceAccountDto(id, currency)
-      }
-    }
-
-    return jdbcTemplate.query(
-        queryAccount,
-        sqlParameterSource,
-        rowMapper,
-    )
-  }
-
-  private fun mapAccount(account: PersistenceAccountDto): Account {
-    val accountId = account.id
-    val accountCurrency = account.currency
-    return Account.load(accountId, accountCurrency)
   }
 
   data class PersistenceOwnerDto(val id: String, val username: String) {
