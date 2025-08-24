@@ -5,6 +5,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.account.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Transfer
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -61,9 +62,20 @@ class TransferMoneyShould {
     testee.execute(command)
 
     argumentCaptor<Account> {
+      val expected = Transfer.load(
+          id = transferId,
+          sourceAccountId = sourceAccountId,
+          destinationAccountId = destinationAccountId,
+          amount = amount,
+      )
       verify(accountRepository, times(2)).save(capture())
-      assertThat(firstValue.transfers()).hasSize(1)
-      // TODO: Assert transfer details
+      assertThat(firstValue.transfers())
+          .hasSize(1)
+          .first()
+          .usingRecursiveComparison()
+          .isEqualTo(expected)
+
+      // TODO: Assert transfer in destination account
     }
   }
 

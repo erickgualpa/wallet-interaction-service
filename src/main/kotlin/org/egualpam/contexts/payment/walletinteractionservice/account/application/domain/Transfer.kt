@@ -23,5 +23,17 @@ class Transfer private constructor(
         destinationAccountId = AccountId(destinationAccountId),
         amount = TransferAmount(amount),
     )
+
+    fun load(
+      id: String,
+      sourceAccountId: String,
+      destinationAccountId: String,
+      amount: Double
+    ) = Transfer(
+        id = TransferId(id),
+        sourceAccountId = AccountId(sourceAccountId),
+        destinationAccountId = AccountId(destinationAccountId),
+        amount = TransferAmount(amount),
+    )
   }
 }
