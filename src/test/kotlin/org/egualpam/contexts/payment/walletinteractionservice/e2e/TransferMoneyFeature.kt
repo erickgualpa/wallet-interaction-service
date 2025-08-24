@@ -17,9 +17,9 @@ class TransferMoneyFeature : AbstractIntegrationTest() {
   fun `transfer money from one account to another`() {
     val transferId = randomUUID()
 
-    val originWalletId = randomUUID().toString()
-    val originAccountId = randomUUID().toString()
-    createWallet(originWalletId, originAccountId)
+    val sourceWalletId = randomUUID().toString()
+    val sourceAccountId = randomUUID().toString()
+    createWallet(sourceWalletId, sourceAccountId)
 
     // Create the destination account
     val destinationWalletId = randomUUID().toString()
@@ -32,13 +32,12 @@ class TransferMoneyFeature : AbstractIntegrationTest() {
       {
         "id": "$transferId",
         "destinationAccountId": "$destinationAccountId",
-        "amount": "$transferAmount",
-        "currency": "$CURRENCY"
+        "amount": $transferAmount
       }
     """
 
     webTestClient.put()
-        .uri("/v1/accounts/{account-id}/transfers", originAccountId)
+        .uri("/v1/accounts/{account-id}/transfers", sourceAccountId)
         .header(CONTENT_TYPE, "application/json")
         .bodyValue(request)
         .exchange()

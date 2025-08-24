@@ -1,5 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.`in`.controllers
 
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.TransferMoney
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.TransferMoneyCommand
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class PutTransferController(
   private val transactionTemplate: TransactionTemplate,
+  private val transferMoney: TransferMoney
 ) {
   private val logger: Logger = getLogger(this::class.java)
 
@@ -28,8 +31,16 @@ class PutTransferController(
     @PathVariable("account-id") accountId: String,
     @RequestBody request: PutTransferRequest
   ): ResponseEntity<Void> {
+    val command = TransferMoneyCommand(
+        transferId = request.id,
+        sourceAccountId = accountId,
+        destinationAccountId = request.destinationAccountId,
+        amount = request.amount,
+    )
+
     return try {
       transactionTemplate.executeWithoutResult {
+        transferMoney.execute(command)
       }
       noContent().build()
     } catch (e: RuntimeException) {
@@ -53,6 +64,5 @@ class PutTransferController(
 data class PutTransferRequest(
   val id: String,
   val destinationAccountId: String,
-  val amount: Double,
-  val currency: String
+  val amount: Double
 )
