@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command
 
+import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
@@ -7,9 +8,11 @@ import org.egualpam.contexts.payment.walletinteractionservice.account.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import java.util.UUID.randomUUID
 
@@ -57,8 +60,11 @@ class TransferMoneyShould {
     )
     testee.execute(command)
 
-    verify(accountRepository).save(sourceAccount)
-    verify(accountRepository).save(destinationAccount)
+    argumentCaptor<Account> {
+      verify(accountRepository, times(2)).save(capture())
+      assertThat(firstValue.transfers()).hasSize(1)
+      // TODO: Assert transfer details
+    }
   }
 
   @Test

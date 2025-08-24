@@ -19,8 +19,16 @@ class TransferMoney(
         accountRepository.find(destinationAccountId)
           ?: throw AccountNotExists(destinationAccountId)
 
+    sourceAccount.transferAmount(
+        transferId = command.transferId,
+        destinationAccountId = destinationAccountId.value,
+        amount = command.amount,
+    )
+
     accountRepository.save(sourceAccount)
     accountRepository.save(destinationAccount)
+
+    // TODO: Publish domain events
   }
 }
 

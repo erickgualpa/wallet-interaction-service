@@ -9,7 +9,8 @@ class Account(
   private val id: AccountId,
   private val walletId: AccountWalletId,
   private val currency: AccountCurrency,
-  private val deposits: MutableSet<Deposit> = mutableSetOf()
+  private val deposits: MutableSet<Deposit> = mutableSetOf(),
+  private val transfers: MutableSet<Transfer> = mutableSetOf(),
 ) : AggregateRoot() {
   override fun getId() = id
 
@@ -67,7 +68,22 @@ class Account(
     this.domainEvents.add(depositProcessed)
   }
 
+  fun transferAmount(
+    transferId: String,
+    destinationAccountId: String,
+    amount: Double
+  ) {
+    val transfer = Transfer.create(
+        id = transferId,
+        sourceAccountId = this.id.value,
+        destinationAccountId,
+        amount,
+    )
+    this.transfers.add(transfer)
+  }
+
   fun walletId() = walletId
   fun currency() = currency
   fun deposits() = deposits
+  fun transfers() = transfers
 }
