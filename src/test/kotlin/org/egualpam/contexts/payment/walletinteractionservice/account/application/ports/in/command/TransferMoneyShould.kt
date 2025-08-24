@@ -75,6 +75,7 @@ class TransferMoneyShould {
           .usingRecursiveComparison()
           .isEqualTo(expected)
 
+      assertThat(firstValue.balance().value).isEqualTo(100.00)
       // TODO: Assert transfer in destination account
     }
   }

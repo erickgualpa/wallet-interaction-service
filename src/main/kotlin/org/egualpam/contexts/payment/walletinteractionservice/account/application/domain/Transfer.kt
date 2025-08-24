@@ -36,4 +36,6 @@ class Transfer private constructor(
         amount = TransferAmount(amount),
     )
   }
+
+  fun amount() = amount
 }

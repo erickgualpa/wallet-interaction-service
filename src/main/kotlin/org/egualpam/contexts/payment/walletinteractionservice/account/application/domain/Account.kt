@@ -82,6 +82,21 @@ class Account(
     this.transfers.add(transfer)
   }
 
+  // TODO: Update this workaround (currently used to have  some 'balance' view)
+  fun balance(): AccountBalance {
+    val depositsSum = deposits
+        .map { it.amount().value }
+        .reduce { acc, amount -> acc + amount }
+
+    val transfersSum = transfers
+        .map { it.amount().value }
+        .reduce { acc, amount -> acc + amount }
+
+    return AccountBalance(
+        depositsSum - transfersSum,
+    )
+  }
+
   fun walletId() = walletId
   fun currency() = currency
   fun deposits() = deposits
