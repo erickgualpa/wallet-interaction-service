@@ -1,7 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.`in`.controllers
 
-import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.TransferMoney
-import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.TransferMoneyCommand
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.TransferMoney
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.TransferMoneyCommand
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidAggregateId
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.exceptions.InvalidDomainEntityId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.exceptions.AccountCurrencyIsNotSupported
