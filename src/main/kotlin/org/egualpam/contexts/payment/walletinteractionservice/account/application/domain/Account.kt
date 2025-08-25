@@ -78,24 +78,50 @@ class Account(
         sourceAccountId = this.id.value,
         destinationAccountId,
         amount,
+        isInbound = false,
+    )
+    this.transfers.add(transfer)
+  }
+
+  fun inboundTransferAmount(
+    transferId: String,
+    sourceAccountId: String,
+    amount: Double
+  ) {
+    val transfer = Transfer.create(
+        id = transferId,
+        sourceAccountId,
+        destinationAccountId = this.id.value,
+        amount,
+        isInbound = true,
     )
     this.transfers.add(transfer)
   }
 
   // TODO: Update this workaround (currently used to have  some 'balance' view)
   fun balance(): AccountBalance {
-    val depositsSum = deposits
-        .map { it.amount().value }
-        .reduce { acc, amount -> acc + amount }
+    val depositsSum =
+        if (deposits.isEmpty()) 0.0
+        else deposits.sumOf { it.amount().value }
 
-    val transfersSum = transfers
-        .map { it.amount().value }
-        .reduce { acc, amount -> acc + amount }
+
+    val outboundTransfers = transfers.filter { it.isOutbound() }
+    val outboundTransfersSum =
+        if (outboundTransfers.isEmpty()) 0.0
+        else outboundTransfers.sumOf { it.amount().value }
+
+    val inboundTransfers = transfers.filter { it.isInbound() }
+    val inboundTransfersSum =
+        if (inboundTransfers.isEmpty()) 0.0
+        else inboundTransfers.sumOf { it.amount().value }
 
     return AccountBalance(
-        depositsSum - transfersSum,
+        depositsSum
+            - outboundTransfersSum
+            + inboundTransfersSum,
     )
   }
+
 
   fun walletId() = walletId
   fun currency() = currency

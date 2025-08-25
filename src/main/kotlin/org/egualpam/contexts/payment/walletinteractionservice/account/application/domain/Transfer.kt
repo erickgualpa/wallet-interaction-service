@@ -7,6 +7,7 @@ class Transfer private constructor(
   private val sourceAccountId: AccountId,
   private val destinationAccountId: AccountId,
   private val amount: TransferAmount,
+  private val isInbound: Boolean
 ) : DomainEntity() {
 
   override fun getId() = id
@@ -16,26 +17,32 @@ class Transfer private constructor(
       id: String,
       sourceAccountId: String,
       destinationAccountId: String,
-      amount: Double
+      amount: Double,
+      isInbound: Boolean,
     ) = Transfer(
         id = TransferId(id),
         sourceAccountId = AccountId(sourceAccountId),
         destinationAccountId = AccountId(destinationAccountId),
         amount = TransferAmount(amount),
+        isInbound,
     )
 
     fun load(
       id: String,
       sourceAccountId: String,
       destinationAccountId: String,
-      amount: Double
+      amount: Double,
+      isInbound: Boolean
     ) = Transfer(
         id = TransferId(id),
         sourceAccountId = AccountId(sourceAccountId),
         destinationAccountId = AccountId(destinationAccountId),
         amount = TransferAmount(amount),
+        isInbound,
     )
   }
 
   fun amount() = amount
+  fun isInbound() = isInbound
+  fun isOutbound() = !isInbound
 }

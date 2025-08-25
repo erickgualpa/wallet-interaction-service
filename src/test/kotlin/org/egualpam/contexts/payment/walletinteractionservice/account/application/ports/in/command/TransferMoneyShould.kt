@@ -62,21 +62,39 @@ class TransferMoneyShould {
     testee.execute(command)
 
     argumentCaptor<Account> {
-      val expected = Transfer.load(
+      verify(accountRepository, times(2)).save(capture())
+
+      // Validate source account state
+      val expectedOutboundTransfer = Transfer.load(
           id = transferId,
           sourceAccountId = sourceAccountId,
           destinationAccountId = destinationAccountId,
           amount = amount,
+          isInbound = false,
       )
-      verify(accountRepository, times(2)).save(capture())
       assertThat(firstValue.transfers())
           .hasSize(1)
           .first()
           .usingRecursiveComparison()
-          .isEqualTo(expected)
+          .isEqualTo(expectedOutboundTransfer)
 
       assertThat(firstValue.balance().value).isEqualTo(100.00)
-      // TODO: Assert transfer in destination account
+
+      // Validate destination account state
+      val expectedInboundTransfer = Transfer.load(
+          id = transferId,
+          sourceAccountId = sourceAccountId,
+          destinationAccountId = destinationAccountId,
+          amount = amount,
+          isInbound = true,
+      )
+      assertThat(secondValue.transfers())
+          .hasSize(1)
+          .first()
+          .usingRecursiveComparison()
+          .isEqualTo(expectedInboundTransfer)
+
+      assertThat(secondValue.balance().value).isEqualTo(100.00)
     }
   }
 

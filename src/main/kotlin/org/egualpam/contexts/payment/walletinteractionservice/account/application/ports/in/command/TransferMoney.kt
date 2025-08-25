@@ -25,6 +25,12 @@ class TransferMoney(
         amount = command.amount,
     )
 
+    destinationAccount.inboundTransferAmount(
+        transferId = command.transferId,
+        sourceAccountId = sourceAccountId.value,
+        amount = command.amount,
+    )
+
     accountRepository.save(sourceAccount)
     accountRepository.save(destinationAccount)
 
