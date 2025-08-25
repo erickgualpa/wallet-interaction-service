@@ -40,12 +40,14 @@ class TransferMoneyShould {
                 amount = 200.0,
             ),
         ),
+        transfers = mutableSetOf(),
     )
     val destinationAccount = Account.load(
         id = destinationAccountId,
         currency = CURRENCY,
         walletId = randomUUID().toString(),
         deposits = mutableSetOf(), // No deposits yet
+        transfers = mutableSetOf(),
     )
     val accountRepository = mock<AccountRepository> {
       on { find(AccountId(sourceAccountId)) } doReturn sourceAccount
@@ -110,6 +112,7 @@ class TransferMoneyShould {
         currency = CURRENCY,
         walletId = randomUUID().toString(),
         deposits = mutableSetOf(), // No deposits yet
+        transfers = mutableSetOf(),
     )
     val accountRepository = mock<AccountRepository> {
       on { find(AccountId(sourceAccountId)) } doReturn null
@@ -147,6 +150,7 @@ class TransferMoneyShould {
                 amount = 200.0,
             ),
         ),
+        transfers = mutableSetOf(),
     )
     val accountRepository = mock<AccountRepository> {
       on { find(AccountId(sourceAccountId)) } doReturn sourceAccount

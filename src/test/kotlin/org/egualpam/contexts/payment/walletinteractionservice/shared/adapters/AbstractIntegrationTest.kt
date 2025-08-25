@@ -3,6 +3,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.AccountTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.DepositTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.OwnerTestRepository
+import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.TransferTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletStreamTestConsumer
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletTestRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,6 +44,9 @@ abstract class AbstractIntegrationTest {
 
   @Autowired
   protected lateinit var depositTestRepository: DepositTestRepository
+
+  @Autowired
+  protected lateinit var transferTestRepository: TransferTestRepository
 
   @Autowired
   protected lateinit var walletStreamTestConsumer: WalletStreamTestConsumer

@@ -35,6 +35,7 @@ class DepositMoneyShould {
         walletId,
         currency,
         deposits = mutableSetOf(),
+        transfers = mutableSetOf(),
     )
 
     val repository = mock<AccountRepository> {
@@ -57,6 +58,7 @@ class DepositMoneyShould {
         walletId,
         currency,
         mutableSetOf(Deposit.load(depositId, depositAmount)),
+        transfers = mutableSetOf(),
     )
     argumentCaptor<Account> {
       verify(repository).save(capture())

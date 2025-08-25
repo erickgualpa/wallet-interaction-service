@@ -41,13 +41,15 @@ class Account(
       id: String,
       walletId: String,
       currency: String,
-      deposits: MutableSet<Deposit>
+      deposits: MutableSet<Deposit>,
+      transfers: MutableSet<Transfer>,
     ): Account {
       return Account(
           id = AccountId(id),
           walletId = AccountWalletId(walletId),
           currency = AccountCurrency(currency),
           deposits,
+          transfers,
       )
     }
   }

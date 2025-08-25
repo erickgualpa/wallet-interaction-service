@@ -42,6 +42,8 @@ class Transfer private constructor(
     )
   }
 
+  fun sourceAccountId() = sourceAccountId.value
+  fun destinationAccountId() = destinationAccountId.value
   fun amount() = amount
   fun isInbound() = isInbound
   fun isOutbound() = !isInbound

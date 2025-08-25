@@ -29,6 +29,7 @@ class AccountExistsMySQLAdapterIT(
           currency = "EUR",
           walletId = walletId,
           deposits = mutableSetOf(),
+          transfers = mutableSetOf(),
       )
 
       accountRepository.save(account)

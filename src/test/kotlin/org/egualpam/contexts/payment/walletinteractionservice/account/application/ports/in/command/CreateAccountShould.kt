@@ -46,6 +46,7 @@ class CreateAccountShould {
           walletId,
           accountCurrency,
           deposits = mutableSetOf(),
+          transfers = mutableSetOf(),
       )
 
       assertThat(firstValue).isEqualTo(expected)

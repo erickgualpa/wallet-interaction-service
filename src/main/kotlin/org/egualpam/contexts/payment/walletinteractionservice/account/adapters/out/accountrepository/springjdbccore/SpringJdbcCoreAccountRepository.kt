@@ -3,7 +3,9 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Transfer
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -34,7 +36,7 @@ class SpringJdbcCoreAccountRepository(
       val persistenceAccountDto =
           jdbcTemplate.queryForObject(queryAccount, sqlParameterSource, rowMapper)!!
       mapAccount(persistenceAccountDto)
-    } catch (e: Exception) {
+    } catch (_: EmptyResultDataAccessException) {
       null
     }
   }
@@ -52,18 +54,32 @@ class SpringJdbcCoreAccountRepository(
           mutableSetOf
         }
 
-    return Account.load(accountId, accountWalletId, accountCurrency, deposits)
+    val transfers = findTransfer(accountId)
+        .map { it.toDomainEntity() }
+        .let {
+          val mutableSetOf = mutableSetOf<Transfer>()
+          mutableSetOf.addAll(it)
+          mutableSetOf
+        }
+
+    return Account.load(
+        accountId,
+        accountWalletId,
+        accountCurrency,
+        deposits,
+        transfers = transfers,
+    )
   }
 
   private fun findDeposit(accountId: String): MutableList<PersistenceDepositDto> {
-    val queryDeposits = """
+    val query = """
         SELECT entity_id, amount
         FROM deposit
         WHERE account_entity_id=:accountId
       """
 
-    val queryDepositsParameterSource = MapSqlParameterSource()
-    queryDepositsParameterSource.addValue("accountId", accountId)
+    val parameterSource = MapSqlParameterSource()
+    parameterSource.addValue("accountId", accountId)
 
     val rowMapper = RowMapper<PersistenceDepositDto> { rs, _ ->
       rs.let {
@@ -77,8 +93,42 @@ class SpringJdbcCoreAccountRepository(
     }
 
     return jdbcTemplate.query(
-        queryDeposits,
-        queryDepositsParameterSource,
+        query,
+        parameterSource,
+        rowMapper,
+    )
+  }
+
+  private fun findTransfer(accountId: String): MutableList<PersistenceTransferDto> {
+    val query = """
+        SELECT id, source_account_id, destination_account_id, amount
+        FROM transfer
+        WHERE source_account_id=:accountId OR destination_account_id=:accountId
+      """
+
+    val parameterSource = MapSqlParameterSource()
+    parameterSource.addValue("accountId", accountId)
+
+    val rowMapper = RowMapper<PersistenceTransferDto> { rs, _ ->
+      rs.let {
+        val id = rs.getString("id")
+        val sourceAccountId = rs.getString("source_account_id")
+        val destinationAccountId = rs.getString("destination_account_id")
+        val amount = rs.getDouble("amount")
+        val isInbound = destinationAccountId == accountId
+        PersistenceTransferDto(
+            id,
+            sourceAccountId,
+            destinationAccountId,
+            amount,
+            isInbound,
+        )
+      }
+    }
+
+    return jdbcTemplate.query(
+        query,
+        parameterSource,
         rowMapper,
     )
   }
@@ -87,6 +137,9 @@ class SpringJdbcCoreAccountRepository(
     insertIntoAccountTable(account)
     account.deposits().forEach {
       insertIntoDepositTable(it, account.getId())
+    }
+    account.transfers().forEach {
+      insertIntoTransferTable(it)
     }
   }
 
@@ -116,6 +169,21 @@ class SpringJdbcCoreAccountRepository(
     jdbcTemplate.update(sql, sqlParameterSource)
   }
 
+  private fun insertIntoTransferTable(transfer: Transfer) {
+    val sql = """
+      INSERT IGNORE INTO transfer(id, created_at, source_account_id, destination_account_id, amount)
+      VALUES(:id, :createdAt, :sourceAccountId, :destinationAccountId, :amount)
+    """
+    val sqlParameterSource = MapSqlParameterSource()
+    sqlParameterSource.addValue("id", transfer.getId().value)
+    sqlParameterSource.addValue("createdAt", Instant.now())
+    sqlParameterSource.addValue("sourceAccountId", transfer.sourceAccountId())
+    sqlParameterSource.addValue("destinationAccountId", transfer.destinationAccountId())
+    sqlParameterSource.addValue("amount", transfer.amount().value)
+    jdbcTemplate.update(sql, sqlParameterSource)
+  }
+
+
   private data class PersistenceAccountDto(
     val id: String,
     val walletId: String,
@@ -124,5 +192,16 @@ class SpringJdbcCoreAccountRepository(
 
   private data class PersistenceDepositDto(val id: String, val amount: Double) {
     fun toDomainEntity() = Deposit.load(id, amount)
+  }
+
+  private data class PersistenceTransferDto(
+    val id: String,
+    val sourceAccountId: String,
+    val destinationAccountId: String,
+    val amount: Double,
+    val isInbound: Boolean,
+  ) {
+    fun toDomainEntity() =
+        Transfer.load(id, sourceAccountId, destinationAccountId, amount, isInbound)
   }
 }
