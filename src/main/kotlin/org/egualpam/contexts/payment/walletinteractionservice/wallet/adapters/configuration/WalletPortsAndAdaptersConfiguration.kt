@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.configuration
 
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.query.RetrieveAccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.depositexists.DepositExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletexists.WalletExistsMySQLAdapter
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletrepository.springjdbccore.SpringJdbcCoreWalletRepository
@@ -16,8 +17,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 class WalletPortsAndAdaptersConfiguration {
   @Bean
   fun springJdbcCoreWalletSearchRepository(
-    jdbcTemplate: NamedParameterJdbcTemplate
-  ): WalletSearchRepository = SpringJdbcCoreWalletSearchRepository(jdbcTemplate)
+    jdbcTemplate: NamedParameterJdbcTemplate,
+    retrieveAccountBalance: RetrieveAccountBalance,
+  ): WalletSearchRepository =
+      SpringJdbcCoreWalletSearchRepository(jdbcTemplate, retrieveAccountBalance)
 
   @Bean
   fun springJdbcCoreWalletRepository(

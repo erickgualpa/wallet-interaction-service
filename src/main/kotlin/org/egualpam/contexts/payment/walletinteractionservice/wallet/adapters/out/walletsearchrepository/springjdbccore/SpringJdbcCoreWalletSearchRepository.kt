@@ -1,5 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.wallet.adapters.out.walletsearchrepository.springjdbccore
 
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.query.RetrieveAccountBalance
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.query.RetrieveAccountBalanceQuery
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.domain.WalletId
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.query.WalletDto
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletSearchRepository
@@ -9,14 +11,23 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
 class SpringJdbcCoreWalletSearchRepository(
-  private val jdbcTemplate: NamedParameterJdbcTemplate
+  private val jdbcTemplate: NamedParameterJdbcTemplate,
+  private val retrieveAccountBalance: RetrieveAccountBalance
 ) : WalletSearchRepository {
   override fun search(id: WalletId): WalletDto? {
     return findOwner(id.value)
         ?.let { owner -> WalletDto.OwnerDto(owner) }
         ?.let { owner ->
           val accounts = findAccounts(id)
-              .map { WalletDto.AccountDto(it.id, it.balance, it.currency) }
+              .map {
+                val query = RetrieveAccountBalanceQuery(it.id)
+                val accountBalance = retrieveAccountBalance.execute(query)
+                WalletDto.AccountDto(
+                    it.id,
+                    balance = accountBalance.balance,
+                    it.currency,
+                )
+              }
               .toMutableSet()
           WalletDto(
               id = id.value,
@@ -38,14 +49,14 @@ class SpringJdbcCoreWalletSearchRepository(
 
     return try {
       jdbcTemplate.queryForObject(sql, sqlParameterSource, String::class.java)
-    } catch (e: EmptyResultDataAccessException) {
+    } catch (_: EmptyResultDataAccessException) {
       null
     }
   }
 
   private fun findAccounts(walletId: WalletId): MutableList<PersistenceAccountDto> {
     val query = """
-        SELECT entity_id, balance, currency
+        SELECT entity_id, currency
         FROM account
         WHERE wallet_entity_id=:walletId
       """
@@ -56,9 +67,8 @@ class SpringJdbcCoreWalletSearchRepository(
     val rowMapper = RowMapper { rs, _ ->
       rs.let {
         val id = rs.getString("entity_id")
-        val balance = rs.getString("balance")
         val currency = rs.getString("currency")
-        PersistenceAccountDto(id, balance, currency)
+        PersistenceAccountDto(id, currency)
       }
     }
 
@@ -69,5 +79,5 @@ class SpringJdbcCoreWalletSearchRepository(
     )
   }
 
-  data class PersistenceAccountDto(val id: String, val balance: String, val currency: String)
+  data class PersistenceAccountDto(val id: String, val currency: String)
 }

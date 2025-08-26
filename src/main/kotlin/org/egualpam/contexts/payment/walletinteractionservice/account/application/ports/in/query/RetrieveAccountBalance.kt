@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.query
 
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 
 class RetrieveAccountBalance(
@@ -9,7 +10,10 @@ class RetrieveAccountBalance(
 
   fun execute(query: RetrieveAccountBalanceQuery): AccountBalanceDto {
     val accountId = AccountId(query.accountId)
-    val account = repository.find(accountId) ?: TODO()
+
+    val account =
+        repository.find(accountId)
+          ?: throw AccountNotExists(accountId)
 
     val deposits = account.deposits()
     val depositsSum =

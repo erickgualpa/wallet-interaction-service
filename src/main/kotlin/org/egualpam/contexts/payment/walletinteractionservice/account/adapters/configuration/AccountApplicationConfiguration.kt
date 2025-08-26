@@ -3,6 +3,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.CreateAccount
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.DepositMoney
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.TransferMoney
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.query.RetrieveAccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
 import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
@@ -33,4 +34,9 @@ class AccountApplicationConfiguration {
     accountRepository: AccountRepository,
     @Qualifier("fakeEventBus") eventBus: EventBus
   ) = TransferMoney(accountRepository, eventBus)
+
+  @Bean
+  fun retrieveAccountBalance(
+    accountRepository: AccountRepository,
+  ) = RetrieveAccountBalance(accountRepository)
 }
