@@ -4,6 +4,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.wallet.application
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.`in`.query.WalletDto
 import org.egualpam.contexts.payment.walletinteractionservice.wallet.application.ports.out.WalletSearchRepository
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
@@ -15,7 +16,7 @@ class SpringJdbcCoreWalletSearchRepository(
         ?.let { owner -> WalletDto.OwnerDto(owner) }
         ?.let { owner ->
           val accounts = findAccounts(id)
-              .map { WalletDto.AccountDto(it) }
+              .map { WalletDto.AccountDto(it.id, it.balance, it.currency) }
               .toMutableSet()
           WalletDto(
               id = id.value,
@@ -42,9 +43,9 @@ class SpringJdbcCoreWalletSearchRepository(
     }
   }
 
-  private fun findAccounts(walletId: WalletId): MutableList<String> {
-    val queryAccount = """
-        SELECT entity_id
+  private fun findAccounts(walletId: WalletId): MutableList<PersistenceAccountDto> {
+    val query = """
+        SELECT entity_id, balance, currency
         FROM account
         WHERE wallet_entity_id=:walletId
       """
@@ -52,10 +53,21 @@ class SpringJdbcCoreWalletSearchRepository(
     val sqlParameterSource = MapSqlParameterSource()
     sqlParameterSource.addValue("walletId", walletId.value)
 
-    return jdbcTemplate.queryForList(
-        queryAccount,
+    val rowMapper = RowMapper { rs, _ ->
+      rs.let {
+        val id = rs.getString("entity_id")
+        val balance = rs.getString("balance")
+        val currency = rs.getString("currency")
+        PersistenceAccountDto(id, balance, currency)
+      }
+    }
+
+    return jdbcTemplate.query(
+        query,
         sqlParameterSource,
-        String::class.java,
+        rowMapper,
     )
   }
+
+  data class PersistenceAccountDto(val id: String, val balance: String, val currency: String)
 }

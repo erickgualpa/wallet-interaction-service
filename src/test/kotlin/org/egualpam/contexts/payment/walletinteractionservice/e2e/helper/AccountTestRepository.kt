@@ -15,12 +15,13 @@ class AccountTestRepository(
     walletEntityId: String,
   ) {
     val sql = """
-        INSERT INTO account(entity_id, currency, wallet_entity_id, created_at)
-        VALUES(:accountEntityId, :currency, :walletEntityId, :createdAt)
+        INSERT INTO account(entity_id, balance, currency, wallet_entity_id, created_at)
+        VALUES(:accountEntityId, :balance, :currency, :walletEntityId, :createdAt)
       """
 
     val sqlParameters = MapSqlParameterSource()
     sqlParameters.addValue("accountEntityId", accountEntityId)
+    sqlParameters.addValue("balance", "0.0")
     sqlParameters.addValue("currency", currency)
     sqlParameters.addValue("walletEntityId", walletEntityId)
     sqlParameters.addValue("createdAt", Instant.now())

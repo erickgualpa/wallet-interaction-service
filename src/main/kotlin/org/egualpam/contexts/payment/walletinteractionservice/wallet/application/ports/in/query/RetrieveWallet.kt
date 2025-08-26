@@ -19,5 +19,5 @@ data class WalletDto(
   val accounts: Set<AccountDto>
 ) {
   data class OwnerDto(val id: String)
-  data class AccountDto(val id: String)
+  data class AccountDto(val id: String, val balance: String, val currency: String)
 }

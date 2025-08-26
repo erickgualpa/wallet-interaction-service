@@ -85,6 +85,8 @@ class Account(
       throw TransferExceedsSourceAccountBalance()
     }
 
+    this.balance = AccountBalance(this.balance.value - amount)
+
     val transfer = Transfer.create(
         id = transferId,
         sourceAccountId = this.id.value,
@@ -113,6 +115,8 @@ class Account(
     sourceAccountId: String,
     amount: Double
   ) {
+    this.balance = AccountBalance(this.balance.value + amount)
+
     val transfer = Transfer.create(
         id = transferId,
         sourceAccountId,
@@ -145,6 +149,10 @@ class Account(
   // TODO: Get rid of value object
   fun balance(): AccountBalance {
     return AccountBalance(internalBalance())
+  }
+
+  fun balanceV2(): String {
+    return balance.value.toString()
   }
 
   fun walletId() = walletId

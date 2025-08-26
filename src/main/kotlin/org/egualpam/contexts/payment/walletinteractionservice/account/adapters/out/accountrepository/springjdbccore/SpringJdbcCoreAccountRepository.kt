@@ -17,7 +17,7 @@ class SpringJdbcCoreAccountRepository(
 ) : AccountRepository {
   override fun find(id: AccountId): Account? {
     val queryAccount = """
-        SELECT wallet_entity_id, currency
+        SELECT wallet_entity_id, balance, currency
         FROM account
         WHERE entity_id=:accountId
       """
@@ -28,8 +28,9 @@ class SpringJdbcCoreAccountRepository(
     val rowMapper = RowMapper<PersistenceAccountDto> { rs, _ ->
       rs.let {
         val walletId = rs.getString("wallet_entity_id")
+        val balance = rs.getString("balance")
         val currency = rs.getString("currency")
-        PersistenceAccountDto(id.value, walletId, currency)
+        PersistenceAccountDto(id.value, walletId, balance, currency)
       }
     }
 
@@ -44,6 +45,7 @@ class SpringJdbcCoreAccountRepository(
 
   private fun mapAccount(account: PersistenceAccountDto): Account {
     val accountId = account.id
+    val accountBalance = account.balance.toDouble()
     val accountCurrency = account.currency
     val accountWalletId = account.walletId
 
@@ -67,7 +69,7 @@ class SpringJdbcCoreAccountRepository(
         accountId,
         accountWalletId,
         accountCurrency,
-        balance = AccountBalance(0.0),
+        AccountBalance(accountBalance), // TODO: Avoid using value object
         deposits,
         transfers = transfers,
     )
@@ -147,12 +149,15 @@ class SpringJdbcCoreAccountRepository(
 
   private fun insertIntoAccountTable(account: Account) {
     val sql = """
-      INSERT IGNORE INTO account(entity_id, created_at, currency, wallet_entity_id)
-      VALUES(:entityId, :createdAt, :currency, :walletEntityId)
+      INSERT INTO account(entity_id, created_at, balance, currency, wallet_entity_id)
+      VALUES(:entityId, :createdAt, :balance, :currency, :walletEntityId)
+      ON DUPLICATE KEY UPDATE 
+        balance = VALUES(balance)
     """
     val sqlParameterSource = MapSqlParameterSource()
     sqlParameterSource.addValue("entityId", account.getId().value)
     sqlParameterSource.addValue("createdAt", Instant.now())
+    sqlParameterSource.addValue("balance", account.balanceV2())
     sqlParameterSource.addValue("currency", account.currency().value)
     sqlParameterSource.addValue("walletEntityId", account.walletId().value)
     jdbcTemplate.update(sql, sqlParameterSource)
@@ -189,6 +194,7 @@ class SpringJdbcCoreAccountRepository(
   private data class PersistenceAccountDto(
     val id: String,
     val walletId: String,
+    val balance: String,
     val currency: String
   )
 

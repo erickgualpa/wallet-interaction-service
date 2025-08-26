@@ -18,6 +18,8 @@ class RetrieveWalletShould {
     val walletId = randomUUID().toString()
     val ownerId = randomUUID().toString()
     val accountId = randomUUID().toString()
+    val balance = "100.0"
+    val currency = "EUR"
 
     val walletSearchRepository = mock<WalletSearchRepository> {
       on {
@@ -25,7 +27,7 @@ class RetrieveWalletShould {
       } doReturn WalletDto(
           walletId,
           WalletDto.OwnerDto(ownerId),
-          setOf(WalletDto.AccountDto(accountId)),
+          setOf(WalletDto.AccountDto(accountId, balance, currency)),
       )
     }
     val retrieveWalletQuery = RetrieveWalletQuery(walletId)
@@ -36,7 +38,7 @@ class RetrieveWalletShould {
         WalletDto(
             walletId,
             WalletDto.OwnerDto(ownerId),
-            setOf(WalletDto.AccountDto(accountId)),
+            setOf(WalletDto.AccountDto(accountId, balance, currency)),
         ),
     )
   }
