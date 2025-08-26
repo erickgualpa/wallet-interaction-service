@@ -81,7 +81,7 @@ class Account(
     destinationAccountId: String,
     amount: Double
   ) {
-    if (amount > internalBalance()) {
+    if (amount > balance.value) {
       throw TransferExceedsSourceAccountBalance()
     }
 
@@ -124,38 +124,12 @@ class Account(
         amount,
         isInbound = true,
     )
+
     this.transfers.add(transfer)
   }
 
-  // TODO: Update this workaround (currently used to have  some 'balance' view)
-  private fun internalBalance(): Double {
-    val depositsSum =
-        if (deposits.isEmpty()) 0.0
-        else deposits.sumOf { it.amount().value }
-
-    val outboundTransfers = transfers.filter { it.isOutbound() }
-    val outboundTransfersSum =
-        if (outboundTransfers.isEmpty()) 0.0
-        else outboundTransfers.sumOf { it.amount().value }
-
-    val inboundTransfers = transfers.filter { it.isInbound() }
-    val inboundTransfersSum =
-        if (inboundTransfers.isEmpty()) 0.0
-        else inboundTransfers.sumOf { it.amount().value }
-
-    return depositsSum - outboundTransfersSum + inboundTransfersSum
-  }
-
-  // TODO: Get rid of value object
-  fun balance(): AccountBalance {
-    return AccountBalance(internalBalance())
-  }
-
-  fun balanceV2(): String {
-    return balance.value.toString()
-  }
-
   fun walletId() = walletId
+  fun balance() = balance
   fun currency() = currency
   fun deposits() = deposits
   fun transfers() = transfers

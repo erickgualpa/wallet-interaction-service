@@ -92,7 +92,6 @@ class TransferMoneyShould {
           .isEqualTo(expectedOutboundTransfer)
 
       assertThat(firstValue.balance().value).isEqualTo(100.00)
-      assertThat(firstValue.balanceV2()).isEqualTo("100.0")
 
       // Validate destination account state
       val expectedInboundTransfer = Transfer.load(
@@ -109,7 +108,6 @@ class TransferMoneyShould {
           .isEqualTo(expectedInboundTransfer)
 
       assertThat(secondValue.balance().value).isEqualTo(100.00)
-      assertThat(secondValue.balanceV2()).isEqualTo("100.0")
     }
 
     argumentCaptor<Set<DomainEvent>> {

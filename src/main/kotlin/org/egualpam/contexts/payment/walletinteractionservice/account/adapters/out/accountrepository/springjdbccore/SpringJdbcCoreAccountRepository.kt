@@ -157,7 +157,7 @@ class SpringJdbcCoreAccountRepository(
     val sqlParameterSource = MapSqlParameterSource()
     sqlParameterSource.addValue("entityId", account.getId().value)
     sqlParameterSource.addValue("createdAt", Instant.now())
-    sqlParameterSource.addValue("balance", account.balanceV2())
+    sqlParameterSource.addValue("balance", account.balance().value)
     sqlParameterSource.addValue("currency", account.currency().value)
     sqlParameterSource.addValue("walletEntityId", account.walletId().value)
     jdbcTemplate.update(sql, sqlParameterSource)
