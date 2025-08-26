@@ -7,7 +7,7 @@ import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.util.UUID.randomUUID
 import kotlin.random.Random.Default.nextDouble
 
-class FullJourneyTest : AbstractIntegrationTest() {
+class DepositJourneyTest : AbstractIntegrationTest() {
   @Test
   fun `full journey`() {
     val walletId = randomUUID().toString()
