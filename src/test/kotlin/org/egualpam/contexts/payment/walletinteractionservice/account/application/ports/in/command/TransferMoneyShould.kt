@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
@@ -39,8 +40,9 @@ class TransferMoneyShould {
 
     val sourceAccount = Account.load(
         id = sourceAccountId,
-        currency = CURRENCY,
         walletId = randomUUID().toString(),
+        balance = AccountBalance(200.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(
             Deposit.load(
                 id = randomUUID().toString(),
@@ -51,8 +53,9 @@ class TransferMoneyShould {
     )
     val destinationAccount = Account.load(
         id = destinationAccountId,
-        currency = CURRENCY,
         walletId = randomUUID().toString(),
+        balance = AccountBalance(0.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(), // No deposits yet
         transfers = mutableSetOf(),
     )
@@ -131,8 +134,9 @@ class TransferMoneyShould {
 
     val sourceAccount = Account.load(
         id = sourceAccountId,
-        currency = CURRENCY,
         walletId = randomUUID().toString(),
+        balance = AccountBalance(200.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(
             Deposit.load(
                 id = randomUUID().toString(),
@@ -143,8 +147,9 @@ class TransferMoneyShould {
     )
     val destinationAccount = Account.load(
         id = destinationAccountId,
-        currency = CURRENCY,
         walletId = randomUUID().toString(),
+        balance = AccountBalance(0.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(),
         transfers = mutableSetOf(),
     )
@@ -180,8 +185,9 @@ class TransferMoneyShould {
 
     val destinationAccount = Account.load(
         id = destinationAccountId,
-        currency = CURRENCY,
         walletId = randomUUID().toString(),
+        balance = AccountBalance(0.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(), // No deposits yet
         transfers = mutableSetOf(),
     )
@@ -215,8 +221,9 @@ class TransferMoneyShould {
 
     val sourceAccount = Account.load(
         id = sourceAccountId,
-        currency = CURRENCY,
         walletId = randomUUID().toString(),
+        balance = AccountBalance(200.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(
             Deposit.load(
                 id = randomUUID().toString(),

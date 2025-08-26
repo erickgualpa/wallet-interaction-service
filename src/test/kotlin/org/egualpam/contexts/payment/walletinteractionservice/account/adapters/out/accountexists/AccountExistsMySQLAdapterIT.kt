@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.out.accountexists
 
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
@@ -26,8 +27,9 @@ class AccountExistsMySQLAdapterIT(
 
       val account = Account.load(
           id = accountId,
-          currency = "EUR",
           walletId = walletId,
+          balance = AccountBalance(0.0),
+          currency = "EUR",
           deposits = mutableSetOf(),
           transfers = mutableSetOf(),
       )

@@ -9,6 +9,7 @@ class Account(
   private val id: AccountId,
   private val walletId: AccountWalletId,
   private val currency: AccountCurrency,
+  private var balance: AccountBalance,
   private val deposits: MutableSet<Deposit> = mutableSetOf(),
   private val transfers: MutableSet<Transfer> = mutableSetOf(),
 ) : AggregateRoot() {
@@ -24,6 +25,7 @@ class Account(
           id = AccountId(id),
           walletId = AccountWalletId(walletId),
           currency = AccountCurrency(currency),
+          balance = AccountBalance(0.0),
       )
 
       val event = AccountCreated(
@@ -41,6 +43,7 @@ class Account(
       id: String,
       walletId: String,
       currency: String,
+      balance: AccountBalance,
       deposits: MutableSet<Deposit>,
       transfers: MutableSet<Transfer>,
     ): Account {
@@ -48,6 +51,7 @@ class Account(
           id = AccountId(id),
           walletId = AccountWalletId(walletId),
           currency = AccountCurrency(currency),
+          balance,
           deposits,
           transfers,
       )
@@ -55,6 +59,8 @@ class Account(
   }
 
   fun depositAmount(depositId: String, amount: Double) {
+    this.balance = AccountBalance(this.balance.value + amount)
+
     val deposit = Deposit.create(depositId, amount)
     this.deposits.add(deposit)
 

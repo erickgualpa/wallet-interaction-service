@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.
 
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Transfer
@@ -44,7 +45,8 @@ class SpringJdbcCoreAccountRepositoryIT : AbstractIntegrationTest() {
     val account = Account.load(
         accountId,
         walletId,
-        CURRENCY,
+        balance = AccountBalance(0.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(deposit),
         transfers = mutableSetOf(),
     )
@@ -58,6 +60,7 @@ class SpringJdbcCoreAccountRepositoryIT : AbstractIntegrationTest() {
     assertThat(result).usingRecursiveComparison().isEqualTo(account)
   }
 
+  // TODO: Amend inconsistencies between balance and transactions
   @Test
   fun `find account when has transfers`() {
     val sourceWalletId = randomUUID().toString()
@@ -87,6 +90,7 @@ class SpringJdbcCoreAccountRepositoryIT : AbstractIntegrationTest() {
         sourceAccountId,
         sourceWalletId,
         CURRENCY,
+        balance = AccountBalance(0.0),
         deposits = mutableSetOf(),
         transfers = mutableSetOf(outboundTransfer),
     )
@@ -102,7 +106,8 @@ class SpringJdbcCoreAccountRepositoryIT : AbstractIntegrationTest() {
     val destinationAccount = Account.load(
         destinationAccountId,
         destinationWalletId,
-        CURRENCY,
+        balance = AccountBalance(0.0),
+        currency = CURRENCY,
         deposits = mutableSetOf(),
         transfers = mutableSetOf(inboundTransfer),
     )

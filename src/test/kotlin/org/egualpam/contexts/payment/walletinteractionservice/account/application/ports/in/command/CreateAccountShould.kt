@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountCreated
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountExists
@@ -45,6 +46,7 @@ class CreateAccountShould {
           id,
           walletId,
           accountCurrency,
+          balance = AccountBalance(0.0),
           deposits = mutableSetOf(),
           transfers = mutableSetOf(),
       )

@@ -2,6 +2,7 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 
 import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
@@ -25,7 +26,7 @@ class DepositMoneyShould {
   @Test
   fun `deposit money`() {
     val depositId = randomUUID().toString()
-    val depositAmount = nextDouble()
+    val depositAmount = 100.0
     val currency = "EUR"
     val accountId = randomUUID().toString()
     val walletId = randomUUID().toString()
@@ -34,6 +35,7 @@ class DepositMoneyShould {
         accountId,
         walletId,
         currency,
+        balance = AccountBalance(0.0),
         deposits = mutableSetOf(),
         transfers = mutableSetOf(),
     )
@@ -57,6 +59,7 @@ class DepositMoneyShould {
         accountId,
         walletId,
         currency,
+        balance = AccountBalance(depositAmount),
         mutableSetOf(Deposit.load(depositId, depositAmount)),
         transfers = mutableSetOf(),
     )

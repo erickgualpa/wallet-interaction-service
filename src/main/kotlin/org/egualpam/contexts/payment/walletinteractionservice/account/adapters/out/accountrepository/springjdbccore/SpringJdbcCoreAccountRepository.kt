@@ -1,6 +1,7 @@
 package org.egualpam.contexts.payment.walletinteractionservice.account.adapters.out.accountrepository.springjdbccore
 
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Account
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Transfer
@@ -66,6 +67,7 @@ class SpringJdbcCoreAccountRepository(
         accountId,
         accountWalletId,
         accountCurrency,
+        balance = AccountBalance(0.0),
         deposits,
         transfers = transfers,
     )
