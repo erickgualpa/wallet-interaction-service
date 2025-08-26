@@ -7,7 +7,6 @@ import org.junit.jupiter.api.assertNotNull
 import org.testcontainers.shaded.com.google.common.net.HttpHeaders.CONTENT_TYPE
 import java.util.UUID.randomUUID
 import java.util.concurrent.Executors
-import kotlin.random.Random.Default.nextDouble
 
 class TransferMoneyFeature : AbstractIntegrationTest() {
 
@@ -21,14 +20,15 @@ class TransferMoneyFeature : AbstractIntegrationTest() {
 
     val sourceWalletId = randomUUID().toString()
     val sourceAccountId = randomUUID().toString()
-    createWallet(sourceWalletId, sourceAccountId)
+    val sourceAccountBalance = 5000.00
+    createWalletWithBalance(sourceWalletId, sourceAccountId, sourceAccountBalance)
 
     // Create the destination account
     val destinationWalletId = randomUUID().toString()
     val destinationAccountId = randomUUID().toString()
     createWallet(destinationWalletId, destinationAccountId)
 
-    val transferAmount = nextDouble(10.0, 10000.0)
+    val transferAmount = 1000.00
 
     val request = """
       {
@@ -61,7 +61,8 @@ class TransferMoneyFeature : AbstractIntegrationTest() {
 
     val sourceWalletId = randomUUID().toString()
     val sourceAccountId = randomUUID().toString()
-    createWallet(sourceWalletId, sourceAccountId)
+    val sourceAccountWithBalance = 400.00
+    createWalletWithBalance(sourceWalletId, sourceAccountId, sourceAccountWithBalance)
 
     // Create the destination account
     val destinationWalletId = randomUUID().toString()
@@ -113,6 +114,27 @@ class TransferMoneyFeature : AbstractIntegrationTest() {
         accountEntityId = accountId,
         currency = CURRENCY,
         walletEntityId = walletId,
+    )
+  }
+
+  private fun createWalletWithBalance(walletId: String, accountId: String, balance: Double) {
+    walletTestRepository.createWallet(walletId)
+
+    val ownerId = randomUUID().toString()
+    val ownerUsername = getRandomAlphabetic(10)
+    ownerTestRepository.createOwner(ownerId, ownerUsername, walletId)
+
+    accountTestRepository.createAccount(
+        accountEntityId = accountId,
+        currency = CURRENCY,
+        walletEntityId = walletId,
+    )
+
+    depositTestRepository.createDeposit(
+        id = randomUUID().toString(),
+        accountId = accountId,
+        amount = balance,
+        currency = CURRENCY,
     )
   }
 }

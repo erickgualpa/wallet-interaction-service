@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.configuration
 
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.`in`.command.DepositMoney
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.AccountTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.DepositTestRepository
 import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.OwnerTestRepository
@@ -8,6 +9,7 @@ import org.egualpam.contexts.payment.walletinteractionservice.e2e.helper.WalletT
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.transaction.support.TransactionTemplate
 
 @Configuration
 class TestRepositoriesConfiguration {
@@ -28,8 +30,10 @@ class TestRepositoriesConfiguration {
 
   @Bean
   fun depositTestRepository(
-    jdbcTemplate: NamedParameterJdbcTemplate
-  ) = DepositTestRepository(jdbcTemplate)
+    jdbcTemplate: NamedParameterJdbcTemplate,
+    transactionTemplate: TransactionTemplate,
+    depositMoney: DepositMoney
+  ) = DepositTestRepository(jdbcTemplate, transactionTemplate, depositMoney)
 
   @Bean
   fun transferTestRepository(

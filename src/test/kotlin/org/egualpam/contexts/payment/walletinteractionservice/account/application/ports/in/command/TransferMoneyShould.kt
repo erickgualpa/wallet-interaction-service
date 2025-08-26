@@ -6,7 +6,9 @@ import org.egualpam.contexts.payment.walletinteractionservice.account.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Transfer
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.TransferExceedsSourceAccountBalance
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.argumentCaptor
@@ -98,6 +100,50 @@ class TransferMoneyShould {
 
       assertThat(secondValue.balance().value).isEqualTo(100.00)
     }
+  }
+
+  @Test
+  fun `throw domain exception when transfer amount exceeds source account balance`() {
+    val transferId = randomUUID().toString()
+    val sourceAccountId = randomUUID().toString()
+    val destinationAccountId = randomUUID().toString()
+    val transferAmount = 400.0
+
+    val sourceAccount = Account.load(
+        id = sourceAccountId,
+        currency = CURRENCY,
+        walletId = randomUUID().toString(),
+        deposits = mutableSetOf(
+            Deposit.load(
+                id = randomUUID().toString(),
+                amount = 200.0,
+            ),
+        ),
+        transfers = mutableSetOf(),
+    )
+    val destinationAccount = Account.load(
+        id = destinationAccountId,
+        currency = CURRENCY,
+        walletId = randomUUID().toString(),
+        deposits = mutableSetOf(),
+        transfers = mutableSetOf(),
+    )
+
+    val accountRepository = mock<AccountRepository> {
+      on { find(AccountId(sourceAccountId)) } doReturn sourceAccount
+      on { find(AccountId(destinationAccountId)) } doReturn destinationAccount
+    }
+    val testee = TransferMoney(accountRepository)
+
+    assertTrue(sourceAccount.balance().value < transferAmount)
+
+    val command = TransferMoneyCommand(
+        transferId,
+        sourceAccountId,
+        destinationAccountId,
+        transferAmount,
+    )
+    assertThrows<TransferExceedsSourceAccountBalance> { testee.execute(command) }
   }
 
   @Test
