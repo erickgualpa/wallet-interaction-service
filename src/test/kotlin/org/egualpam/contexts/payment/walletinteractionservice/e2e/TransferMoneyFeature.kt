@@ -93,48 +93,87 @@ class TransferMoneyFeature : AbstractIntegrationTest() {
               .isNoContent
         }
       }
+
+      // TODO: Validate that account balance is correct for both accounts
+      /* webTestClient.get()
+           .uri("/v1/wallets/{wallet-id}", sourceWalletId)
+           .exchange()
+           .expectStatus()
+           .isOk
+           .expectBody().json(
+               """
+               {
+                 "wallet": {
+                   "accounts": [
+                     {
+                       "balance": "0.0"
+                     }
+                   ]
+                 }
+               }
+               """,
+           )
+
+       webTestClient.get()
+           .uri("/v1/wallets/{wallet-id}", destinationWalletId)
+           .exchange()
+           .expectStatus()
+           .isOk
+           .expectBody().json(
+               """
+               {
+                 "wallet": {
+                   "accounts": [
+                     {
+                       "balance": "400.0"
+                     }
+                   ]
+                 }
+               }
+               """,
+           )
+     }*/
+
+      Thread.sleep(1000)
+
+      transferIdsPool.forEach { transferId ->
+        val transferResult = transferTestRepository.findTransfer(transferId)
+        assertNotNull(transferResult)
+      }
     }
 
-    Thread.sleep(1000)
+    private fun createWallet(walletId: String, accountId: String) {
+      walletTestRepository.createWallet(walletId)
 
-    transferIdsPool.forEach { transferId ->
-      val transferResult = transferTestRepository.findTransfer(transferId)
-      assertNotNull(transferResult)
+      val ownerId = randomUUID().toString()
+      val ownerUsername = getRandomAlphabetic(10)
+      ownerTestRepository.createOwner(ownerId, ownerUsername, walletId)
+
+      accountTestRepository.createAccount(
+          accountEntityId = accountId,
+          currency = CURRENCY,
+          walletEntityId = walletId,
+      )
+    }
+
+    private fun createWalletWithBalance(walletId: String, accountId: String, balance: Double) {
+      walletTestRepository.createWallet(walletId)
+
+      val ownerId = randomUUID().toString()
+      val ownerUsername = getRandomAlphabetic(10)
+      ownerTestRepository.createOwner(ownerId, ownerUsername, walletId)
+
+      accountTestRepository.createAccount(
+          accountEntityId = accountId,
+          currency = CURRENCY,
+          walletEntityId = walletId,
+      )
+
+      depositTestRepository.createDeposit(
+          id = randomUUID().toString(),
+          accountId = accountId,
+          amount = balance,
+          currency = CURRENCY,
+      )
     }
   }
-
-  private fun createWallet(walletId: String, accountId: String) {
-    walletTestRepository.createWallet(walletId)
-
-    val ownerId = randomUUID().toString()
-    val ownerUsername = getRandomAlphabetic(10)
-    ownerTestRepository.createOwner(ownerId, ownerUsername, walletId)
-
-    accountTestRepository.createAccount(
-        accountEntityId = accountId,
-        currency = CURRENCY,
-        walletEntityId = walletId,
-    )
-  }
-
-  private fun createWalletWithBalance(walletId: String, accountId: String, balance: Double) {
-    walletTestRepository.createWallet(walletId)
-
-    val ownerId = randomUUID().toString()
-    val ownerUsername = getRandomAlphabetic(10)
-    ownerTestRepository.createOwner(ownerId, ownerUsername, walletId)
-
-    accountTestRepository.createAccount(
-        accountEntityId = accountId,
-        currency = CURRENCY,
-        walletEntityId = walletId,
-    )
-
-    depositTestRepository.createDeposit(
-        id = randomUUID().toString(),
-        accountId = accountId,
-        amount = balance,
-        currency = CURRENCY,
-    )
-  }
-}
