@@ -3,9 +3,11 @@ package org.egualpam.contexts.payment.walletinteractionservice.account.applicati
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountId
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.AccountNotExists
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 
 class TransferMoney(
-  private val accountRepository: AccountRepository
+  private val accountRepository: AccountRepository,
+  private val eventBus: EventBus
 ) {
   fun execute(command: TransferMoneyCommand) {
     val sourceAccountId = AccountId(command.sourceAccountId)
@@ -34,7 +36,8 @@ class TransferMoney(
     accountRepository.save(sourceAccount)
     accountRepository.save(destinationAccount)
 
-    // TODO: Publish domain events
+    eventBus.publish(sourceAccount.pullDomainEvents())
+    eventBus.publish(destinationAccount.pullDomainEvents())
   }
 }
 

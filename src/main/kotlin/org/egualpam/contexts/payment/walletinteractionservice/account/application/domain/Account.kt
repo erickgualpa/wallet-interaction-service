@@ -88,8 +88,20 @@ class Account(
     )
 
     this.transfers.add(transfer)
+
+    val transferProcessed = TransferProcessed(
+        DomainEventId.generate(),
+        Instant.now(),
+        transfer.getId(),
+        transfer.sourceAccountId,
+        transfer.destinationAccountId,
+        transfer.amount,
+    )
+
+    addDomainEvent(transferProcessed)
   }
 
+  // TODO: Check what makes more sense, store or not store inbound transfers (right now is redundant)
   fun inboundTransferAmount(
     transferId: String,
     sourceAccountId: String,

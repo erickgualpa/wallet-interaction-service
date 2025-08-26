@@ -4,9 +4,9 @@ import org.egualpam.contexts.payment.walletinteractionservice.shared.application
 
 class Transfer private constructor(
   private val id: TransferId,
-  private val sourceAccountId: AccountId,
-  private val destinationAccountId: AccountId,
-  private val amount: TransferAmount,
+  val sourceAccountId: AccountId,
+  val destinationAccountId: AccountId,
+  val amount: TransferAmount,
   private val isInbound: Boolean
 ) : DomainEntity() {
 

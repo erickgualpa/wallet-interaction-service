@@ -31,5 +31,6 @@ class AccountApplicationConfiguration {
   @Bean
   fun transferMoney(
     accountRepository: AccountRepository,
-  ) = TransferMoney(accountRepository)
+    @Qualifier("fakeEventBus") eventBus: EventBus
+  ) = TransferMoney(accountRepository, eventBus)
 }

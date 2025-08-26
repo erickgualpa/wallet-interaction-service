@@ -7,10 +7,15 @@ import org.egualpam.contexts.payment.walletinteractionservice.account.applicatio
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Deposit
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.Transfer
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.TransferExceedsSourceAccountBalance
+import org.egualpam.contexts.payment.walletinteractionservice.account.application.domain.TransferProcessed
 import org.egualpam.contexts.payment.walletinteractionservice.account.application.ports.out.AccountRepository
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.domain.DomainEvent
+import org.egualpam.contexts.payment.walletinteractionservice.shared.application.ports.out.EventBus
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertThrows
+import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -55,7 +60,8 @@ class TransferMoneyShould {
       on { find(AccountId(sourceAccountId)) } doReturn sourceAccount
       on { find(AccountId(destinationAccountId)) } doReturn destinationAccount
     }
-    val testee = TransferMoney(accountRepository)
+    val eventBus = mock<EventBus>()
+    val testee = TransferMoney(accountRepository, eventBus)
 
     val command = TransferMoneyCommand(
         transferId,
@@ -100,6 +106,20 @@ class TransferMoneyShould {
 
       assertThat(secondValue.balance().value).isEqualTo(100.00)
     }
+
+    argumentCaptor<Set<DomainEvent>> {
+      verify(eventBus, times(2)).publish(capture())
+      assertThat(firstValue).hasSize(1).first().satisfies(
+          {
+            assertThat(it).isInstanceOf(TransferProcessed::class.java)
+            val transferProcessed = it as TransferProcessed
+            assertNotNull(transferProcessed.id())
+            assertThat(transferProcessed.aggregateId()).isEqualTo(sourceAccountId)
+            assertNotNull(transferProcessed.occurredOn())
+          },
+      )
+      assertThat(secondValue).isEmpty()
+    }
   }
 
   @Test
@@ -133,7 +153,8 @@ class TransferMoneyShould {
       on { find(AccountId(sourceAccountId)) } doReturn sourceAccount
       on { find(AccountId(destinationAccountId)) } doReturn destinationAccount
     }
-    val testee = TransferMoney(accountRepository)
+    val eventBus = mock<EventBus>()
+    val testee = TransferMoney(accountRepository, eventBus)
 
     assertTrue(sourceAccount.balance().value < transferAmount)
 
@@ -144,6 +165,10 @@ class TransferMoneyShould {
         transferAmount,
     )
     assertThrows<TransferExceedsSourceAccountBalance> { testee.execute(command) }
+
+    verify(accountRepository, never()).save(sourceAccount)
+    verify(accountRepository, never()).save(destinationAccount)
+    verify(eventBus, never()).publish(any())
   }
 
   @Test
@@ -164,7 +189,8 @@ class TransferMoneyShould {
       on { find(AccountId(sourceAccountId)) } doReturn null
       on { find(AccountId(destinationAccountId)) } doReturn destinationAccount
     }
-    val testee = TransferMoney(accountRepository)
+    val eventBus = mock<EventBus>()
+    val testee = TransferMoney(accountRepository, eventBus)
 
     val command = TransferMoneyCommand(
         transferId,
@@ -177,6 +203,7 @@ class TransferMoneyShould {
     }
 
     verify(accountRepository, never()).save(destinationAccount)
+    verify(eventBus, never()).publish(any())
   }
 
   @Test
@@ -202,7 +229,8 @@ class TransferMoneyShould {
       on { find(AccountId(sourceAccountId)) } doReturn sourceAccount
       on { find(AccountId(destinationAccountId)) } doReturn null
     }
-    val testee = TransferMoney(accountRepository)
+    val eventBus = mock<EventBus>()
+    val testee = TransferMoney(accountRepository, eventBus)
 
     val command = TransferMoneyCommand(
         transferId,
@@ -215,5 +243,6 @@ class TransferMoneyShould {
     }
 
     verify(accountRepository, never()).save(sourceAccount)
+    verify(eventBus, never()).publish(any())
   }
 }
