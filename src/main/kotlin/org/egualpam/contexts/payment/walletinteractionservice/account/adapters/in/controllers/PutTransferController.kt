@@ -45,7 +45,6 @@ class PutTransferController(
       transactionTemplate.executeWithoutResult {
         transferMoney.execute(command)
       }
-      lock.unlock()
       noContent().build()
     } catch (e: RuntimeException) {
       when (e.javaClass) {
@@ -61,6 +60,8 @@ class PutTransferController(
           internalServerError().build()
         }
       }
+    } finally {
+      lock.unlock()
     }
   }
 }
