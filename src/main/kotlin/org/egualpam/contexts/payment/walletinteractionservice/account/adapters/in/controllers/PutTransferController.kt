@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.concurrent.locks.ReentrantLock
 
 @RequestMapping("/v1/accounts")
 @RestController
@@ -25,6 +26,7 @@ class PutTransferController(
   private val transferMoney: TransferMoney
 ) {
   private val logger: Logger = getLogger(this::class.java)
+  private val lock = ReentrantLock()
 
   @PutMapping("/{account-id}/transfers")
   fun putTransfer(
@@ -39,9 +41,11 @@ class PutTransferController(
     )
 
     return try {
+      lock.lock()
       transactionTemplate.executeWithoutResult {
         transferMoney.execute(command)
       }
+      lock.unlock()
       noContent().build()
     } catch (e: RuntimeException) {
       when (e.javaClass) {

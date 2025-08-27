@@ -1,5 +1,6 @@
 package org.egualpam.contexts.payment.walletinteractionservice.e2e
 
+import org.assertj.core.api.Assertions.assertThat
 import org.egualpam.contexts.payment.walletinteractionservice.shared.adapters.AbstractIntegrationTest
 import org.egualpam.contexts.payment.walletinteractionservice.shared.helper.RandomValuesSupplier.Companion.getRandomAlphabetic
 import org.junit.jupiter.api.Test
@@ -95,52 +96,18 @@ class TransferMoneyFeature : AbstractIntegrationTest() {
       }
     }
 
-    // TODO: Validate that account balance is correct for both accounts
-    /* webTestClient.get()
-         .uri("/v1/wallets/{wallet-id}", sourceWalletId)
-         .exchange()
-         .expectStatus()
-         .isOk
-         .expectBody().json(
-             """
-             {
-               "wallet": {
-                 "accounts": [
-                   {
-                     "balance": "0.0"
-                   }
-                 ]
-               }
-             }
-             """,
-         )
-
-     webTestClient.get()
-         .uri("/v1/wallets/{wallet-id}", destinationWalletId)
-         .exchange()
-         .expectStatus()
-         .isOk
-         .expectBody().json(
-             """
-             {
-               "wallet": {
-                 "accounts": [
-                   {
-                     "balance": "400.0"
-                   }
-                 ]
-               }
-             }
-             """,
-         )
-   }*/
-
-    Thread.sleep(1000)
-
     transferIdsPool.forEach { transferId ->
       val transferResult = transferTestRepository.findTransfer(transferId)
       assertNotNull(transferResult)
     }
+
+    val sourceAccount = accountTestRepository.findAccount(sourceAccountId)
+    assertNotNull(sourceAccount)
+    assertThat(sourceAccount.balance).isEqualTo("0.0")
+
+    val destinationAccount = accountTestRepository.findAccount(destinationAccountId)
+    assertNotNull(destinationAccount)
+    assertThat(destinationAccount.balance).isEqualTo("400.0")
   }
 
   private fun createWallet(walletId: String, accountId: String) {

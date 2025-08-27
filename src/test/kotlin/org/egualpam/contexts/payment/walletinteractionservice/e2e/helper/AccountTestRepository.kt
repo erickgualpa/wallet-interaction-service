@@ -31,7 +31,7 @@ class AccountTestRepository(
 
   fun findAccount(accountId: String): AccountResult? {
     val sql = """
-        SELECT entity_id, currency, created_at
+        SELECT entity_id, balance, currency, created_at
         FROM account
         WHERE entity_id=:accountId
       """
@@ -42,6 +42,7 @@ class AccountTestRepository(
     val accountResultRowMapper = RowMapper { rs, _ ->
       AccountResult(
           rs.getString("entity_id"),
+          rs.getString("balance"),
           rs.getString("currency"),
           rs.getTimestamp("created_at").toInstant(),
       )
@@ -49,10 +50,15 @@ class AccountTestRepository(
 
     return try {
       jdbcTemplate.queryForObject(sql, sqlParameters, accountResultRowMapper)
-    } catch (e: EmptyResultDataAccessException) {
+    } catch (_: EmptyResultDataAccessException) {
       null
     }
   }
 
-  data class AccountResult(val id: String, val currency: String, val createdAt: Instant)
+  data class AccountResult(
+    val id: String,
+    val balance: String,
+    val currency: String,
+    val createdAt: Instant
+  )
 }
